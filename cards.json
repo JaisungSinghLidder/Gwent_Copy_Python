@@ -1,0 +1,149 @@
+
+
+[
+  {
+    "name": "emiel regis rohellec terzieff",
+    "faction": "neutral",
+    "row": "melee",
+    "strength" : 5,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "redanian ford soldier",
+    "faction": "northern realms",
+    "row": "melee",
+    "strength": 1,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "sigismund dijkstra",
+    "faction": "northern realms",
+    "row": "melee",
+    "strength": 4,
+    "card_type": "unit",
+    "ability": "Spy"
+  },
+  {
+    "name": "vernon roche",
+    "faction": "northern realms",
+    "row": "melee",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "trebuchet",
+    "faction": "northern realms",
+    "row": "siege",
+    "strength": 6,
+    "card_type": "unit",
+    "ability": null
+
+  },
+  {
+    "name": "blue stripes commando",
+    "faction": "northern realms",
+    "row": "melee",
+    "strength": 4,
+    "card_type": "unit",
+    "ability": "tight bound"
+  },
+  {
+    "name": "dethmold",
+    "faction": "northern realms",
+    "row": "range",
+    "strength": 6,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "assire van anahid",
+    "faction": "nilfgaardian",
+    "row": "range",
+    "strength": 6,
+    "card_time": "unit",
+    "ability": null
+  },
+  {
+    "name": "imprea brigade guard,",
+    "faction": "nilfgaardian",
+    "row": "melee",
+    "strength": 3,
+    "card_time": "unit",
+    "ability": "tight bound"
+  },
+  {
+    "name": "siege engineer",
+    "faction": "nilfgaardian",
+    "row": "siege",
+    "strength": 6,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "tibor eggebracht",
+    "faction": "nilfgaardin",
+    "row": "range",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "vattier de rideaux",
+    "faction": "nilfgaardin",
+    "row": "melee",
+    "strength": 4,
+    "card_type": "unit",
+    "ability": "spy"
+  },
+  {
+    "name": "puttkammer",
+    "faction": "nilfgaardin",
+    "row": "range",
+    "strength": 3,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "commander's horn",
+    "faction": "neutral",
+    "row": null,
+    "strength": 0,
+    "unit_type": "buff",
+    "ability": "horn"
+  },
+  {
+    "name": "scorch",
+    "faction": "neutral",
+    "row": null,
+    "strength": 0,
+    "card_type": "buff",
+    "ability": "scorch"
+  },
+  {
+    "name":"torrential rain",
+    "faction": "neutral",
+    "row": null,
+    "strength": 0,
+    "card_type": "weather",
+    "ability": "rain"
+  },
+  {
+    "name": "biting frost",
+    "faction": "neutral",
+    "row": null,
+    "strength": 0,
+    "card_type": "weather",
+    "ability": "frost"
+  },
+  {
+    "name": "clear weather",
+    "faction": "neutral",
+    "row": null,
+    "strength": 0,
+    "card_type": "weather",
+    "ability": "clear weather"
+  }
+]

@@ -1,0 +1,41 @@
+Have a minmax AI to play against.
+Use Tkinter to have an integrated Python design for the game.
+Or use Flask to use HTML, CSS, and Javascript for the game
+
+1. Classes:
+
+Card (Done) :
+
+Attributes: name, value, faction, ability, etc.
+
+Methods: getters and one setter for strength
+
+Player:
+
+Attributes: name, deck, hand, score, leader_card, etc.
+
+Methods: draw_card(), play_card(), calculate_score(), choose_leader_ability(), etc.
+
+Deck (Done) :
+
+Attributes: cards (list of cards)
+
+Methods: shuffle(), deal_cards(), draw_card(), etc.
+
+Game:
+
+Attributes: players, current_round, current_turn, etc.
+
+Methods: start_game(), next_turn(), determine_winner(), resolve_round(), etc.
+
+Round:
+
+Attributes: round_number, current_player, cards_played, round_winner, etc.
+
+Methods: play_round(), determine_round_winner(), etc.
+
+Faction:
+
+Attributes: name, leader, faction_ability, cards, strategy(For AI use only)
+
+Methods: get_faction_ability(), get_faction_strategy(), add_card_to_faction(card)
