@@ -3,7 +3,7 @@ from Card_Space.Deck import Deck
 
 class Player:
 
-    def __init__(self, player_name, deck, hand, leader_card, strength, faction, ai_player):
+    def __init__(self, deck, hand, leader_card, strength, faction, ai_player, player_name):
         self.player_name = player_name
         self.deck = deck
         self.hand = hand
@@ -20,6 +20,7 @@ class Player:
         #True will indicate that it is True
         self.turn_order_first = False
         self.ai_player = ai_player
+        self.player_name = player_name
 
 
     def play_card(self, card_name):
@@ -88,6 +89,13 @@ class Player:
             self.graveyard.extend(row)
             row.clear()
         self.strength = 0
+
+
+
+
+
+
+
 
 
 
