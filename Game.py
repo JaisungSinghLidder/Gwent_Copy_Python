@@ -216,35 +216,41 @@ class Game:
 
         if weather_effect == "biting frost":
             for card in self.player_one.board["melee"]:
-                self.player_one_weather_sum += (card.strength - 1)
+                if card.ability != "hero":
+                    self.player_one_weather_sum += (card.strength - 1)
             self.player_one_weather_sum *= -1
             self.player_one_sum += self.player_one_weather_sum
 
             for card in self.player_two.board["melee"]:
-                self.player_two_weather_sum += (card.strength - 1)
+                if card.ability != "hero":
+                    self.player_two_weather_sum += (card.strength - 1)
             self.player_two_weather_sum *= -1
             self.player_two_sum += self.player_two_weather_sum
 
 
         elif weather_effect == "impenetrable fog":
             for card in self.player_one.board["range"]:
-                self.player_one_weather_sum += (card.strength - 1)
+                if card.ability != "hero":
+                    self.player_one_weather_sum += (card.strength - 1)
             self.player_one_weather_sum *= -1
             self.player_one_sum += self.player_one_weather_sum
 
             for card in self.player_two.board["range"]:
-                self.player_two_weather_sum += (card.strength - 1)
+                if card.ability != "hero":
+                    self.player_two_weather_sum += (card.strength - 1)
             self.player_two_weather_sum *= -1
             self.player_two_sum += self.player_two_weather_sum
 
         elif weather_effect == "torrential rain":
             for card in self.player_one.board["siege"]:
-                self.player_one_weather_sum += (card.strength - 1)
+                if card.ability != "hero":
+                    self.player_one_weather_sum += (card.strength - 1)
             self.player_one_weather_sum *= -1
             self.player_one_sum += self.player_one_weather_sum
 
             for card in self.player_two.board["siege"]:
-                self.player_two_weather_sum += (card.strength - 1)
+                if card.ability != "hero":
+                    self.player_two_weather_sum += (card.strength - 1)
             self.player_two_weather_sum *= -1
             self.player_two_sum += self.player_two_weather_sum
 
@@ -253,22 +259,26 @@ class Game:
                 return
             elif "torrential rain" in self.active_weather_effect:
                 for card in self.player_one.board["range"]:
-                    self.player_one_weather_sum += (card.strength - 1)
+                    if card.ability != "hero":
+                        self.player_one_weather_sum += (card.strength - 1)
                 self.player_one_weather_sum *= -1
                 self.player_one_sum += self.player_one_weather_sum
 
                 for card in self.player_two.board["range"]:
-                    self.player_two_weather_sum += (card.strength - 1)
+                    if card.ability != "hero":
+                        self.player_two_weather_sum += (card.strength - 1)
                 self.player_two_weather_sum *= -1
                 self.player_two_sum += self.player_two_weather_sum
             elif "impenetrable fog" in self.active_weather_effect:
                 for card in self.player_one.board["siege"]:
-                    self.player_one_weather_sum += (card.strength - 1)
+                    if card.ability != "hero":
+                        self.player_one_weather_sum += (card.strength - 1)
                 self.player_one_weather_sum *= -1
                 self.player_one_sum += self.player_one_weather_sum
 
                 for card in self.player_two.board["siege"]:
-                    self.player_two_weather_sum += (card.strength - 1)
+                    if card.ability != "hero":
+                        self.player_two_weather_sum += (card.strength - 1)
                 self.player_two_weather_sum *= -1
                 self.player_two_sum += self.player_two_weather_sum
 
@@ -301,3 +311,189 @@ class Game:
         print_player_board(self.player_one, self.player_one_name)
         print_player_board(self.player_two, self.player_two_name)
 
+    def use_card_ability(self, player, og_card):
+        #gathering the card's ability
+        if player == self.player_one:
+
+            if og_card.ability == "tight bond":
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_one.board[row]:
+                        if og_card.ability == "tight bond" and og_card.ability == card.ability and og_card.card_name == card.card_name and og_card.row == card.row:
+                            card.strength *= 2
+                            og_card.strength *= 2
+
+            elif og_card.ability == "medic":
+                if self.player_one.graveyard is None:
+                    print("There is no cards to heal")
+                else:
+                    for card in self.player_one.graveyard:
+                        print(card.card_name)
+                    card_choice = input("So what card do you want?")
+                    for i, c in enumerate(self.player_one.graveyard):
+                        if c.card_name == card_choice and c.card_type == "unit" and c.ability != "hero":
+                            row = c.row
+                            self.player_one.board[row].append(c)
+                            self.player_one.strength += c.strength
+                            del self.player_one.graveyard[i]
+                            break
+
+            elif og_card.ability == "munster":
+                for i, card in enumerate(self.player_one.deck):
+                        if og_card.card_name == card.card_name:
+                            self.player_one.strength += card.strength
+                            self.player_one.board[card.row].append(card)
+                            # we are using del so that we delete the specific index and not deleting all the cards with the same name
+                            del self.player_one.deck[i]
+
+            elif og_card.ability == "morale boost":
+                for card in self.player_one.board[og_card.row]:
+                    if og_card.card_name != card.card_name:
+                        card.strength += 1
+
+            elif og_card.ability == "spy":
+                self.player_two.board[og_card.row].append(og_card)
+                for _ in range(2):
+                    self.player_one.deck.draw_from_deck()
+
+            elif og_card.ability == "decoy":
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_one.board[row]:
+                        print(card.card_name)
+                card_chosen = input("What card do you want?")
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(self.player_one.board[row]):
+                        if card.card_name == card_chosen:
+                            self.player_one.hand.append(card)
+                            self.player_one.board[row][i] = og_card
+                            return
+
+            elif og_card.ability == "scorch":
+                max_strength_player_one = 0
+                max_card_player_one = None
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_one.board[row]:
+                        if max_strength_player_one < card.strength and card.ability != "hero":
+                            max_card_player_one = card
+                            max_strength_card_player_one = card.strength
+
+                max_card_player_two = None
+                max_strength_player_two = 0
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_two.board[row]:
+                        if max_strength_player_two < card.strength and card.ability != "hero":
+                            max_card_player_two = card
+                            max_strength_player_two = card.strength
+
+                #now we are deleting it
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(self.player_one.board[row]):
+                        if card is max_card_player_one:
+                            del self.player_one.board[row][i]
+                            break
+
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(self.player_two.board[row]):
+                        if card is max_card_player_two:
+                            del self.player_two.board[row][i]
+                            break
+
+        elif player == self.player_two:
+
+            if og_card.ability == "tight bond":
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_two.board[row]:
+                        if og_card.ability == "tight bond" and og_card.ability == card.ability and og_card.card_name == card.card_name and og_card.row == card.row:
+                            card.strength *= 2
+                            og_card.strength *= 2
+
+            elif og_card.ability == "medic":
+                if self.player_two.graveyard is None:
+                    print("There is no cards to heal")
+                else:
+                    for card in self.player_two.graveyard:
+                        print(card.card_name)
+                    card_choice = input("So what card do you want?")
+                    for i, c in enumerate(self.player_two.graveyard):
+                        if c.card_name == card_choice and c.card_type == "unit" and c.ability != "hero":
+                            row = c.row
+                            self.player_two.board[row].append(c)
+                            self.player_two.strength += c.strength
+                            del self.player_two.graveyard[i]
+                            break
+
+            elif og_card.ability == "munster":
+                for i, card in enumerate(self.player_two.deck):
+                        if og_card.card_name == card.card_name:
+                            self.player_two.strength += card.strength
+                            self.player_two.board[card.row].append(card)
+                            # we are using del so that we delete the specific index and not deleting all the cards with the same name
+                            del self.player_two.deck[i]
+
+            elif og_card.ability == "morale boost":
+                for card in self.player_two.board[og_card.row]:
+                    if og_card.card_name != card.card_name:
+                        card.strength += 1
+
+            elif og_card.ability == "spy":
+                self.player_one.board[og_card.row].append(og_card)
+                for _ in range(2):
+                    self.player_two.deck.draw_from_deck()
+
+            elif og_card.ability == "decoy":
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_two.board[row]:
+                        print(card.card_name)
+                card_chosen = input("What card do you want?")
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(self.player_two.board[row]):
+                        if card.card_name == card_chosen:
+                            self.player_two.hand.append(card)
+                            self.player_two.board[row][i] = og_card
+                            return
+
+            elif og_card.ability == "scorch":
+                max_strength_player_one = 0
+                max_card_player_one = None
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_one.board[row]:
+                        if max_strength_player_one < card.strength and card.ability != "hero":
+                            max_card_player_one = card
+                            max_strength_card_player_one = card.strength
+
+                max_card_player_two = None
+                max_strength_player_two = 0
+                for row in ["melee", "range", "siege"]:
+                    for card in self.player_two.board[row]:
+                        if max_strength_player_two < card.strength and card.ability != "hero":
+                            max_card_player_two = card
+                            max_strength_player_two = card.strength
+
+                #now we are deleting it
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(self.player_one.board[row]):
+                        if card is max_card_player_one:
+                            del self.player_one.board[row][i]
+                            break
+
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(self.player_two.board[row]):
+                        if card is max_card_player_two:
+                            del self.player_two.board[row][i]
+                            break
+
+
+
+    def cancel_effects(self,player,card):
+        if card.ability == "tight bond":
+            # Revert tight bond effect on other matching cards
+            for row in ["melee", "range", "siege"]:
+                for other_card in player.board[row]:
+                    if (other_card.ability == "tight bond" and
+                            other_card.card_name == card.card_name and
+                            other_card.row == card.row):
+                        other_card.strength //= 2  # Undo the doubling
+        elif card.ability == "morale boost":
+            # Remove the +1 morale boost from same-row cards
+            for other_card in player.board[card.row]:
+                if other_card is not card:  
+                    other_card.strength -= 1
