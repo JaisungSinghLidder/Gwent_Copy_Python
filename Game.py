@@ -36,16 +36,17 @@ class Game:
 
 
     def end_game_checker(self):
-        #refactor by adding variables that will allow it to be easier read
-        
+        p1_nilfgaard = self.player_one.faction.lower() == "nilfgaard"
+        p2_nilfgaard = self.player_two.faction.lower() == "nilfgaard"
+
         if self.player_one.lives == 0 and self.player_two.lives == 0:
-            if self.player_one.faction != "nilfgaard" and self.player_two.faction != "nilfgaard":
+            if not p1_nilfgaard and not p2_nilfgaard:
                 print("A draw has taken place, nobody wins")
                 return "draw"
-            elif self.player_one.faction == "nilfgaard" and self.player_two.faction != "nilfgaard":
+            elif p1_nilfgaard and not p2_nilfgaard:
                 print("Player one has activated its ability and player two has lost")
                 return "player one wins"
-            elif self.player_one.faction != "nilfgaard" and self.player_two.faction == "nilfgaard":
+            elif not p1_nilfgaard and p2_nilfgaard:
                 print("Player two has activated its ability and player one has lost")
                 return "player two wins"
         elif self.player_one.lives == 0:
