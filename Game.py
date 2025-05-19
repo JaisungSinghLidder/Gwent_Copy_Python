@@ -58,32 +58,48 @@ class Game:
 
     #refactor this to just have more readable code
     def determine_turn_order(self):
-        if self.player_one.faction == "scoia'tael":
-            player_choice_loop = True
-            while player_choice_loop:
-                player_choice = input("Player One (Scoia'tael): Do you want to go first or second? Note: type in first or second?")
-                if player_choice.lower() == "first":
-                    self.player_one.turn_order_first = True
-                    player_choice_loop = False
-                elif player_choice.lower() == "second":
-                    self.player_two.turn_order_first = True
-                    player_choice_loop = False
-        elif self.player_two.faction == "scoia'tael":
-            player_choice_loop = True
-            while player_choice_loop:
-                player_choice = input("Player Two (Scoia'tael): Do you want to go first or second")
-                if player_choice.lower() == "first":
-                    self.player_one.turn_order_first = True
-                    player_choice_loop = False
-                elif player_choice.lower() == "second":
-                    self.player_two.turn_order_first = True
-                    player_choice_loop = False
-        else:
-            coin_flip = random.randint(0,1)
-            if coin_flip == 0:
+
+        p1_scoia = self.player_one.faction.lower() == "scoia'tael"
+        p2_scoia = self.player_two.faction.lower() == "scoia'tael"
+
+
+        def coin_flip():
+            coin_flip_var = random.randint(0, 1)
+            if coin_flip_var == 0:
                 self.player_one.turn_order_first = True
             else:
                 self.player_two.turn_order_first = True
+
+        #both scoia'tael case:
+        #if they are both scoia'tael then just do a coin flip
+        if p1_scoia and p2_scoia:
+            coin_flip()
+
+        elif p1_scoia and not p2_scoia:
+            while True:
+                player_choice = input("Player One (Scoia'tael): Do you want to go first or second? Note: type in first or second?")
+                if player_choice.lower() == "first":
+                    self.player_one.turn_order_first = True
+                    break
+                elif player_choice.lower() == "second":
+                    self.player_two.turn_order_first = True
+                    break
+                else:
+                    print("Please type in first or second")
+
+        elif p2_scoia and not p1_scoia:
+            while True:
+                player_choice = input("Player Two (Scoia'tael): Do you want to go first or second")
+                if player_choice.lower() == "first":
+                    self.player_one.turn_order_first = True
+                    break
+                elif player_choice.lower() == "second":
+                    self.player_two.turn_order_first = True
+                    break
+                else:
+                    print("Please type in first or second")
+        else:
+            coin_flip()
 
 
     def round_resolve(self):
@@ -101,6 +117,10 @@ class Game:
     def faction_ability(self, round_winner, round_count):
         # monster faction case:
         # ability: keeps random unit card out after each round
+
+        #maybe add functions to make the logic more clear and the code less repetitive
+        #1)Random draw code
+        #2)??
 
         if self.player_one.faction == "monsters" and self.player_two.faction == "monsters":
             player_one_board = self.player_one.board
@@ -433,3 +453,15 @@ class Game:
             for card in player.board[row]:
                 total += card.strength
         player.strength = total
+
+
+
+
+
+
+
+
+
+
+
+
