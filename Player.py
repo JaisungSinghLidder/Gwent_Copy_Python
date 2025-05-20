@@ -3,7 +3,7 @@ from Card_Space.Deck import Deck
 
 class Player:
 
-    def __init__(self, deck, hand, leader_card, strength, faction, ai_player, player_name):
+    def __init__(self, deck, hand, leader_card, strength, faction, ai_player, player_name, weather_sum, sum):
         self.player_name = player_name
         self.deck = deck
         self.hand = hand
@@ -21,6 +21,8 @@ class Player:
         self.turn_order_first = False
         self.ai_player = ai_player
         self.player_name = player_name
+        self.weather_sum = weather_sum
+        self.sum = sum
 
 
     def play_card(self, card_name):
@@ -67,19 +69,19 @@ class Player:
 
     def passing_turn(self):
         passLoop = False
-        while passLoop == False:
+        while not passLoop:
             choice = input("Do you want to pass this round: yes or no?").lower()
             if choice == "yes":
                 self.passed = True
                 passLoop = True
-            elif(choice == "no"):
+            elif choice == "no":
                 self.passed = False
                 passLoop = True
             else:
                 print("Please input either yes or no?")
 
     def can_use_leader(self):
-        if self.leader_used == False:
+        if not self.leader_used:
             return True
         else:
             return False
@@ -89,12 +91,6 @@ class Player:
             self.graveyard.extend(row)
             row.clear()
         self.strength = 0
-
-
-
-
-
-
 
 
 
