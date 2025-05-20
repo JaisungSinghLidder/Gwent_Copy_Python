@@ -11,10 +11,9 @@ class Game:
         #this is for the ability where the player can keep a card
         self.player_one.cards_to_keep  = []
         self.player_two.cards_to_keep =  []
-        self.player_one_sum = 0
-        self.player_two_sum = 0
-        self.player_one_weather_sum = 0
-        self.player_two_weather_sum = 0
+        #have the player handle their own sum as well, but I'll add that to a later version of this code
+        #no more player sum
+        #no more weather sum
         self.active_weather_effect = set()
 
     def determine_winner(self):
@@ -116,7 +115,6 @@ class Game:
     #This faction ability is going to cover northern realms and skilege
     def faction_ability(self, round_winner, round_count):
 
-
         def monster_keep_card(player, board):
             valid_rows = [row for row in board if board[row]]
             if valid_rows:
@@ -204,87 +202,71 @@ class Game:
 
         self.active_weather_effect.add(weather_effect)
 
-        if weather_effect == "biting frost":
-            for card in self.player_one.board["melee"]:
+        def biting_frost(player):
+            for card in player.board["melee"]:
                 if card.ability != "hero":
-                    self.player_one_weather_sum += (card.strength - 1)
-            self.player_one_weather_sum *= -1
-            self.player_one_sum += self.player_one_weather_sum
+                    player.weather_sum += (card.strength - 1)
+            player.weather_sum *= -1
+            player.sum += player.weather_sum
 
-            for card in self.player_two.board["melee"]:
+        def impenetrable_fog(player):
+            for card in player.board["range"]:
                 if card.ability != "hero":
-                    self.player_two_weather_sum += (card.strength - 1)
-            self.player_two_weather_sum *= -1
-            self.player_two_sum += self.player_two_weather_sum
+                    player.weather_sum += (card.strength - 1)
+            player.weather_sum *= -1
+            player.sum += player.weather_sum
+
+        def torrential_rain(player):
+            for card in player.board["siege"]:
+                if card.ability != "hero":
+                    player.weather_sum += (card.strength - 1)
+            player.weather_sum *= -1
+            player.sum += player.weather_sum
+
+        if weather_effect == "biting frost":
+
+            biting_frost(self.player_one)
+
+            biting_frost(self.player_two)
 
 
         elif weather_effect == "impenetrable fog":
-            for card in self.player_one.board["range"]:
-                if card.ability != "hero":
-                    self.player_one_weather_sum += (card.strength - 1)
-            self.player_one_weather_sum *= -1
-            self.player_one_sum += self.player_one_weather_sum
+            impenetrable_fog(self.player_one)
 
-            for card in self.player_two.board["range"]:
-                if card.ability != "hero":
-                    self.player_two_weather_sum += (card.strength - 1)
-            self.player_two_weather_sum *= -1
-            self.player_two_sum += self.player_two_weather_sum
+            impenetrable_fog(self.player_two)
 
         elif weather_effect == "torrential rain":
-            for card in self.player_one.board["siege"]:
-                if card.ability != "hero":
-                    self.player_one_weather_sum += (card.strength - 1)
-            self.player_one_weather_sum *= -1
-            self.player_one_sum += self.player_one_weather_sum
+            torrential_rain(self.player_one)
 
-            for card in self.player_two.board["siege"]:
-                if card.ability != "hero":
-                    self.player_two_weather_sum += (card.strength - 1)
-            self.player_two_weather_sum *= -1
-            self.player_two_sum += self.player_two_weather_sum
+            torrential_rain(self.player_two)
 
         elif weather_effect == "skelliege storm":
             if "torrential rain" in self.active_weather_effect and "impenetrable fog" in self.active_weather_effect:
                 return
+
             elif "torrential rain" in self.active_weather_effect:
-                for card in self.player_one.board["range"]:
-                    if card.ability != "hero":
-                        self.player_one_weather_sum += (card.strength - 1)
-                self.player_one_weather_sum *= -1
-                self.player_one_sum += self.player_one_weather_sum
+                impenetrable_fog(self.player_one)
 
-                for card in self.player_two.board["range"]:
-                    if card.ability != "hero":
-                        self.player_two_weather_sum += (card.strength - 1)
-                self.player_two_weather_sum *= -1
-                self.player_two_sum += self.player_two_weather_sum
+                impenetrable_fog(self.player_two)
+
             elif "impenetrable fog" in self.active_weather_effect:
-                for card in self.player_one.board["siege"]:
-                    if card.ability != "hero":
-                        self.player_one_weather_sum += (card.strength - 1)
-                self.player_one_weather_sum *= -1
-                self.player_one_sum += self.player_one_weather_sum
+                torrential_rain(self.player_one)
 
-                for card in self.player_two.board["siege"]:
-                    if card.ability != "hero":
-                        self.player_two_weather_sum += (card.strength - 1)
-                self.player_two_weather_sum *= -1
-                self.player_two_sum += self.player_two_weather_sum
+                torrential_rain(self.player_two)
 
         elif weather_effect == "clear weather":
             self.active_weather_effect.clear()
-            self.player_one_weather_sum *= -1
-            self.player_two_weather_sum *= -1
-            self.player_one_sum += self.player_one_weather_sum
-            self.player_two_sum += self.player_two_weather_sum
+            self.player_one.weather_sum *= -1
+            self.player_two.weather_sum *= -1
+            self.player_one.sum += self.player_one.weather_sum
+            self.player_two.sum += self.player_two.weather_sum
 
     #Maybe I will just to get rid of the reliance on the other systems
     def round_summary(self):
         print("Player one stats:")
-        print(f"Sum: {self.player_one_sum} ")
+        print(f"Sum: {self.player_one.sum} ")
         print("Player two stats:")
-        print(f"Sum: {self.player_two_sum}")
+        print(f"Sum: {self.player_two.sum}")
         print("Round:")
         print(f"{self.round_counter}")
 
@@ -421,8 +403,4 @@ class Game:
             for card in player.board[row]:
                 total += card.strength
         player.strength = total
-
-
-
-
 
