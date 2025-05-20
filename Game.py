@@ -70,7 +70,7 @@ class Game:
             else:
                 self.player_two.turn_order_first = True
 
-        #both scoia'tael case:
+
         #if they are both scoia'tael then just do a coin flip
         if p1_scoia and p2_scoia:
             coin_flip()
@@ -105,7 +105,7 @@ class Game:
     def round_resolve(self):
         self.player_one.round_end()
         self.player_two.round_end()
-        if self.player_one.turn_order_first == True:
+        if self.player_one.turn_order_first:
             self.player_one.turn_order_first = False
             self.player_two.turn_order_first = True
         else:
@@ -115,106 +115,74 @@ class Game:
 
     #This faction ability is going to cover northern realms and skilege
     def faction_ability(self, round_winner, round_count):
-        # monster faction case:
-        # ability: keeps random unit card out after each round
 
-        #maybe add functions to make the logic more clear and the code less repetitive
-        #1)Random draw code
-        #2)??
 
+        def monster_keep_card(player, board):
+            valid_rows = [row for row in board if board[row]]
+            if valid_rows:
+                chosen_row = random.choice(valid_rows)
+                card_to_keep = random.choice(board[chosen_row])
+                player.cards_to_keep.append(card_to_keep)
+
+        def northern_realms_draw_card(player):
+            extra_card_player = player.deck.draw_from_deck()
+            player.hand.append(extra_card_player)
+
+        def skellige_draw_from_graveyard(player):
+            #not checking for two cards because you can't win a round by placing somehow less than two cards the whole game in total
+            for _ in range(2):
+                card_to_keep = random.choice(player.graveyard)
+                player.cards_to_keep.append(card_to_keep)
+                for i, c in enumerate(player.graveyard):
+                    if c is card_to_keep:
+                        del player.graveyard[i]
+                        break
+
+
+        #monster's block
         if self.player_one.faction == "monsters" and self.player_two.faction == "monsters":
-            player_one_board = self.player_one.board
-            player_two_board = self.player_two.board
 
-            player_one_valid_rows = [row for row in player_one_board if player_one_board[row]]
-            player_two_valid_rows = [row for row in player_two_board if player_two_board[row]]
+            monster_keep_card(self.player_one, self.player_one.board)
 
-            if player_one_valid_rows:
-                chosen_row = random.choice(player_one_valid_rows)
-                card_to_keep = random.choice(player_one_board[chosen_row])
+            monster_keep_card(self.player_two, self.player_two.board)
 
-                # Add the card to the keep list
-                self.player_one.cards_to_keep.append(card_to_keep)
-
-            if player_two_valid_rows:
-                chosen_row = random.choice(player_two_valid_rows)
-                card_to_keep = random.choice(player_two_board[chosen_row])
-
-                # Add the card to the keep list
-                self.player_two.cards_to_keep.append(card_to_keep)
 
         elif self.player_one.faction == "monsters":
-            board = self.player_one.board
-            valid_rows = [row for row in board if board[row]]
+            monster_keep_card(self.player_one, self.player_one.board)
 
-            if valid_rows:
-                chosen_row = random.choice(valid_rows)
-                card_to_keep = random.choice(board[chosen_row])
-
-                # Add the card to the keep list
-                self.player_one.cards_to_keep.append(card_to_keep)
-
-                print(f"(Player One): The monsters faction keeps card '{card_to_keep.card_name}' on the board.")
         elif self.player_two.faction == "monsters":
-            board = self.player_two.board
-            valid_rows = [row for row in board if board[row]]
+            monster_keep_card(self.player_two, self.player_two.board)
 
-            if valid_rows:
-                chosen_row = random.choice(valid_rows)
-                card_to_keep = random.choice(board[chosen_row])
-
-                # Add the card to the keep list
-                self.player_two.cards_to_keep.append(card_to_keep)
-
-                print(f"(Player Two): The monsters faction keeps the card '{card_to_keep.card_name}' on the board")
-
+        #northern realm's block
         if self.player_one.faction == "northern realms" and round_winner == "player one wins":
-            extra_card_player_one = self.player_one.deck.draw_from_deck()
-            self.player_one.hand.append(extra_card_player_one)
+            northern_realms_draw_card(self.player_one)
 
-            print(f"(Player One): Northern Realms faction draws a card '{extra_card_player_one.card_name}'")
         elif self.player_two.faction == "northern realms" and round_winner == "player two wins":
-            extra_card_player_two = self.player_two.deck.draw_from_deck()
-            self.player_two.hand.append(extra_card_player_two)
+            northern_realms_draw_card(self.player_two)
 
-            print(f"(Player Two): Northern Realms faction draws a card '{extra_card_player_two.card_name}'")
 
-        #Note in the future, get rid of the remove as it will remove duplicates wihtin the graveyard which is terrible
-        if self.player_one.faction == "skellige" and self.player_two.faction == "skellige" and round_count == 3:
-            for _ in range(2):
-                card_to_keep = random.choice(self.player_one.graveyard)
-                self.player_one.cards_to_keep.append(card_to_keep)
-                for i, c in enumerate(self.player_one.graveyard):
-                    if c is card_to_keep:
-                        del self.player_one.graveyard[i]
-                        break
-            for _ in range(2):
-                card_to_keep = random.choice(self.player_two.graveyard)
-                self.player_two.cards_to_keep.append(card_to_keep)
-                for i, c in enumerate(self.player_two.graveyard):
-                    if c is card_to_keep:
-                        del self.player_two.graveyard[i]
-                        break
-        elif self.player_one.faction == "skellige" and round_count == 3:
-            for _ in range(2):
-                card_to_keep = random.choice(self.player_one.graveyard)
-                self.player_one.cards_to_keep.append(card_to_keep)
-                for i, c in enumerate(self.player_one.graveyard):
-                    if c is card_to_keep:
-                        del self.player_one.graveyard[i]
-                        break
-        elif self.player_two.faction == "skellige" and round_count == 3:
-            for _ in range(2):
-                card_to_keep = random.choice(self.player_two.graveyard)
-                self.player_two.cards_to_keep.append(card_to_keep)
-                for i, c in enumerate(self.player_two.graveyard):
-                    if c is card_to_keep:
-                        del self.player_two.graveyard[i]
-                        break
+        #skellige's block
+
+        #only works on round 3
+        if round_count == 3:
+
+            if self.player_one.faction == "skellige" and self.player_two.faction == "skellige":
+
+                skellige_draw_from_graveyard(self.player_one)
+
+                skellige_draw_from_graveyard(self.player_two)
+
+            elif self.player_one.faction == "skellige":
+
+                skellige_draw_from_graveyard(self.player_one)
+
+            elif self.player_two.faction == "skellige":
+
+                skellige_draw_from_graveyard(self.player_two)
 
 
 
-
+    #this function will play the cards that are supposed to be kept on field or going to be brought back
     def play_card_to_keep(self):
         if self.player_one.cards_to_keep:
             for card in self.player_one.cards_to_keep:
@@ -453,13 +421,6 @@ class Game:
             for card in player.board[row]:
                 total += card.strength
         player.strength = total
-
-
-
-
-
-
-
 
 
 
