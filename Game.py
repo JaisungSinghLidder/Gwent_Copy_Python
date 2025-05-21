@@ -405,3 +405,86 @@ class Game:
             for card in player.board[row]:
                 total += card.strength
         player.strength = total
+
+
+    #have to add a leader ability now
+    #probably just going to add 5 because I don't want to add all the variants into the deck
+    #1)Northern Realms: Foltest - Lord commander of the North - Clear Weather effects
+    #2)Monsters: Eredin - Bringer of death - Boost a random unit by 2
+    #3)Nilfgaard: Emhyr var Emreis - The white Flame - Look at opponent's hand
+    #4)Scoia'tael: Francesca Findabair - QUeen of Dol Blathanna - Play a random card from your deck
+    #5)Skillege: Crach an Craite - Shuffle all cards from each player graveyards back into their decks
+
+    def use_leader_ability(self, player):
+
+        opponent = None
+
+        if player == self.player_one:
+            opponent = self.player_two
+        else:
+            opponent = self.player_one
+
+
+        if player.leader_used:
+            print("You have already used this ability")
+
+        else:
+            #basically using clear weather
+            if player.leader_card == "foltest lord commander" and player.faction == "northern realms":
+
+
+                self.active_weather_effect.clear()
+                self.player_one.weather_sum *= -1
+                self.player_two.weather_sum *= -1
+                self.player_one.sum += self.player_one.weather_sum
+                self.player_two.sum += self.player_two.weather_sum
+
+
+                player.leader_used = True
+
+            #looking at 3 cards in your opponents hand
+            elif player.leader_card == "emhyr var emreis the white flame" and player.faction == "nilfgaard":
+
+                cards_to_show = random.sample(opponent.hand, min(3,len(opponent.hand)))
+                print("3 of the opponenets hand")
+                for card in cards_to_show:
+                    print(card)
+
+                player.leader_used = True
+
+            # boosting the strength by 3
+            elif player.leader_used == "eredin bringer of death" and player.faction == "monsters":
+
+                card_chosen = input("List a target(by name) you wish to boost the strength by 3")
+
+                for row in ["melee", "range", "siege"]:
+                    for card in player.board[row]:
+                        if card.card_name == card_chosen and card.ability != "hero":
+                            card.strength += 3
+                            print(f"{card.card_name} has been boosted by 3")
+
+                player.leader_used = True
+
+            #lets you play special card from your deck
+
+            elif player.leader_used == "francesa queen of dol blathanaa" and player.faction == "scoia'tael":
+
+                for card in player.deck:
+                    if card.card_type != " ":
+                        chosen_card = random.choice(player.deck)
+                        player.hand.append(chosen_card)
+                        player.deck.remove(chosen_card)
+                        print(f"{chosen_card}")
+                        
+                player.leader_used = True 
+
+            # shuffle all cards from each player's graveyard back into their decks
+            elif player.leader_used == "crach an craite" and player.faction == "skellige":
+                
+                
+                player.deck.extend(player.graveyard)
+                player.graveyard.clear()
+                random.shuffle(player.deck)
+                
+                
+                player.leader_used = True 
