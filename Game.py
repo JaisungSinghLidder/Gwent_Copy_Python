@@ -55,7 +55,7 @@ class Game:
             print("Player one has won!")
             return "player one wins"
 
-    #refactor this to just have more readable code
+
     def determine_turn_order(self):
 
         p1_scoia = self.player_one.faction.lower() == "scoia'tael"
@@ -304,7 +304,7 @@ class Game:
                         og_card.strength *= 2
 
         elif og_card.ability == "medic":
-            if player.graveyard is None:
+            if not player.graveyard:
                 print("There is no cards to heal")
             else:
                 for card in player.graveyard:
@@ -318,7 +318,7 @@ class Game:
                         del player.graveyard[i]
                         break
 
-        elif og_card.ability == "munster":
+        elif og_card.ability == "muster":
             for i, card in enumerate(player.deck):
                     if og_card.card_name == card.card_name:
                         player.strength += card.strength
@@ -332,9 +332,11 @@ class Game:
                     card.strength += 1
 
         elif og_card.ability == "spy":
-            opponent[og_card.row].append(og_card)
+            opponent.board[og_card.row].append(og_card)
             for _ in range(2):
-                player.deck.draw_from_deck()
+                card = player.deck.draw_from_deck()
+                if card:
+                    player.hand.append(card)
 
         elif og_card.ability == "decoy":
             for row in ["melee", "range", "siege"]:
@@ -360,7 +362,7 @@ class Game:
             max_card_player_two = None
             max_strength_player_two = 0
             for row in ["melee", "range", "siege"]:
-                for card in opponent[row]:
+                for card in opponent.board[row]:
                     if max_strength_player_two < card.strength and card.ability != "hero":
                         max_card_player_two = card
                         max_strength_player_two = card.strength
@@ -403,4 +405,3 @@ class Game:
             for card in player.board[row]:
                 total += card.strength
         player.strength = total
-
