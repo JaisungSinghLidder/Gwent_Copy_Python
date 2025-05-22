@@ -1,12 +1,13 @@
+from typing import List
 from Card_Space.Card import Card
 from Card_Space.Deck import Deck
 
 class Player:
 
-    def __init__(self, hand, leader_card, strength, faction, ai_player, player_name, weather_sum, sum):
+    def __init__(self, deck: Deck, leader_card: str, strength: int, faction: str, ai_player: bool, player_name: str, weather_sum: int, sum: int):
         self.player_name = player_name
-        self.deck = []
-        self.hand = hand
+        self.deck = deck
+        self.hand: List[Card] = []
         self.board = {"melee": [], "ranged": [], "siege": []}
         #this is going to be where cards die!
         self.graveyard = []
@@ -23,10 +24,13 @@ class Player:
         self.player_name = player_name
         self.weather_sum = weather_sum
         self.sum = sum
+        
+    
+    #adding a draw hand implementation later after typing is completed
 
 
 
-    def play_card(self, card_name):
+    def play_card(self, card_name) -> Card | None:
 
         if not self.hand:
             print("You have nothing in your hand")
@@ -48,20 +52,20 @@ class Player:
                     return None
 
 
-    def reset_score(self):
+    def reset_score(self) -> None:
         self.strength = 0
 
-    def lose_life(self):
+    def lose_life(self) -> None:
         self.lives -= 1
 
-    def lose_game(self):
+    def lose_game(self) -> str:
         if self.lives == 0:
             return "Defeated"
 
-    def check_lives(self):
+    def check_lives(self) -> int:
         return self.lives
 
-    def display_hand(self):
+    def display_hand(self) -> None:
         print("Displaying your hand")
         for card in self.hand:
             print(f"{card.card_name} | {card.strength} | {card.ability}")
@@ -72,8 +76,9 @@ class Player:
             print(f"\n{row.upper()}")
             for card in cards:
                 print(f"{card.card_name} | {card.strength} | {card.ability}")
-
-    def passing_turn(self):
+    
+    #need to change this loop logic to make it more clear
+    def passing_turn(self) -> None:
         passLoop = False
         while not passLoop:
             choice = input("Do you want to pass this round: yes or no?").lower()
@@ -86,20 +91,18 @@ class Player:
             else:
                 print("Please input either yes or no?")
 
-    def can_use_leader(self):
+    def can_use_leader(self) -> bool:
         if not self.leader_used:
             return True
         else:
             return False
 
-    def round_end(self):
+    def round_end(self) -> None:
         for row in self.board.values():
             self.graveyard.extend(row)
             row.clear()
         self.weather_sum = 0
         self.sum = 0
-
-
 
 
 
