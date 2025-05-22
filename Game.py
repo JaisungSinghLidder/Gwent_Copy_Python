@@ -1,22 +1,24 @@
+from typing import List
 from General_Game_Space import Player
+from Card_Space.Card import Card
 import random
 
 class Game:
 
-    def __init__(self,player_one, player_two):
+    def __init__(self,player_one: Player, player_two: Player):
         self.player_one = player_one
         self.player_two = player_two
         #we need to check the counter because of Skillege ability
         self.round_counter = 0
         #this is for the ability where the player can keep a card
-        self.player_one.cards_to_keep  = []
-        self.player_two.cards_to_keep =  []
+        self.player_one.cards_to_keep: List[Card]  = []
+        self.player_two.cards_to_keep: List[Card] =  []
         #have the player handle their own sum as well, but I'll add that to a later version of this code
         #no more player sum
         #no more weather sum
         self.active_weather_effect = set()
 
-    def determine_winner(self):
+    def determine_winner(self) -> str:
         #An outright win case
         if self.player_one.strength > self.player_two.strength:
             self.player_two.lose_life()
@@ -34,7 +36,7 @@ class Game:
 
 
 
-    def end_game_checker(self):
+    def end_game_checker(self) -> str:
         p1_nilfgaard = self.player_one.faction.lower() == "nilfgaard"
         p2_nilfgaard = self.player_two.faction.lower() == "nilfgaard"
 
@@ -57,7 +59,7 @@ class Game:
             return "player one wins"
 
 
-    def determine_turn_order(self):
+    def determine_turn_order(self)-> None:
 
         p1_scoia = self.player_one.faction.lower() == "scoia'tael"
         p2_scoia = self.player_two.faction.lower() == "scoia'tael"
@@ -104,20 +106,20 @@ class Game:
 
 
     #This faction ability is going to cover northern realms and skilege
-    def faction_ability(self, round_winner, round_count):
+    def faction_ability(self, round_winner, round_count) -> None:
 
-        def monster_keep_card(player, board):
+        def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
             if valid_rows:
                 chosen_row = random.choice(valid_rows)
                 card_to_keep = random.choice(board[chosen_row])
                 player.cards_to_keep.append(card_to_keep)
 
-        def northern_realms_draw_card(player):
+        def northern_realms_draw_card(player) -> None:
             extra_card_player = player.deck.draw_from_deck()
             player.hand.append(extra_card_player)
 
-        def skellige_draw_from_graveyard(player):
+        def skellige_draw_from_graveyard(player) -> None:
             #not checking for two cards because you can't win a round by placing somehow less than two cards the whole game in total
             for _ in range(2):
                 card_to_keep = random.choice(player.graveyard)
@@ -172,7 +174,7 @@ class Game:
 
 
     #this function will play the cards that are supposed to be kept on field or going to be brought back
-    def play_card_to_keep(self):
+    def play_card_to_keep(self) -> None:
         if self.player_one.cards_to_keep:
             for card in self.player_one.cards_to_keep:
                 row = card.row_type
@@ -186,28 +188,28 @@ class Game:
             self.player_two.cards_to_keep.clear()
 
     #Weather effect
-    def check_weather_effect(self, weather_effect):
+    def check_weather_effect(self, weather_effect) -> None:
         if weather_effect in self.active_weather_effect:
             print(f"{weather_effect} is already in use")
             return
 
         self.active_weather_effect.add(weather_effect)
 
-        def biting_frost(player):
+        def biting_frost(player) -> None:
             for card in player.board["melee"]:
                 if card.ability != "hero":
                     player.weather_sum += (card.strength - 1)
             player.weather_sum *= -1
             player.sum += player.weather_sum
 
-        def impenetrable_fog(player):
+        def impenetrable_fog(player) -> None:
             for card in player.board["range"]:
                 if card.ability != "hero":
                     player.weather_sum += (card.strength - 1)
             player.weather_sum *= -1
             player.sum += player.weather_sum
 
-        def torrential_rain(player):
+        def torrential_rain(player) -> None:
             for card in player.board["siege"]:
                 if card.ability != "hero":
                     player.weather_sum += (card.strength - 1)
@@ -253,7 +255,7 @@ class Game:
             self.player_two.sum += self.player_two.weather_sum
 
     #Maybe I will just to get rid of the reliance on the other systems
-    def round_summary(self):
+    def round_summary(self) -> None:
         print("Player one stats:")
         print(f"Sum: {self.player_one.sum} ")
         print("Player two stats:")
@@ -261,7 +263,7 @@ class Game:
         print("Round:")
         print(f"{self.round_counter}")
 
-    def display_board(self):
+    def display_board(self) -> None:
         print("\n ===== BOARD =====")
 
         #change the player statement so that it prints out the right player
@@ -279,7 +281,7 @@ class Game:
         print_player_board(self.player_two)
 
 
-    def use_card_ability(self, player, og_card):
+    def use_card_ability(self, player, og_card) -> None:
         opponent = None
 
         if player == self.player_one:
@@ -372,7 +374,7 @@ class Game:
                         break
 
 
-    def cancel_effects(self,player,card):
+    def cancel_effects(self,player,card) -> None:
         if card.ability == "tight bond":
             # Revert tight bond effect on other matching cards
             for row in ["melee", "range", "siege"]:
@@ -390,7 +392,7 @@ class Game:
 
 
     #Debugging function
-    def calculate_strength(self, player):
+    def calculate_strength(self, player) -> None:
         total = 0
         for row in ["melee", "range", "siege"]:
             for card in player.board[row]:
@@ -406,7 +408,7 @@ class Game:
     #4)Scoia'tael: Francesca Findabair - QUeen of Dol Blathanna - Play a random card from your deck
     #5)Skillege: Crach an Craite - Shuffle all cards from each player graveyards back into their decks
 
-    def use_leader_ability(self, player):
+    def use_leader_ability(self, player) -> None:
 
         opponent = None
 
@@ -481,7 +483,7 @@ class Game:
                 player.leader_used = True
 
 
-    def round_resolve(self):
+    def round_resolve(self) -> None:
         self.player_one.round_end()
         self.player_two.round_end()
 
@@ -491,7 +493,7 @@ class Game:
             for row in player.board.values():
                 for card in row:
                     self.cancel_effects(player, card)
-                    
+
         self.calculate_strength(self.player_one)
         self.calculate_strength(self.player_two)
 
@@ -502,3 +504,6 @@ class Game:
             self.player_two.turn_order_first = False
             self.player_one.turn_order_first = True
         self.round_counter += 1
+
+
+
