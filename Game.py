@@ -38,7 +38,8 @@ class Game:
         p1_nilfgaard = self.player_one.faction.lower() == "nilfgaard"
         p2_nilfgaard = self.player_two.faction.lower() == "nilfgaard"
 
-        if self.player_one.lives == 0 and self.player_two.lives == 0:
+        #using <= just to make sure if a glitch happens and something became negative that it would error check for that.
+        if self.player_one.lives <= 0 and self.player_two.lives <= 0:
             if not p1_nilfgaard and not p2_nilfgaard:
                 print("A draw has taken place, nobody wins")
                 return "draw"
@@ -48,10 +49,10 @@ class Game:
             elif not p1_nilfgaard and p2_nilfgaard:
                 print("Player two has activated its ability and player one has lost")
                 return "player two wins"
-        elif self.player_one.lives == 0:
+        elif self.player_one.lives <= 0:
             print("Player two has won!")
             return "player two wins"
-        elif self.player_two.lives == 0:
+        elif self.player_two.lives <= 0:
             print("Player one has won!")
             return "player one wins"
 
@@ -101,16 +102,6 @@ class Game:
             coin_flip()
 
 
-    def round_resolve(self):
-        self.player_one.round_end()
-        self.player_two.round_end()
-        if self.player_one.turn_order_first:
-            self.player_one.turn_order_first = False
-            self.player_two.turn_order_first = True
-        else:
-            self.player_two.turn_order_first = False
-            self.player_one.turn_order_first = True
-        self.round_counter += 1
 
     #This faction ability is going to cover northern realms and skilege
     def faction_ability(self, round_winner, round_count):
@@ -475,16 +466,39 @@ class Game:
                         player.hand.append(chosen_card)
                         player.deck.remove(chosen_card)
                         print(f"{chosen_card}")
-                        
-                player.leader_used = True 
+
+                player.leader_used = True
 
             # shuffle all cards from each player's graveyard back into their decks
             elif player.leader_used == "crach an craite" and player.faction == "skellige":
-                
-                
+
+
                 player.deck.extend(player.graveyard)
                 player.graveyard.clear()
                 random.shuffle(player.deck)
-                
-                
-                player.leader_used = True 
+
+
+                player.leader_used = True
+
+
+    def round_resolve(self):
+        self.player_one.round_end()
+        self.player_two.round_end()
+
+        self.check_weather_effect("clear weather")
+        #need to effect the player
+        for player in (self.player_one, self.player_two):
+            for row in player.board.values():
+                for card in row:
+                    self.cancel_effects(player, card)
+                    
+        self.calculate_strength(self.player_one)
+        self.calculate_strength(self.player_two)
+
+        if self.player_one.turn_order_first:
+            self.player_one.turn_order_first = False
+            self.player_two.turn_order_first = True
+        else:
+            self.player_two.turn_order_first = False
+            self.player_one.turn_order_first = True
+        self.round_counter += 1
