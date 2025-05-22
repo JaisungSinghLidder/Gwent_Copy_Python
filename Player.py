@@ -3,9 +3,9 @@ from Card_Space.Deck import Deck
 
 class Player:
 
-    def __init__(self, deck, hand, leader_card, strength, faction, ai_player, player_name, weather_sum, sum):
+    def __init__(self, hand, leader_card, strength, faction, ai_player, player_name, weather_sum, sum):
         self.player_name = player_name
-        self.deck = deck
+        self.deck = []
         self.hand = hand
         self.board = {"melee": [], "ranged": [], "siege": []}
         #this is going to be where cards die!
@@ -25,22 +25,28 @@ class Player:
         self.sum = sum
 
 
+
     def play_card(self, card_name):
-        for i, card in enumerate(self.hand):
-            #card is a unit and it exists in hand
-            if card.card_name == card_name and card.card_type == "unit":
-                self.strength += card.strength
-                self.board[card.row].append(card)
-                #we are using del so that we delete the specific index and not deleting all the cards with the same name
-                del self.hand[i]
-            #case where it is a weather card, this is important as weather cards affect both boards so it needs special handling
-            elif card.card_name == card_name and card.card_type == "weather":
-                card_to_graveyard = self.hand[i]
-                del self.hand[i]
-                self.graveyard.append(card_to_graveyard)
-            return card
-        #card doesn't exist
-        return None
+
+        if not self.hand:
+            print("You have nothing in your hand")
+            return None
+
+        else:
+            for i, card in enumerate(self.hand):
+                #card is a unit and it exists in hand
+                if card.card_name == card_name and card.card_type == "unit":
+                    self.strength += card.strength
+                    self.board[card.row].append(card)
+                    return self.hand.pop(i)
+                #case where it is a weather card, this is important as weather cards affect both boards so it needs special handling
+                elif card.card_name == card_name and card.card_type == "weather":
+                    self.graveyard.append(card)
+                    return self.hand.pop(i)
+                else:
+                    print("That card doesn't exist")
+                    return None
+
 
     def reset_score(self):
         self.strength = 0
@@ -90,20 +96,8 @@ class Player:
         for row in self.board.values():
             self.graveyard.extend(row)
             row.clear()
-        self.strength = 0
-
-
-
-
-
-
-
-
-
-
-
-
-
+        self.weather_sum = 0
+        self.sum = 0
 
 
 
