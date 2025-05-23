@@ -137,7 +137,6 @@ class Game:
 
             monster_keep_card(self.player_two, self.player_two.board)
 
-
         elif self.player_one.faction == "monsters":
             monster_keep_card(self.player_one, self.player_one.board)
 
@@ -425,13 +424,11 @@ class Game:
             #basically using clear weather
             if player.leader_card == "foltest lord commander" and player.faction == "northern realms":
 
-
                 self.active_weather_effect.clear()
                 self.player_one.weather_sum *= -1
                 self.player_two.weather_sum *= -1
                 self.player_one.sum += self.player_one.weather_sum
                 self.player_two.sum += self.player_two.weather_sum
-
 
                 player.leader_used = True
 
@@ -504,6 +501,101 @@ class Game:
             self.player_two.turn_order_first = False
             self.player_one.turn_order_first = True
         self.round_counter += 1
+
+    #adding a display hand feature
+    def display_player_hand(self, player: Player) -> None:
+        for card in player.hand:
+            print(card.card_name)
+
+    #drawing and redrawing feature:
+    def player_starting_draw(self) -> None:
+
+        def redraw_mechanic(player: Player):
+            if len(player.deck.cards) < 10:
+                print(f"{player.player_name}Your deck isn't big enough to draw, please create a bigger deck")
+                return
+
+            # going to draw 10
+            for _ in range(10):
+                player.draw_card_to_hand()
+
+            self.display_player_hand(player)
+
+            # redraw logic
+            print("One at a time you will be able to redraw 3 cards")
+            redraw_choice = input("Please press enter if you want to redraw nothing though")
+
+            if redraw_choice.strip() != "":
+                redraws_remaining = 3
+                while redraws_remaining > 0:
+                    redraw_card_choice = input(
+                        "Please enter in the name of the card to redraw or press enter to skip").lower().strip()
+
+                    if redraw_card_choice == "":
+                        break
+
+                    for i, card in enumerate(player.hand):
+                        if card.card_name.lower() == redraw_card_choice:
+
+                            # want to reintroduce the card into the deck, then reshuffle that deck
+                            player.deck.add_to_deck(player.hand.pop(i))
+                            player.deck.shuffle()
+
+                            new_card = player.deck.draw_from_deck()
+
+                            if new_card:
+                                player.hand.append(new_card)
+                                print(f"You now get {new_card.card_name}")
+                            else:
+                                print("Deck is empty. Could not draw a new card")
+                            redraws_remaining -= 1
+                            break
+                    else:
+                        print("Card isn't in your hand, could you please try again")
+
+
+
+        #shuffle decks beforehand just to make sure
+        self.player_one.deck.shuffle()
+        self.player_two.deck.shuffle()
+
+
+        redraw_mechanic(self.player_one)
+        redraw_mechanic(self.player_two)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
