@@ -10,6 +10,70 @@
     "ability": null
   },
   {
+    "name": "geralt of rivia",
+    "faction": "neutral",
+    "row": "melee",
+    "strength": 15,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "zoltan chivay",
+    "faction": "neutral",
+    "row": "melee",
+    "strength": 5,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "vesemir",
+    "faction": "neutral",
+    "row": "melee",
+    "strength": 6,
+    "card_type": "unit",
+    "ability": null
+  },
+  {
+    "name": "philippa Eilhart",
+    "faction": "northern realms",
+    "row": "range",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "esterad thyssen",
+    "faction": "northern realms",
+    "row": "range",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "john natalis",
+    "faction": "northern realms",
+    "row": "melee",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "moruran voorhis",
+    "faction": "nilfgaardian",
+    "row": "siege",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "hero"
+  },
+  {
+    "name": "menno coehoorn",
+    "faction": "nilfgaardian",
+    "row": "melee",
+    "strength": 10,
+    "card_type": "unit",
+    "ability": "medic"
+  },
+  {
     "name": "redanian ford soldier",
     "faction": "northern realms",
     "row": "melee",
@@ -23,7 +87,7 @@
     "row": "melee",
     "strength": 4,
     "card_type": "unit",
-    "ability": "Spy"
+    "ability": "spy"
   },
   {
     "name": "vernon roche",
@@ -63,15 +127,15 @@
     "faction": "nilfgaardian",
     "row": "range",
     "strength": 6,
-    "card_time": "unit",
+    "card_type": "unit",
     "ability": null
   },
   {
-    "name": "imprea brigade guard,",
+    "name": "imprea brigade guard",
     "faction": "nilfgaardian",
     "row": "melee",
     "strength": 3,
-    "card_time": "unit",
+    "card_type": "unit",
     "ability": "tight bound"
   },
   {
@@ -84,7 +148,7 @@
   },
   {
     "name": "tibor eggebracht",
-    "faction": "nilfgaardin",
+    "faction": "nilfgaardian",
     "row": "range",
     "strength": 10,
     "card_type": "unit",
@@ -92,7 +156,7 @@
   },
   {
     "name": "vattier de rideaux",
-    "faction": "nilfgaardin",
+    "faction": "nilfgaardian",
     "row": "melee",
     "strength": 4,
     "card_type": "unit",
@@ -100,7 +164,7 @@
   },
   {
     "name": "puttkammer",
-    "faction": "nilfgaardin",
+    "faction": "nilfgaardian",
     "row": "range",
     "strength": 3,
     "card_type": "unit",
@@ -111,7 +175,7 @@
     "faction": "neutral",
     "row": null,
     "strength": 0,
-    "unit_type": "buff",
+    "card_type": "buff",
     "ability": "horn"
   },
   {
