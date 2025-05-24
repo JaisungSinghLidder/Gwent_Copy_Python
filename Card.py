@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 #Since it already creates comparisons
 #now I am going to base it off strength right now to keep the code easier for my AI
 #it probably won't be the smartest yet, but I can deal with that for now until I find another way to do it.
+
+@dataclass
 class Card:
 
     card_name: str = field(compare = False)
