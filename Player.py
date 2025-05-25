@@ -1,16 +1,17 @@
-from typing import List
+from typing import List, Dict
 from Card_Space.Card import Card
 from Card_Space.Deck import Deck
+from Faction_Space.Leader import Leader
 
 class Player:
 
-    def __init__(self, deck: Deck, leader_card: str, strength: int, faction: str, ai_player: bool, player_name: str, weather_sum: int, sum: int):
+    def __init__(self, deck: Deck, leader_card: Leader, strength: int, faction: str, ai_player: bool, player_name: str, weather_sum: int, sum: int):
         self.player_name = player_name
         self.deck = deck
         self.hand: List[Card] = []
-        self.board = {"melee": [], "ranged": [], "siege": []}
+        self.board: Dict[str, List[Card]] = {"melee": [], "ranged": [], "siege": []}
         #this is going to be where cards die!
-        self.graveyard = []
+        self.graveyard: List[Card] = []
         self.leader_card = leader_card
         self.strength = strength
         self.faction = faction
@@ -24,13 +25,18 @@ class Player:
         self.player_name = player_name
         self.weather_sum = weather_sum
         self.sum = sum
-        
-    
+
+
     #adding a draw hand implementation later after typing is completed
 
+    def draw_card_to_hand(self) -> None:
+        card = self.deck.draw_from_deck()
+        if card is not None:
+            self.hand.append(card)
+        else:
+            print(f"{self.player_name}'s deck is empty. No card drawn.")
 
-
-    def play_card(self, card_name) -> Card | None:
+    def play_card(self, card_name: str) -> Card | None:
 
         if not self.hand:
             print("You have nothing in your hand")
@@ -39,12 +45,12 @@ class Player:
         else:
             for i, card in enumerate(self.hand):
                 #card is a unit and it exists in hand
-                if card.card_name == card_name and card.card_type == "unit":
+                if card.card_name.lower().strip() == card_name.lower().strip() and card.card_type.lower().strip() == "unit":
                     self.strength += card.strength
                     self.board[card.row].append(card)
                     return self.hand.pop(i)
                 #case where it is a weather card, this is important as weather cards affect both boards so it needs special handling
-                elif card.card_name == card_name and card.card_type == "weather":
+                elif card.card_name.lower().strip() == card_name.lower().strip() and card.card_type.lower().strip() == "weather":
                     self.graveyard.append(card)
                     return self.hand.pop(i)
                 else:
@@ -76,7 +82,7 @@ class Player:
             print(f"\n{row.upper()}")
             for card in cards:
                 print(f"{card.card_name} | {card.strength} | {card.ability}")
-    
+
     #need to change this loop logic to make it more clear
     def passing_turn(self) -> None:
         passLoop = False
@@ -103,6 +109,8 @@ class Player:
             row.clear()
         self.weather_sum = 0
         self.sum = 0
+
+
 
 
 
