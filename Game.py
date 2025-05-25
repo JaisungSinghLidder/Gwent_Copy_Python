@@ -61,8 +61,8 @@ class Game:
 
     def determine_turn_order(self)-> None:
 
-        p1_scoia = self.player_one.faction.lower() == "scoia'tael"
-        p2_scoia = self.player_two.faction.lower() == "scoia'tael"
+        p1_scoia = self.player_one.faction.lower().strip() == "scoia'tael"
+        p2_scoia = self.player_two.faction.lower().strip() == "scoia'tael"
 
 
         def coin_flip():
@@ -92,10 +92,10 @@ class Game:
         elif p2_scoia and not p1_scoia:
             while True:
                 player_choice = input("Player Two (Scoia'tael): Do you want to go first or second")
-                if player_choice.lower() == "first":
+                if player_choice.lower().strip() == "first":
                     self.player_one.turn_order_first = True
                     break
-                elif player_choice.lower() == "second":
+                elif player_choice.lower().strip() == "second":
                     self.player_two.turn_order_first = True
                     break
                 else:
@@ -131,23 +131,23 @@ class Game:
 
 
         #monster's block
-        if self.player_one.faction == "monsters" and self.player_two.faction == "monsters":
+        if self.player_one.faction.lower().strip() == "monsters" and self.player_two.faction.lower().strip() == "monsters":
 
             monster_keep_card(self.player_one, self.player_one.board)
 
             monster_keep_card(self.player_two, self.player_two.board)
 
-        elif self.player_one.faction == "monsters":
+        elif self.player_one.faction.lower().strip() == "monsters":
             monster_keep_card(self.player_one, self.player_one.board)
 
-        elif self.player_two.faction == "monsters":
+        elif self.player_two.faction.lower().strip() == "monsters":
             monster_keep_card(self.player_two, self.player_two.board)
 
         #northern realm's block
-        if self.player_one.faction == "northern realms" and round_winner == "player one wins":
+        if self.player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
             northern_realms_draw_card(self.player_one)
 
-        elif self.player_two.faction == "northern realms" and round_winner == "player two wins":
+        elif self.player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
             northern_realms_draw_card(self.player_two)
 
 
@@ -156,17 +156,17 @@ class Game:
         #only works on round 3
         if round_count == 3:
 
-            if self.player_one.faction == "skellige" and self.player_two.faction == "skellige":
+            if self.player_one.faction.lower().strip() == "skellige" and self.player_two.faction.lower().strip() == "skellige":
 
                 skellige_draw_from_graveyard(self.player_one)
 
                 skellige_draw_from_graveyard(self.player_two)
 
-            elif self.player_one.faction == "skellige":
+            elif self.player_one.faction.lower().strip() == "skellige":
 
                 skellige_draw_from_graveyard(self.player_one)
 
-            elif self.player_two.faction == "skellige":
+            elif self.player_two.faction.lower().strip() == "skellige":
 
                 skellige_draw_from_graveyard(self.player_two)
 
@@ -196,43 +196,43 @@ class Game:
 
         def biting_frost(player) -> None:
             for card in player.board["melee"]:
-                if card.ability != "hero":
+                if card.ability.lower().strip() != "hero":
                     player.weather_sum += (card.strength - 1)
             player.weather_sum *= -1
             player.sum += player.weather_sum
 
         def impenetrable_fog(player) -> None:
             for card in player.board["range"]:
-                if card.ability != "hero":
+                if card.ability.lower().strip() != "hero":
                     player.weather_sum += (card.strength - 1)
             player.weather_sum *= -1
             player.sum += player.weather_sum
 
         def torrential_rain(player) -> None:
             for card in player.board["siege"]:
-                if card.ability != "hero":
+                if card.ability.lower().strip() != "hero":
                     player.weather_sum += (card.strength - 1)
             player.weather_sum *= -1
             player.sum += player.weather_sum
 
-        if weather_effect == "biting frost":
+        if weather_effect.lower().strip() == "biting frost":
 
             biting_frost(self.player_one)
 
             biting_frost(self.player_two)
 
 
-        elif weather_effect == "impenetrable fog":
+        elif weather_effect.lower().strip() == "impenetrable fog":
             impenetrable_fog(self.player_one)
 
             impenetrable_fog(self.player_two)
 
-        elif weather_effect == "torrential rain":
+        elif weather_effect.lower().strip() == "torrential rain":
             torrential_rain(self.player_one)
 
             torrential_rain(self.player_two)
 
-        elif weather_effect == "skelliege storm":
+        elif weather_effect.lower().strip() == "skelliege storm":
             if "torrential rain" in self.active_weather_effect and "impenetrable fog" in self.active_weather_effect:
                 return
 
@@ -246,7 +246,7 @@ class Game:
 
                 torrential_rain(self.player_two)
 
-        elif weather_effect == "clear weather":
+        elif weather_effect.lower().strip() == "clear weather":
             self.active_weather_effect.clear()
             self.player_one.weather_sum *= -1
             self.player_two.weather_sum *= -1
@@ -288,14 +288,14 @@ class Game:
         else:
             opponent = self.player_one
 
-        if og_card.ability == "tight bond":
+        if og_card.ability.lower().strip() == "tight bond":
             for row in ["melee", "range", "siege"]:
                 for card in player.board[row]:
                     if og_card.ability == "tight bond" and og_card.ability == card.ability and og_card.card_name == card.card_name and og_card.row == card.row:
                         card.strength *= 2
                         og_card.strength *= 2
 
-        elif og_card.ability == "medic":
+        elif og_card.ability.lower().strip() == "medic":
             if not player.graveyard:
                 print("There is no cards to heal")
             else:
@@ -310,7 +310,7 @@ class Game:
                         del player.graveyard[i]
                         break
 
-        elif og_card.ability == "muster":
+        elif og_card.ability.lower().strip() == "muster":
             for i, card in enumerate(player.deck):
                     if og_card.card_name == card.card_name:
                         player.strength += card.strength
@@ -318,19 +318,19 @@ class Game:
                         # we are using del so that we delete the specific index and not deleting all the cards with the same name
                         del player.deck[i]
 
-        elif og_card.ability == "morale boost":
+        elif og_card.ability.lower().strip() == "morale boost":
             for card in player.board[og_card.row]:
                 if og_card.card_name != card.card_name:
                     card.strength += 1
 
-        elif og_card.ability == "spy":
+        elif og_card.ability.lower().strip() == "spy":
             opponent.board[og_card.row].append(og_card)
             for _ in range(2):
                 card = player.deck.draw_from_deck()
                 if card:
                     player.hand.append(card)
 
-        elif og_card.ability == "decoy":
+        elif og_card.ability.lower().strip() == "decoy":
             for row in ["melee", "range", "siege"]:
                 for card in player.board[row]:
                     print(card.card_name)
@@ -342,7 +342,7 @@ class Game:
                         player.board[row][i] = og_card
                         return
 
-        elif og_card.ability == "scorch":
+        elif og_card.ability.lower().strip() == "scorch":
             max_strength_player_one = 0
             max_card_player_one = None
             for row in ["melee", "range", "siege"]:
@@ -374,7 +374,7 @@ class Game:
 
 
     def cancel_effects(self,player,card) -> None:
-        if card.ability == "tight bond":
+        if card.ability.lower().strip() == "tight bond":
             # Revert tight bond effect on other matching cards
             for row in ["melee", "range", "siege"]:
                 for other_card in player.board[row]:
@@ -382,7 +382,7 @@ class Game:
                             other_card.card_name == card.card_name and
                             other_card.row == card.row):
                         other_card.strength //= 2  # Undo the doubling
-        elif card.ability == "morale boost":
+        elif card.ability.lower().strip() == "morale boost":
             # Remove the +1 morale boost from same-row cards
             for other_card in player.board[card.row]:
                 if other_card is not card:
@@ -398,6 +398,8 @@ class Game:
                 total += card.strength
         player.strength = total
 
+
+    #Maybe change it so the leader is
 
     #have to add a leader ability now
     #probably just going to add 5 because I don't want to add all the variants into the deck
@@ -422,7 +424,7 @@ class Game:
 
         else:
             #basically using clear weather
-            if player.leader_card == "foltest lord commander" and player.faction == "northern realms":
+            if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
 
                 self.active_weather_effect.clear()
                 self.player_one.weather_sum *= -1
@@ -433,7 +435,7 @@ class Game:
                 player.leader_used = True
 
             #looking at 3 cards in your opponents hand
-            elif player.leader_card == "emhyr var emreis the white flame" and player.faction == "nilfgaard":
+            elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaard":
 
                 cards_to_show = random.sample(opponent.hand, min(3,len(opponent.hand)))
                 print("3 of the opponenets hand")
@@ -443,7 +445,7 @@ class Game:
                 player.leader_used = True
 
             # boosting the strength by 3
-            elif player.leader_used == "eredin bringer of death" and player.faction == "monsters":
+            elif player.leader_card.leader_ability.lower().strip() == "random boost by 2" and player.leader_card.faction.lower().strip() == "monsters":
 
                 card_chosen = input("List a target(by name) you wish to boost the strength by 3")
 
@@ -457,7 +459,7 @@ class Game:
 
             #lets you play special card from your deck
 
-            elif player.leader_used == "francesa queen of dol blathanaa" and player.faction == "scoia'tael":
+            elif player.leader_card.leader_ability.lower().strip() == "play a random card" and player.leader_card.faction.lower().strip() == "scoia'tael":
 
                 for card in player.deck:
                     if card.card_type != " ":
@@ -469,7 +471,7 @@ class Game:
                 player.leader_used = True
 
             # shuffle all cards from each player's graveyard back into their decks
-            elif player.leader_used == "crach an craite" and player.faction == "skellige":
+            elif player.leader_card.leader_ability.lower().strip() == "crach an craite" and player.leader_card.faction.lower().strip() == "skellige":
 
 
                 player.deck.extend(player.graveyard)
@@ -510,13 +512,14 @@ class Game:
     #drawing and redrawing feature:
     def player_starting_draw(self) -> None:
 
+        #only going to draw 5 cards because I wanted to shorten hands to make the game better
         def redraw_mechanic(player: Player):
-            if len(player.deck.cards) < 10:
+            if len(player.deck.cards) < 5:
                 print(f"{player.player_name}Your deck isn't big enough to draw, please create a bigger deck")
                 return
 
             # going to draw 10
-            for _ in range(10):
+            for _ in range(5):
                 player.draw_card_to_hand()
 
             self.display_player_hand(player)
@@ -562,12 +565,6 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
-
-
-
-
-
-
 
 
 
