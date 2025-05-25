@@ -1,0 +1,29 @@
+[
+
+  {
+    "name": "foltest lord commander of the north",
+    "ability": "clear",
+    "faction": "northern realms"
+  },
+  {
+    "name": "eredin bringer of death",
+    "ability": "random boost by 2",
+    "faction": "monster"
+  },
+  {
+    "name": "emhyr var emreis the white flame",
+    "ability": "look at opponent hand",
+    "faction": "nilfgaard"
+  },
+  {
+    "name": "francesa findabair queen of dol blathanna",
+    "ability": "play a random card",
+    "faction": "scoia'tael"
+  },
+  {
+    "name": "crach an craite",
+    "ability": "shuffle all cards from each player back into their deck",
+    "faction": "skillege"
+  }
+
+]
