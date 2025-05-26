@@ -5,6 +5,7 @@ import json
 import random
 
 from Card_Space.Card import Card
+from Card_Space.CardLoader import CardLoader
 
 
 class Deck:
@@ -22,19 +23,8 @@ class Deck:
                 return False
         return True
 
-    #right now loads random cards
-    #should be same faction only
-    def load_deck_from_json(self, json_file, faction, deck_size = 5):
-        with open(json_file, 'r') as f:
-            card_data = json.load(f)
-
-        #that ** unpacks each dictionary into keyword arguments
-        all_cards = [Card(**card) for card in card_data]
-
-        faction_cards = [card for card in all_cards if card.faction == faction.lower().strip() or card.faction == "neutral"]
-        
-        self.cards = random.sample(faction_cards, deck_size)
-
+    def load_deck_from_json(self, path: str, deck_size: int = 10):
+        self.cards = CardLoader.load_deck_from_json(path, self.faction_name)
 
     #Limiting deck to 10 cards for now
     def check_deck_size(self) -> bool:
@@ -59,6 +49,5 @@ class Deck:
         else:
             random_card = random.randint(0, len(self.cards) - 1 )
             return self.cards.pop(random_card)
-
 
 
