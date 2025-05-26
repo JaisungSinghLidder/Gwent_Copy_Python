@@ -1,11 +1,11 @@
 from typing import List, Dict
 from Card_Space.Card import Card
 from Card_Space.Deck import Deck
-from Faction_Space.Leader import Leader
+from Card_Space.Leader import Leader
 
 class Player:
 
-    def __init__(self, deck: Deck, leader_card: Leader, strength: int, faction: str, ai_player: bool, player_name: str, weather_sum: int, sum: int):
+    def __init__(self, deck: Deck, leader_card: Leader, faction: str, ai_player: bool, player_name: str):
         self.player_name = player_name
         self.deck = deck
         self.hand: List[Card] = []
@@ -13,7 +13,6 @@ class Player:
         #this is going to be where cards die!
         self.graveyard: List[Card] = []
         self.leader_card = leader_card
-        self.strength = strength
         self.faction = faction
         self.passed = False
         self.lives = 2
@@ -23,8 +22,8 @@ class Player:
         self.turn_order_first = False
         self.ai_player = ai_player
         self.player_name = player_name
-        self.weather_sum = weather_sum
-        self.sum = sum
+        self.weather_sum = 0
+        self.sum = 0
 
 
     #adding a draw hand implementation later after typing is completed
@@ -37,6 +36,8 @@ class Player:
             print(f"{self.player_name}'s deck is empty. No card drawn.")
 
     def play_card(self, card_name: str) -> Card | None:
+
+        #add logic so that when I ask to pass it just skips this
 
         if not self.hand:
             print("You have nothing in your hand")
@@ -83,17 +84,16 @@ class Player:
             for card in cards:
                 print(f"{card.card_name} | {card.strength} | {card.ability}")
 
-    #need to change this loop logic to make it more clear
+
     def passing_turn(self) -> None:
-        passLoop = False
-        while not passLoop:
+        while True:
             choice = input("Do you want to pass this round: yes or no?").lower()
-            if choice == "yes":
+            if choice.lower().strip() == "yes":
                 self.passed = True
-                passLoop = True
-            elif choice == "no":
+                break
+            elif choice.lower().strip() == "no":
                 self.passed = False
-                passLoop = True
+                break
             else:
                 print("Please input either yes or no?")
 
@@ -109,6 +109,25 @@ class Player:
             row.clear()
         self.weather_sum = 0
         self.sum = 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
