@@ -36,27 +36,27 @@ class Player:
             print(f"{self.player_name}'s deck is empty. No card drawn.")
 
     def play_card(self, card_name: str) -> Card | None:
+        while True:
+            if not self.hand:
+                print("You have nothing in your hand")
+                return None
 
-        #add logic so that when I ask to pass it just skips this
-
-        if not self.hand:
-            print("You have nothing in your hand")
-            return None
-
-        else:
             for i, card in enumerate(self.hand):
-                #card is a unit and it exists in hand
-                if card.card_name.lower().strip() == card_name.lower().strip() and card.card_type.lower().strip() == "unit":
-                    self.strength += card.strength
-                    self.board[card.row].append(card)
-                    return self.hand.pop(i)
-                #case where it is a weather card, this is important as weather cards affect both boards so it needs special handling
-                elif card.card_name.lower().strip() == card_name.lower().strip() and card.card_type.lower().strip() == "weather":
-                    self.graveyard.append(card)
-                    return self.hand.pop(i)
-                else:
-                    print("That card doesn't exist")
-                    return None
+                if card.card_name.lower().strip() == card_name.lower().strip():
+                    if card.card_type.lower().strip() == "unit":
+                        self.strength += card.strength
+                        self.board[card.row].append(card)
+                        return self.hand.pop(i)
+                    elif card.card_type.lower().strip() == "weather":
+                        self.graveyard.append(card)
+                        return self.hand.pop(i)
+                    #note to myself, create a case for this
+                    elif card.card_type.lower().strip() == "buff":
+                        self.graveyard.append(card)
+                        return self.hand.pop(i)
+
+            print("That card doesn't exist, please try again")
+            card_name = input("Enter a valid card name:")
 
 
     def reset_score(self) -> None:
@@ -109,7 +109,6 @@ class Player:
             row.clear()
         self.weather_sum = 0
         self.sum = 0
-
 
 
 
