@@ -8,8 +8,8 @@ class Game:
     def __init__(self,player_one: Player, player_two: Player):
         self.player_one = player_one
         self.player_two = player_two
-        #we need to check the counter because of Skillege ability
-        self.round_counter = 0
+        #counting from 1 instead of the computer standard of zero
+        self.round_counter = 1
         #this is for the ability where the player can keep a card
         self.player_one.cards_to_keep: List[Card]  = []
         self.player_two.cards_to_keep: List[Card] =  []
@@ -106,7 +106,11 @@ class Game:
 
 
     #This faction ability is going to cover northern realms and skilege
-    def faction_ability(self, round_winner, round_count) -> None:
+    #northern realms: keep a card after a win
+    #skelllige: 2 random cards from the graveyard are placed on the battlefield at the start of the third round
+    #monsters: keep random unit card out after each round
+
+    def faction_ability(self, round_winner) -> None:
 
         def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
@@ -130,7 +134,9 @@ class Game:
                         break
 
 
-        #monster's block
+
+
+        # monster's block
         if self.player_one.faction.lower().strip() == "monsters" and self.player_two.faction.lower().strip() == "monsters":
 
             monster_keep_card(self.player_one, self.player_one.board)
@@ -154,7 +160,7 @@ class Game:
         #skellige's block
 
         #only works on round 3
-        if round_count == 3:
+        if self.round_counter == 3:
 
             if self.player_one.faction.lower().strip() == "skellige" and self.player_two.faction.lower().strip() == "skellige":
 
@@ -306,14 +312,14 @@ class Game:
                     if c.card_name == card_choice and c.card_type == "unit" and c.ability != "hero":
                         row = c.row
                         player.board[row].append(c)
-                        player.strength += c.strength
+                        player.sum += c.strength
                         del player.graveyard[i]
                         break
 
         elif og_card.ability.lower().strip() == "muster":
             for i, card in enumerate(player.deck):
                     if og_card.card_name == card.card_name:
-                        player.strength += card.strength
+                        player.sum+= card.strength
                         player.board[card.row].append(card)
                         # we are using del so that we delete the specific index and not deleting all the cards with the same name
                         del player.deck[i]
@@ -342,7 +348,18 @@ class Game:
                         player.board[row][i] = og_card
                         return
 
-        elif og_card.ability.lower().strip() == "scorch":
+
+    def check_buff(self, player, og_card):
+
+        opponent = None
+
+        if player == self.player_one:
+            opponent = self.player_two
+        else:
+            opponent = self.player_one
+
+
+        if og_card.ability.lower().strip() == "scorch":
             max_strength_player_one = 0
             max_card_player_one = None
             for row in ["melee", "range", "siege"]:
@@ -372,6 +389,23 @@ class Game:
                         del player.board[row][i]
                         break
 
+        elif og_card.ability.lower().strip() == "horn":
+            while True:
+                chosen_row = input("What row do you want to double?")
+                if chosen_row == "melee":
+                    for card in player.board["melee"]:
+                        card.strength *= 2
+                        break
+                elif chosen_row == "range":
+                    for card in player.board["range"]:
+                        card.strength *=2
+                        break
+                elif chosen_row == "siege":
+                    for card in player.board["siege"]:
+                        card.strength *= 2
+                        break
+                print("Please type in either melee, range, or siege please")
+
 
     def cancel_effects(self,player,card) -> None:
         if card.ability.lower().strip() == "tight bond":
@@ -387,6 +421,7 @@ class Game:
             for other_card in player.board[card.row]:
                 if other_card is not card:
                     other_card.strength -= 1
+        #now here need to add logic for undoing the commander horn's
 
 
 
@@ -396,7 +431,7 @@ class Game:
         for row in ["melee", "range", "siege"]:
             for card in player.board[row]:
                 total += card.strength
-        player.strength = total
+        player.sum = total
 
 
     #Maybe change it so the leader is
@@ -565,7 +600,6 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
-
 
 
 
