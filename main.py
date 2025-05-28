@@ -7,21 +7,25 @@ from General_Game_Space.Game import Game
 def main():
 
     #this is going to hold the played card
-    played_card = None
+    played_card_first_turn = None
+    played_card_second_turn = None
+    #going to hold the chosen_row in the commander's horn case
+    chosen_row_first_turn = None
+    chosen_row_second_turn = None
     #intializing the decks for the player
     #their faction is already intialized when the deck is created
     player_one_deck = Deck("northern realms")
-    player_one_deck.load_deck_from_json("Card_Space/cards.json")
+    player_one_deck.load_deck_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\cards.json")
     player_two_deck = Deck("nilfgaardian")
-    player_two_deck.load_deck_from_json("Card_Space/cards.json" )
+    player_two_deck.load_deck_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\cards.json")
 
     #creating leaders now
     #will ask player what leader they want
 
-    leader_player_one =  CardLoader.load_leaders_from_json("Card_Space/leader_cards.json")
-    leader_player_two = CardLoader.load_leaders_from_json("Card_Space/leader_cards.json")
+    leader_player_one =  CardLoader.load_leaders_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\leader_cards.json")
+    leader_player_two = CardLoader.load_leaders_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\leader_cards.json")
 
-    player_one_leader_choice = input("Player one, what leader do you want for your deck")
+    player_one_leader_choice = input("Player one, what leader do you want for your deck ")
 
     player_one_leader_card = None
     player_two_leader_card = None
@@ -29,6 +33,8 @@ def main():
     for card in leader_player_one:
         if card == player_one_leader_choice:
             player_one_leader_card = card
+
+    player_two_leader_card = input("Player two, what leader do you want for your deck ")
 
     for card in leader_player_two:
         if card == player_two_leader_card:
@@ -79,6 +85,11 @@ def main():
             #checking whether the playing wants to pass their turn
             first_turn.passing_turn()
 
+            #this case will leave the loop if the player chooses to leave
+            if first_turn.passed:
+                print(f"{first_turn.player_name} has passed their turn.")
+                break  # or continue, depending on structure
+
             #now checking whether a user wants to use their leader
             #this is happening in the game class because this ability affects the whole board
 
@@ -88,13 +99,19 @@ def main():
                 game_state.use_leader_ability(first_turn)
 
             #now we are going to play card
-            played_card = first_turn.play_card()
+            played_card_first_turn = first_turn.play_card()
 
             #deciding which effect to use
-            if played_card.card_type == "unit":
-                game_state.use_card_ability(first_turn,played_card)
-            elif played_card.card_type == "weather":
-                game_state.use_card_ability(first_turn,played_card)
+            if played_card_first_turn.card_type == "unit":
+                game_state.use_card_ability(first_turn,played_card_first_turn)
+            elif played_card_first_turn.card_type == "weather":
+                game_state.active_weather_effect(first_turn,played_card_first_turn)
+            elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
+                game_state.check_buff(first_turn, played_card_first_turn)
+            elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
+                chosen_row = game_state.check_buff(first_turn, played_card_first_turn)
+
+
 
         print(f"{second_turn.player_name}'s turn is now")
 
@@ -106,6 +123,11 @@ def main():
             # checking whether the playing wants to pass their turn
             second_turn.passing_turn()
 
+            #checking whether the player should leave
+            if second_turn.passed:
+                print(f"{second_turn.player_name} has passed their turn.")
+                break  # or continue, depending on structure
+
             # now checking whether a user wants to use their leader
             # this is happening in the game class because this ability affects the whole board
 
@@ -115,8 +137,26 @@ def main():
                 game_state.use_leader_ability(second_turn)
 
             # now we are going to play card
-            second_turn.play_card()
+            played_card_second_turn = second_turn.play_card()
 
+            # deciding which effect to use
+            if played_card_second_turn.card_type == "unit":
+                game_state.use_card_ability(first_turn, played_card_second_turn)
+            elif played_card_second_turn.card_type == "weather":
+                game_state.active_weather_effect(first_turn, played_card_second_turn)
+            elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
+                game_state.check_buff(first_turn, played_card_second_turn)
+            elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
+                chosen_row = game_state.check_buff(first_turn, played_card_second_turn)
+
+        #now determine the winner
+        game_state.determine_winner()
+
+        #showing off the game stats
+        game_state.round_summary()
+
+        #now we should be resetting the round
+        game_state.round_resolve()
 
 
 
