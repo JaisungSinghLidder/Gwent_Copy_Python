@@ -1,8 +1,6 @@
-
-
 [
   {
-    "name": "emiel regis rohellec terzieff",
+    "card_name": "emiel regis rohellec terzieff",
     "faction": "neutral",
     "row": "melee",
     "strength" : 5,
@@ -10,7 +8,7 @@
     "ability": null
   },
   {
-    "name": "geralt of rivia",
+    "card_name": "geralt of rivia",
     "faction": "neutral",
     "row": "melee",
     "strength": 15,
@@ -18,7 +16,7 @@
     "ability": "hero"
   },
   {
-    "name": "zoltan chivay",
+    "card_name": "zoltan chivay",
     "faction": "neutral",
     "row": "melee",
     "strength": 5,
@@ -26,7 +24,7 @@
     "ability": null
   },
   {
-    "name": "vesemir",
+    "card_name": "vesemir",
     "faction": "neutral",
     "row": "melee",
     "strength": 6,
@@ -34,7 +32,7 @@
     "ability": null
   },
   {
-    "name": "philippa Eilhart",
+    "card_name": "philippa Eilhart",
     "faction": "northern realms",
     "row": "range",
     "strength": 10,
@@ -42,7 +40,7 @@
     "ability": "hero"
   },
   {
-    "name": "esterad thyssen",
+    "card_name": "esterad thyssen",
     "faction": "northern realms",
     "row": "range",
     "strength": 10,
@@ -50,7 +48,7 @@
     "ability": "hero"
   },
   {
-    "name": "john natalis",
+    "card_name": "john natalis",
     "faction": "northern realms",
     "row": "melee",
     "strength": 10,
@@ -58,7 +56,7 @@
     "ability": "hero"
   },
   {
-    "name": "moruran voorhis",
+    "card_name": "moruran voorhis",
     "faction": "nilfgaardian",
     "row": "siege",
     "strength": 10,
@@ -66,7 +64,7 @@
     "ability": "hero"
   },
   {
-    "name": "menno coehoorn",
+    "card_name": "menno coehoorn",
     "faction": "nilfgaardian",
     "row": "melee",
     "strength": 10,
@@ -74,7 +72,7 @@
     "ability": "medic"
   },
   {
-    "name": "redanian ford soldier",
+    "card_name": "redanian foot soldier",
     "faction": "northern realms",
     "row": "melee",
     "strength": 1,
@@ -82,7 +80,7 @@
     "ability": null
   },
   {
-    "name": "sigismund dijkstra",
+    "card_name": "sigismund dijkstra",
     "faction": "northern realms",
     "row": "melee",
     "strength": 4,
@@ -90,7 +88,7 @@
     "ability": "spy"
   },
   {
-    "name": "vernon roche",
+    "card_name": "vernon roche",
     "faction": "northern realms",
     "row": "melee",
     "strength": 10,
@@ -98,7 +96,7 @@
     "ability": "hero"
   },
   {
-    "name": "trebuchet",
+    "card_name": "trebuchet",
     "faction": "northern realms",
     "row": "siege",
     "strength": 6,
@@ -107,7 +105,7 @@
 
   },
   {
-    "name": "blue stripes commando",
+    "card_name": "blue stripes commando",
     "faction": "northern realms",
     "row": "melee",
     "strength": 4,
@@ -115,7 +113,7 @@
     "ability": "tight bound"
   },
   {
-    "name": "dethmold",
+    "card_name": "dethmold",
     "faction": "northern realms",
     "row": "range",
     "strength": 6,
@@ -123,7 +121,7 @@
     "ability": null
   },
   {
-    "name": "assire van anahid",
+    "card_name": "assire van anahid",
     "faction": "nilfgaardian",
     "row": "range",
     "strength": 6,
@@ -131,7 +129,7 @@
     "ability": null
   },
   {
-    "name": "imprea brigade guard",
+    "card_name": "imprea brigade guard",
     "faction": "nilfgaardian",
     "row": "melee",
     "strength": 3,
@@ -139,7 +137,7 @@
     "ability": "tight bound"
   },
   {
-    "name": "siege engineer",
+    "card_name": "siege engineer",
     "faction": "nilfgaardian",
     "row": "siege",
     "strength": 6,
@@ -147,7 +145,7 @@
     "ability": null
   },
   {
-    "name": "tibor eggebracht",
+    "card_name": "tibor eggebracht",
     "faction": "nilfgaardian",
     "row": "range",
     "strength": 10,
@@ -155,7 +153,7 @@
     "ability": "hero"
   },
   {
-    "name": "vattier de rideaux",
+    "card_name": "vattier de rideaux",
     "faction": "nilfgaardian",
     "row": "melee",
     "strength": 4,
@@ -163,7 +161,7 @@
     "ability": "spy"
   },
   {
-    "name": "puttkammer",
+    "card_name": "puttkammer",
     "faction": "nilfgaardian",
     "row": "range",
     "strength": 3,
@@ -171,7 +169,7 @@
     "ability": null
   },
   {
-    "name": "commander's horn",
+    "card_name": "commander's horn",
     "faction": "neutral",
     "row": null,
     "strength": 0,
@@ -179,7 +177,7 @@
     "ability": "horn"
   },
   {
-    "name": "scorch",
+    "card_name": "scorch",
     "faction": "neutral",
     "row": null,
     "strength": 0,
@@ -187,7 +185,7 @@
     "ability": "scorch"
   },
   {
-    "name":"torrential rain",
+    "card_name":"torrential rain",
     "faction": "neutral",
     "row": null,
     "strength": 0,
@@ -195,7 +193,7 @@
     "ability": "rain"
   },
   {
-    "name": "biting frost",
+    "card_name": "biting frost",
     "faction": "neutral",
     "row": null,
     "strength": 0,
@@ -203,7 +201,7 @@
     "ability": "frost"
   },
   {
-    "name": "clear weather",
+    "card_name": "clear weather",
     "faction": "neutral",
     "row": null,
     "strength": 0,
