@@ -20,16 +20,16 @@ class Game:
 
     def determine_winner(self) -> str:
         #An outright win case
-        if self.player_one.strength > self.player_two.strength:
+        if self.player_one.sum > self.player_two.sum:
             self.player_two.lose_life()
             print("Player one has won the round")
             return "player one wins"
-        elif self.player_two.strength > self.player_one.strength:
+        elif self.player_two.sum > self.player_one.sum:
             self.player_one.lose_life()
             print("Player two has one the round")
             return "player two wins"
         #Tie cases
-        elif self.player_one.strength == self.player_two.strength:
+        elif self.player_one.sum == self.player_two.sum:
             self.player_one.lose_life()
             self.player_two.lose_life()
             return "draw"
@@ -253,11 +253,14 @@ class Game:
                 torrential_rain(self.player_two)
 
         elif weather_effect.lower().strip() == "clear weather":
-            self.active_weather_effect.clear()
-            self.player_one.weather_sum *= -1
-            self.player_two.weather_sum *= -1
-            self.player_one.sum += self.player_one.weather_sum
-            self.player_two.sum += self.player_two.weather_sum
+            if self.active_weather_effect:
+                self.active_weather_effect.clear()
+                self.player_one.weather_sum *= -1
+                self.player_two.weather_sum *= -1
+                self.player_one.sum += self.player_one.weather_sum
+                self.player_two.sum += self.player_two.weather_sum
+            else:
+                print("There is no weather effect to clear")
 
     #Maybe I will just to get rid of the reliance on the other systems
     def round_summary(self) -> None:
@@ -395,19 +398,19 @@ class Game:
                 if chosen_row == "melee":
                     for card in player.board["melee"]:
                         card.strength *= 2
-                        break
+                        return chosen_row
                 elif chosen_row == "range":
                     for card in player.board["range"]:
                         card.strength *=2
-                        break
+                        return chosen_row
                 elif chosen_row == "siege":
                     for card in player.board["siege"]:
                         card.strength *= 2
-                        break
+                        return chosen_row
                 print("Please type in either melee, range, or siege please")
 
 
-    def cancel_effects(self,player,card) -> None:
+    def cancel_effects(self,player,card, chosen_row = None) -> None:
         if card.ability.lower().strip() == "tight bond":
             # Revert tight bond effect on other matching cards
             for row in ["melee", "range", "siege"]:
@@ -422,6 +425,9 @@ class Game:
                 if other_card is not card:
                     other_card.strength -= 1
         #now here need to add logic for undoing the commander horn's
+        elif card.ability.lower().strip() == "horn":
+            for card in player.board[chosen_row]:
+                card.strength //= 2 # Undo the doubling
 
 
 
@@ -563,33 +569,41 @@ class Game:
             print("One at a time you will be able to redraw 3 cards")
             redraw_choice = input("Please press enter if you want to redraw nothing though")
 
-            if redraw_choice.strip() != "":
-                redraws_remaining = 3
-                while redraws_remaining > 0:
-                    redraw_card_choice = input(
-                        "Please enter in the name of the card to redraw or press enter to skip").lower().strip()
+            if redraw_choice == "":
+                print("Redrawing nothing")
+                return
 
-                    if redraw_card_choice == "":
+
+            redraws_remaining = 3
+            while redraws_remaining > 0:
+                redraw_card_choice = input(
+                    "Please enter in the name of the card to redraw or press enter to skip").lower().strip()
+
+                #if players want to skip one of their redraw choice
+                if redraw_card_choice == "":
+                    redraws_remaining -= 1
+                    print(f"You have this many redraw remaining {redraws_remaining}")
+                    continue
+
+                for i, card in enumerate(player.hand):
+                    if card.card_name.lower() == redraw_card_choice:
+
+                        # want to reintroduce the card into the deck, then reshuffle that deck
+                        player.deck.add_to_deck(player.hand.pop(i))
+                        player.deck.shuffle()
+
+                        new_card = player.deck.draw_from_deck()
+
+                        if new_card:
+                            player.hand.append(new_card)
+                            print(f"You got rid of{redraw_card_choice}")
+                            print(f"You now get {new_card.card_name}")
+                        else:
+                            print("Deck is empty. Could not draw a new card")
+                        redraws_remaining -= 1
                         break
 
-                    for i, card in enumerate(player.hand):
-                        if card.card_name.lower() == redraw_card_choice:
-
-                            # want to reintroduce the card into the deck, then reshuffle that deck
-                            player.deck.add_to_deck(player.hand.pop(i))
-                            player.deck.shuffle()
-
-                            new_card = player.deck.draw_from_deck()
-
-                            if new_card:
-                                player.hand.append(new_card)
-                                print(f"You now get {new_card.card_name}")
-                            else:
-                                print("Deck is empty. Could not draw a new card")
-                            redraws_remaining -= 1
-                            break
-                    else:
-                        print("Card isn't in your hand, could you please try again")
+                print("Card isn't in your hand, could you please try again")
 
 
 
@@ -600,7 +614,6 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
-
 
 
 
