@@ -58,6 +58,13 @@ def main():
 
     #because there is 3 rounds, I am simply going to run a for loop that goes around 3 times
     for _ in range(3):
+
+        #I will set each player passed to be false, so that if it changed during one of the previous loops, it gets reset
+        game_state.player_one.passed = False
+        game_state.player_two.passed = False
+
+
+        #these are the turns
         first_turn = None
         second_turn = None
 
@@ -80,6 +87,9 @@ def main():
         #now initializing the loop for the first player
         while not first_turn.passed or first_turn.hand == 0:
 
+            #we are now going to reset the card choice here to be careful
+            first_turn_card_choice = None
+
             game_state.display_player_hand(first_turn)
 
             #checking whether the playing wants to pass their turn
@@ -98,18 +108,25 @@ def main():
             if leader_choice.lower().strip() == "yes":
                 game_state.use_leader_ability(first_turn)
 
-            #now we are going to play card
-            played_card_first_turn = first_turn.play_card()
 
-            #deciding which effect to use
-            if played_card_first_turn.card_type == "unit":
-                game_state.use_card_ability(first_turn,played_card_first_turn)
-            elif played_card_first_turn.card_type == "weather":
-                game_state.active_weather_effect(first_turn,played_card_first_turn)
-            elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
-                game_state.check_buff(first_turn, played_card_first_turn)
-            elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
-                chosen_row = game_state.check_buff(first_turn, played_card_first_turn)
+            #going to ask the user to play their card
+            if len(first_turn.hand) == 0:
+                first_turn_card_choice = input("\n Please pick a card in your hand to play")
+
+                #now we are going to play card
+                played_card_first_turn = first_turn.play_card(first_turn_card_choice)
+
+                #deciding which effect to use
+                if played_card_first_turn.card_type == "unit":
+                    game_state.use_card_ability(first_turn,played_card_first_turn)
+                elif played_card_first_turn.card_type == "weather":
+                    game_state.active_weather_effect(first_turn,played_card_first_turn)
+                elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
+                    game_state.check_buff(first_turn, played_card_first_turn)
+                elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
+                    chosen_row = game_state.check_buff(first_turn, played_card_first_turn)
+            else:
+                print("You have no cards in your deck")
 
 
 
@@ -120,8 +137,12 @@ def main():
 
         # now initializing the loop for the first player
         while not second_turn.passed or second_turn.hand == 0:
+
+            second_turn_card_choice = None
             # checking whether the playing wants to pass their turn
             second_turn.passing_turn()
+
+            game_state.display_player_hand(second_turn)
 
             #checking whether the player should leave
             if second_turn.passed:
@@ -136,8 +157,11 @@ def main():
             if leader_choice.lower().strip() == "yes":
                 game_state.use_leader_ability(second_turn)
 
+            second_turn_card_choice = input("\n Please pick a card in your hand to play")
+
+
             # now we are going to play card
-            played_card_second_turn = second_turn.play_card()
+            played_card_second_turn = second_turn.play_card(second_turn_card_choice)
 
             # deciding which effect to use
             if played_card_second_turn.card_type == "unit":
@@ -149,6 +173,9 @@ def main():
             elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
                 chosen_row = game_state.check_buff(first_turn, played_card_second_turn)
 
+        #this block should probably be changed
+        #something are wrong with these functions
+
         #now determine the winner
         game_state.determine_winner()
 
@@ -158,12 +185,17 @@ def main():
         #now we should be resetting the round
         game_state.round_resolve()
 
+        #checking whether the game should end or not and who is the winner
+        game_state.end_game_checker()
+
 
 
 
 #over here is the executable
 if __name__ == "__main__":
     main()
+
+
 
 
 
