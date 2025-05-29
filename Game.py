@@ -37,25 +37,25 @@ class Game:
 
 
     def end_game_checker(self) -> str:
-        p1_nilfgaard = self.player_one.faction.lower() == "nilfgaard"
-        p2_nilfgaard = self.player_two.faction.lower() == "nilfgaard"
+        p1_nilfgaardian = self.player_one.faction.lower() == "nilfgaardian"
+        p2_nilfgaardian = self.player_two.faction.lower() == "nilfgaardian"
 
         #using <= just to make sure if a glitch happens and something became negative that it would error check for that.
         if self.player_one.lives <= 0 and self.player_two.lives <= 0:
-            if not p1_nilfgaard and not p2_nilfgaard:
+            if not p1_nilfgaardian and not p2_nilfgaardian:
                 print("A draw has taken place, nobody wins")
                 return "draw"
-            elif p1_nilfgaard and not p2_nilfgaard:
-                print("Player one has activated its ability and player two has lost")
+            elif p1_nilfgaardian and not p2_nilfgaardian:
+                print(f"{self.player_one.player_name} has activated its ability and {self.player_two.player_name} has lost")
                 return "player one wins"
-            elif not p1_nilfgaard and p2_nilfgaard:
-                print("Player two has activated its ability and player one has lost")
+            elif not p1_nilfgaardian and p2_nilfgaardian:
+                print(f"{self.player_two.player_name} has activated its ability and {self.player_one.player_name} has lost")
                 return "player two wins"
         elif self.player_one.lives <= 0:
-            print("Player two has won!")
+            print(f"{self.player_two.player_name} has won!")
             return "player two wins"
         elif self.player_two.lives <= 0:
-            print("Player one has won!")
+            print(f"{self.player_one.player_name} has won!")
             return "player one wins"
 
 
@@ -352,6 +352,7 @@ class Game:
                         return
 
 
+
     def check_buff(self, player, og_card):
 
         opponent = None
@@ -614,6 +615,52 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
