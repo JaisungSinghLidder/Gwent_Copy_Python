@@ -16,7 +16,7 @@ class CardLoader:
     @staticmethod
     def load_leaders_from_json(path: str) -> list[Leader]:
         with open(path, "r") as f:
-            data =  json.load(f)
+            data = json.load(f)
         return [Leader(**item) for item in data]
 
     @staticmethod
@@ -27,5 +27,7 @@ class CardLoader:
                          card.faction == faction.lower().strip() or card.faction == "neutral"]
 
         cards = random.sample(faction_cards, deck_size)
+
+        return cards
 
         return cards
