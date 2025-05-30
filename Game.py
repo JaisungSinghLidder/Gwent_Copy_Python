@@ -451,7 +451,7 @@ class Game:
     #4)Scoia'tael: Francesca Findabair - QUeen of Dol Blathanna - Play a random card from your deck
     #5)Skillege: Crach an Craite - Shuffle all cards from each player graveyards back into their decks
 
-    def use_leader_ability(self, player) -> None:
+    def use_leader_ability(self, player: Player) -> None:
 
         opponent = None
 
@@ -482,7 +482,7 @@ class Game:
                 cards_to_show = random.sample(opponent.hand, min(3,len(opponent.hand)))
                 print("3 of the opponenets hand")
                 for card in cards_to_show:
-                    print(card)
+                    print(card.card_name)
 
                 player.leader_used = True
 
@@ -615,6 +615,33 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
