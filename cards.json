@@ -3,7 +3,8 @@
     "card_name": "emiel regis rohellec terzieff",
     "faction": "neutral",
     "row": "melee",
-    "strength" : 5,
+    "base_strength" : 5,
+    "current_strength" : 5,
     "card_type": "unit",
     "ability": "none"
   },
@@ -11,7 +12,8 @@
     "card_name": "geralt of rivia",
     "faction": "neutral",
     "row": "melee",
-    "strength": 15,
+    "base_strength": 15,
+    "current_strength": 15,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -19,7 +21,8 @@
     "card_name": "zoltan chivay",
     "faction": "neutral",
     "row": "melee",
-    "strength": 5,
+    "base_strength": 5,
+    "current_strength": 5,
     "card_type": "unit",
     "ability": "none"
   },
@@ -27,7 +30,8 @@
     "card_name": "vesemir",
     "faction": "neutral",
     "row": "melee",
-    "strength": 6,
+    "base_strength": 6,
+    "current_strength": 6,
     "card_type": "unit",
     "ability": "none"
   },
@@ -35,7 +39,8 @@
     "card_name": "philippa Eilhart",
     "faction": "northern realms",
     "row": "range",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -43,7 +48,8 @@
     "card_name": "esterad thyssen",
     "faction": "northern realms",
     "row": "range",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -51,7 +57,8 @@
     "card_name": "john natalis",
     "faction": "northern realms",
     "row": "melee",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -59,7 +66,8 @@
     "card_name": "moruran voorhis",
     "faction": "nilfgaardian",
     "row": "siege",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -67,7 +75,8 @@
     "card_name": "menno coehoorn",
     "faction": "nilfgaardian",
     "row": "melee",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "medic"
   },
@@ -75,7 +84,8 @@
     "card_name": "redanian foot soldier",
     "faction": "northern realms",
     "row": "melee",
-    "strength": 1,
+    "base_strength": 1,
+    "current_strength": 1,
     "card_type": "unit",
     "ability": "none"
   },
@@ -83,7 +93,8 @@
     "card_name": "sigismund dijkstra",
     "faction": "northern realms",
     "row": "melee",
-    "strength": 4,
+    "base_strength": 4,
+    "current_strength": 4,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -91,7 +102,8 @@
     "card_name": "vernon roche",
     "faction": "northern realms",
     "row": "melee",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -99,7 +111,8 @@
     "card_name": "trebuchet",
     "faction": "northern realms",
     "row": "siege",
-    "strength": 6,
+    "base_strength": 6,
+    "current_strength": 6,
     "card_type": "unit",
     "ability": "none"
 
@@ -108,7 +121,8 @@
     "card_name": "blue stripes commando",
     "faction": "northern realms",
     "row": "melee",
-    "strength": 4,
+    "base_strength": 4,
+    "current_strength": 4,
     "card_type": "unit",
     "ability": "tight bound"
   },
@@ -116,7 +130,8 @@
     "card_name": "dethmold",
     "faction": "northern realms",
     "row": "range",
-    "strength": 6,
+    "base_strength": 6,
+    "current_strength": 6,
     "card_type": "unit",
     "ability": "none"
   },
@@ -124,7 +139,8 @@
     "card_name": "assire van anahid",
     "faction": "nilfgaardian",
     "row": "range",
-    "strength": 6,
+    "base_strength": 6,
+    "current_strength": 6,
     "card_type": "unit",
     "ability": "none"
   },
@@ -132,7 +148,8 @@
     "card_name": "imprea brigade guard",
     "faction": "nilfgaardian",
     "row": "melee",
-    "strength": 3,
+    "base_strength": 3,
+    "current_strength": 3,
     "card_type": "unit",
     "ability": "tight bound"
   },
@@ -140,7 +157,8 @@
     "card_name": "siege engineer",
     "faction": "nilfgaardian",
     "row": "siege",
-    "strength": 6,
+    "base_strength": 6,
+    "current_strength": 6,
     "card_type": "unit",
     "ability": "none"
   },
@@ -148,7 +166,8 @@
     "card_name": "tibor eggebracht",
     "faction": "nilfgaardian",
     "row": "range",
-    "strength": 10,
+    "base_strength": 10,
+    "current_strength": 10,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -156,7 +175,8 @@
     "card_name": "vattier de rideaux",
     "faction": "nilfgaardian",
     "row": "melee",
-    "strength": 4,
+    "base_strength": 4,
+    "current_strength": 4,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -164,7 +184,8 @@
     "card_name": "puttkammer",
     "faction": "nilfgaardian",
     "row": "range",
-    "strength": 3,
+    "base_strength": 3,
+    "current_strength": 3,
     "card_type": "unit",
     "ability": "none"
   },
@@ -172,7 +193,8 @@
     "card_name": "commander's horn",
     "faction": "neutral",
     "row": "none",
-    "strength": 0,
+    "base_strength": 0,
+    "current_strength": 0,
     "card_type": "buff",
     "ability": "horn"
   },
@@ -180,7 +202,8 @@
     "card_name": "scorch",
     "faction": "neutral",
     "row": "none",
-    "strength": 0,
+    "base_strength": 0,
+    "current_strength": 0,
     "card_type": "buff",
     "ability": "scorch"
   },
@@ -188,7 +211,8 @@
     "card_name":"torrential rain",
     "faction": "neutral",
     "row": "none",
-    "strength": 0,
+    "base_strength": 0,
+    "current_strength": 0,
     "card_type": "weather",
     "ability": "rain"
   },
@@ -196,7 +220,8 @@
     "card_name": "biting frost",
     "faction": "neutral",
     "row": "none",
-    "strength": 0,
+    "base_strength": 0,
+    "current_strength": 0,
     "card_type": "weather",
     "ability": "frost"
   },
@@ -204,8 +229,100 @@
     "card_name": "clear weather",
     "faction": "neutral",
     "row": "none",
-    "strength": 0,
+    "base_strength": 0,
+    "current_strength": 0,
     "card_type": "weather",
     "ability": "clear weather"
+  },
+  {
+    "card_name": "keira metz",
+    "faction": "northern realms",
+    "row": "range",
+    "base_strength": 5,
+    "current_strength": 5,
+    "card_type": "unit",
+    "ability": "medic"
+  },
+  {
+    "card_name": "ballista",
+    "faction": "northern realms",
+    "row": "siege",
+    "base_strength": 6,
+    "current_strength": 6,
+    "card_type": "unit",
+    "ability": "none"
+  },
+  {
+    "card_name": "catapult",
+    "faction": "northern realms",
+    "row": "siege",
+    "base_strength": 8,
+    "current_strength": 8,
+    "card_type": "unit",
+    "ability": "tight bond"
+  },
+  {
+    "card_name": "thaler",
+    "faction": "northern realms",
+    "row": "melee",
+    "base_strength": 1,
+    "current_strength": 1,
+    "card_type": "unit",
+    "ability": "spy"
+  },
+  {
+    "card_name": "reinforced trebuchet",
+    "faction": "northern realms",
+    "row": "siege",
+    "base_strength": 6,
+    "current_strength": 6,
+    "card_type": "unit",
+    "ability": "morale boost"
+  },
+  {
+    "card_name": "renuald aep matsen",
+    "faction": "nilfgaardian",
+    "row": "range",
+    "base_strength": 4,
+    "current_strength": 4,
+    "card_type": "unit",
+    "ability": "spy"
+  },
+  {
+    "card_name": "archegriffin",
+    "faction": "nilfgaardian",
+    "row": "siege",
+    "base_strength": 6,
+    "current_strength": 6,
+    "card_type": "unit",
+    "ability": "none"
+  },
+  {
+    "card_name": "magna division",
+    "faction": "nilfgaardian",
+    "row": "melee",
+    "base_strength": 4,
+    "current_strength": 4,
+    "card_type": "unit",
+    "ability": "tight bond"
+  },
+  {
+    "card_name": "shilard fitz-esterlen",
+    "faction": "nilfgaardian",
+    "row": "range",
+    "base_strength": 5,
+    "current_strength": 5,
+    "card_type": "unit",
+    "ability": "spy"
+  },
+  {
+    "card_name": "nauzicaa brigade",
+    "faction": "nilfgaardian",
+    "row": "melee",
+    "base_strength": 5,
+    "current_strength": 5,
+    "card_type": "unit",
+    "ability": "none"
   }
+
 ]
