@@ -9,7 +9,7 @@ class Player:
         self.player_name = player_name
         self.deck = deck
         self.hand: List[Card] = []
-        self.board: Dict[str, List[Card]] = {"melee": [], "ranged": [], "siege": []}
+        self.board: Dict[str, List[Card]] = {"melee": [], "range": [], "siege": []}
         #this is going to be where cards die!
         self.graveyard: List[Card] = []
         self.leader_card = leader_card
@@ -22,8 +22,6 @@ class Player:
         self.turn_order_first = False
         self.ai_player = ai_player
         self.player_name = player_name
-        self.weather_sum = 0
-        self.sum = 0
 
 
     #adding a draw hand implementation later after typing is completed
@@ -36,6 +34,7 @@ class Player:
             print(f"{self.player_name}'s deck is empty. No card drawn.")
 
     def play_card(self, card_name: str) -> Card | None:
+
         while True:
             if not self.hand:
                 print("You have nothing in your hand")
@@ -44,7 +43,6 @@ class Player:
             for i, card in enumerate(self.hand):
                 if card.card_name.lower().strip() == card_name.lower().strip():
                     if card.card_type.lower().strip() == "unit":
-                        self.strength += card.strength
                         self.board[card.row].append(card)
                         return self.hand.pop(i)
                     elif card.card_type.lower().strip() == "weather":
@@ -57,10 +55,6 @@ class Player:
 
             print("That card doesn't exist, please try again")
             card_name = input("Enter a valid card name:")
-
-
-    def reset_score(self) -> None:
-        self.strength = 0
 
     def lose_life(self) -> None:
         self.lives -= 1
@@ -107,8 +101,13 @@ class Player:
         for row in self.board.values():
             self.graveyard.extend(row)
             row.clear()
-        self.weather_sum = 0
-        self.sum = 0
+
+
+
+
+
+
+
 
 
 
