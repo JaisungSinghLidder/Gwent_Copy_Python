@@ -5,6 +5,8 @@
     "row": "melee",
     "base_strength" : 5,
     "current_strength" : 5,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -14,6 +16,8 @@
     "row": "melee",
     "base_strength": 15,
     "current_strength": 15,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -23,6 +27,8 @@
     "row": "melee",
     "base_strength": 5,
     "current_strength": 5,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -32,6 +38,8 @@
     "row": "melee",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -41,6 +49,8 @@
     "row": "range",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -50,6 +60,8 @@
     "row": "range",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -59,6 +71,8 @@
     "row": "melee",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -68,6 +82,8 @@
     "row": "siege",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -77,6 +93,8 @@
     "row": "melee",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "medic"
   },
@@ -86,6 +104,8 @@
     "row": "melee",
     "base_strength": 1,
     "current_strength": 1,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -95,6 +115,8 @@
     "row": "melee",
     "base_strength": 4,
     "current_strength": 4,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -104,6 +126,8 @@
     "row": "melee",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -113,6 +137,8 @@
     "row": "siege",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
 
@@ -123,6 +149,8 @@
     "row": "melee",
     "base_strength": 4,
     "current_strength": 4,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "tight bound"
   },
@@ -132,6 +160,8 @@
     "row": "range",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -141,6 +171,8 @@
     "row": "range",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -150,6 +182,8 @@
     "row": "melee",
     "base_strength": 3,
     "current_strength": 3,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "tight bound"
   },
@@ -159,6 +193,8 @@
     "row": "siege",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -168,6 +204,8 @@
     "row": "range",
     "base_strength": 10,
     "current_strength": 10,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "hero"
   },
@@ -177,6 +215,8 @@
     "row": "melee",
     "base_strength": 4,
     "current_strength": 4,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -186,6 +226,8 @@
     "row": "range",
     "base_strength": 3,
     "current_strength": 3,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -195,6 +237,8 @@
     "row": "none",
     "base_strength": 0,
     "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "buff",
     "ability": "horn"
   },
@@ -204,6 +248,8 @@
     "row": "none",
     "base_strength": 0,
     "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "buff",
     "ability": "scorch"
   },
@@ -213,6 +259,8 @@
     "row": "none",
     "base_strength": 0,
     "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "weather",
     "ability": "rain"
   },
@@ -222,6 +270,8 @@
     "row": "none",
     "base_strength": 0,
     "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "weather",
     "ability": "frost"
   },
@@ -231,6 +281,8 @@
     "row": "none",
     "base_strength": 0,
     "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "weather",
     "ability": "clear weather"
   },
@@ -240,6 +292,8 @@
     "row": "range",
     "base_strength": 5,
     "current_strength": 5,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "medic"
   },
@@ -249,6 +303,8 @@
     "row": "siege",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -258,6 +314,8 @@
     "row": "siege",
     "base_strength": 8,
     "current_strength": 8,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "tight bond"
   },
@@ -267,6 +325,8 @@
     "row": "melee",
     "base_strength": 1,
     "current_strength": 1,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -276,6 +336,8 @@
     "row": "siege",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "morale boost"
   },
@@ -285,6 +347,8 @@
     "row": "range",
     "base_strength": 4,
     "current_strength": 4,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -294,6 +358,8 @@
     "row": "siege",
     "base_strength": 6,
     "current_strength": 6,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   },
@@ -303,6 +369,8 @@
     "row": "melee",
     "base_strength": 4,
     "current_strength": 4,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "tight bond"
   },
@@ -312,6 +380,8 @@
     "row": "range",
     "base_strength": 5,
     "current_strength": 5,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "spy"
   },
@@ -321,6 +391,8 @@
     "row": "melee",
     "base_strength": 5,
     "current_strength": 5,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
     "card_type": "unit",
     "ability": "none"
   }
