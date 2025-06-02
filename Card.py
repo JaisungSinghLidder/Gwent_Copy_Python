@@ -7,15 +7,21 @@ from dataclasses import dataclass, field
 #now I am going to base it off strength right now to keep the code easier for my AI
 #it probably won't be the smartest yet, but I can deal with that for now until I find another way to do it.
 
-@dataclass
+@dataclass()
 class Card:
 
-    card_name: str = field(compare = False)
-    faction: str = field(compare = False)
-    row: str = field(compare = False)
-    strength: int
-    card_type: str =  field(compare = False)
-    ability: str = field(default=None, compare = False)
+    card_name: str
+    faction: str
+    row: str
+    #this is going to be their base strength
+    base_strength: int
+    #meanwhile this will be the strength that will be changed by differing conditions
+    current_strength: int
+    #adding these flags for weather and horn
+    is_affected_by_weather: bool = field(compare = False)
+    is_affected_by_horn: bool = field(compare = False)
+    card_type: str
+    ability: str
 
 
 
