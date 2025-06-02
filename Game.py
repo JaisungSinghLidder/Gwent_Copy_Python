@@ -13,9 +13,6 @@ class Game:
         #this is for the ability where the player can keep a card
         self.player_one.cards_to_keep: List[Card]  = []
         self.player_two.cards_to_keep: List[Card] =  []
-        #have the player handle their own sum as well, but I'll add that to a later version of this code
-        #no more player sum
-        #no more weather sum
         self.active_weather_effect = set()
 
     def determine_winner(self) -> str:
@@ -276,6 +273,10 @@ class Game:
             else:
                 print("There is no weather effect to clear")
 
+    #adding maintaining functions to keep checking for these effects
+    def maintain_weather_effects(self):
+        pass
+
     #Maybe I will just to get rid of the reliance on the other systems
     def round_summary(self) -> None:
         print("Player one stats:")
@@ -313,11 +314,18 @@ class Game:
 
         #going to change the implementation of the tight bond ability
         if og_card.ability.lower().strip() == "tight bond":
+            # a list for holding all the tight bond cards
+            # because the calculation is not doubling
+            # it is the original strength * number of cards
+            tight_bond_cards = []
+
             for row in ["melee", "range", "siege"]:
                 for card in player.board[row]:
-                    if og_card.ability == "tight bond" and og_card.ability == card.ability and og_card.card_name == card.card_name and og_card.row == card.row:
-                        card.current_strength *= 2
-                        og_card.current_strength *= 2
+                    if og_card == card:
+                        tight_bond_cards.append(card)
+
+            for card in tight_bond_cards:
+                card.current_strength = card.base_strength * len(tight_bond_cards)
 
         elif og_card.ability.lower().strip() == "medic":
             if not player.graveyard:
@@ -336,8 +344,7 @@ class Game:
 
         elif og_card.ability.lower().strip() == "muster":
             for i, card in enumerate(player.deck):
-                    if og_card.card_name == card.card_name:
-                        player.sum+= card.strength
+                    if og_card == card:
                         player.board[card.row].append(card)
                         # we are using del so that we delete the specific index and not deleting all the cards with the same name
                         del player.deck[i]
@@ -348,6 +355,7 @@ class Game:
                     card.current_strength += 1
 
         elif og_card.ability.lower().strip() == "spy":
+            #spy's go on opponent's board
             opponent.board[og_card.row].append(og_card)
             for _ in range(2):
                 card = player.deck.draw_from_deck()
@@ -366,9 +374,20 @@ class Game:
                         player.board[row][i] = og_card
                         return
 
+    #maybe add a maintain_effect function to check whether morale booster and tight bond is working
+    def maintain_effect(self, player):
+        pass
+
+       ''' tight_bound_card_count = 0
+        #tight bond case
+        for row in ["melee", "range", "siege"]:
+            for card in player.board[row]:
+                if card.ability ==
+                tight_bound_card_count += 1 '''
 
 
-    def check_buff(self, player, og_card):
+
+    def check_buff(self, player: Player, og_card: Card):
 
         opponent = None
 
@@ -379,6 +398,10 @@ class Game:
 
 
         if og_card.ability.lower().strip() == "scorch":
+
+            #I think scorch is wrong, as it should take the highest or same strength cards
+            #currently implementing that it destroys the highest card on both sides
+
             max_strength_player_one = 0
             max_card_player_one = None
             for row in ["melee", "range", "siege"]:
@@ -395,7 +418,7 @@ class Game:
                         max_card_player_two = card
                         max_strength_player_two = card.strength
 
-                #now we are deleting it
+            #now we are deleting it
             for row in ["melee", "range", "siege"]:
                 for i, card in enumerate(player.board[row]):
                     if card is max_card_player_one:
@@ -430,13 +453,12 @@ class Game:
 
 
     def cancel_effects(self,player,card, chosen_row = None) -> None:
+        #this needs to change
         if card.ability.lower().strip() == "tight bond":
             # Revert tight bond effect on other matching cards
             for row in ["melee", "range", "siege"]:
                 for other_card in player.board[row]:
-                    if (other_card.ability == "tight bond" and
-                            other_card.card_name == card.card_name and
-                            other_card.row == card.row):
+                    if other_card == card:
                         other_card.strength //= 2  # Undo the doubling
         elif card.ability.lower().strip() == "morale boost":
             # Remove the +1 morale boost from same-row cards
@@ -446,12 +468,13 @@ class Game:
         #now here need to add logic for undoing the commander horn's
         elif card.ability.lower().strip() == "horn":
             for card in player.board[chosen_row] and card.is_affected_by_horn:
-                card.strength //= 2 # Undo the doubling
+                card.current_strength //= 2 # Undo the doubling
 
 
 
     #Calculating the strength of each player's board
-    def calculate_strength(self, player) -> None:
+    #Noveau:
+    def calculate_strength(self, player: Player) -> None:
         total = 0
         for row in ["melee", "range", "siege"]:
             for card in player.board[row]:
@@ -464,7 +487,7 @@ class Game:
     #have to add a leader ability now
     #probably just going to add 5 because I don't want to add all the variants into the deck
     #1)Northern Realms: Foltest - Lord commander of the North - Clear Weather effects
-    #2)Monsters: Eredin - Bringer of death - Boost a random unit by 2
+    #2)Monsters: Eredin - The Treacherous - Double the strength of the vampires
     #3)Nilfgaard: Emhyr var Emreis - The white Flame - Look at opponent's hand
     #4)Scoia'tael: Francesca Findabair - QUeen of Dol Blathanna - Play a random card from your deck
     #5)Skillege: Crach an Craite - Shuffle all cards from each player graveyards back into their decks
@@ -580,7 +603,7 @@ class Game:
     #adding a display hand feature
     def display_player_hand(self, player: Player) -> None:
         for card in player.hand:
-            print(card.card_name)
+            print(card.card_name + " " + card.current_strength)
 
     #drawing and redrawing feature:
     def player_starting_draw(self) -> None:
@@ -646,6 +669,15 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
+
+
+
+
+
+
+
+
+
 
 
 
