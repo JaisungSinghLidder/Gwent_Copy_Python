@@ -22,6 +22,8 @@ class Player:
         self.turn_order_first = False
         self.ai_player = ai_player
         self.player_name = player_name
+        #reintroducing player own sum
+        self.sum = 0
 
 
     #adding a draw hand implementation later after typing is completed
