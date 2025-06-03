@@ -374,17 +374,29 @@ class Game:
                         player.board[row][i] = og_card
                         return
 
-    #maybe add a maintain_effect function to check whether morale booster and tight bond is working
-    def maintain_effect(self, player):
-        pass
+    #this will check for maintaining effects such as weather, horn, morale booster
+    def maintain_effect(self, player: Player, card: Card):
 
-       ''' tight_bound_card_count = 0
-        #tight bond case
-        for row in ["melee", "range", "siege"]:
-            for card in player.board[row]:
-                if card.ability ==
-                tight_bound_card_count += 1 '''
+        #weather case
+        for other_card in player.board[card.row]:
+            if other_card.is_affected_by_weather:
+                card.is_affected_by_weather = True
+                card.current_strength = 1
+                break
 
+        #horn case
+        for other_card in player.board[card.row]:
+            if other_card.is_affected_by_horn:
+                card.is_affected_by_horn = True
+                card.current_strength *= 2
+                break
+
+        #morale booster case
+        #going to not break from the for loop since morale boost can be stacked on top of the row over and over again
+
+        for other_card in player.board[card.row]:
+            if other_card.ability.lower().strip() == "morale boost":
+                card.current_strength += 1
 
 
     def check_buff(self, player: Player, og_card: Card):
@@ -396,40 +408,42 @@ class Game:
         else:
             opponent = self.player_one
 
+        #this inner function go alongside the scorch
+        #just to cancel any effects that would happen alongside it
+        def cancel_effects_before_destroy(card: Card, player: Player):
+            #morale boost case
+            if card.ability == "morale boost":
+                for other_card in player.board[card.row]:
+                    other_card.current_strength -= 1
+            elif card.ability == "tight bond":
 
+                tight_bond_count = []
+                for other_card in player.board[card.row]:
+                    if card == other_card:
+                        tight_bond_count.append(card)
+
+
+                #just pop one out to represent
+                tight_bond_count.pop()
+
+
+                for tight_bond_cards in tight_bond_count:
+                    tight_bond_cards.current_strength *= tight_bond_cards.base_strength * len(tight_bond_count)
+
+            elif card.ability == "frost":
+                pass
+
+            elif card.ability == "rain":
+                pass
+
+            elif card.ability == ""
+
+
+
+
+        #in the works
         if og_card.ability.lower().strip() == "scorch":
-
-            #I think scorch is wrong, as it should take the highest or same strength cards
-            #currently implementing that it destroys the highest card on both sides
-
-            max_strength_player_one = 0
-            max_card_player_one = None
-            for row in ["melee", "range", "siege"]:
-                for card in player.board[row]:
-                    if max_strength_player_one < card.strength and card.ability != "hero":
-                        max_card_player_one = card
-                        max_strength_card_player_one = card.strength
-
-            max_card_player_two = None
-            max_strength_player_two = 0
-            for row in ["melee", "range", "siege"]:
-                for card in opponent.board[row]:
-                    if max_strength_player_two < card.strength and card.ability != "hero":
-                        max_card_player_two = card
-                        max_strength_player_two = card.strength
-
-            #now we are deleting it
-            for row in ["melee", "range", "siege"]:
-                for i, card in enumerate(player.board[row]):
-                    if card is max_card_player_one:
-                        del player.board[row][i]
-                        break
-
-            for row in ["melee", "range", "siege"]:
-                for i, card in enumerate(player.board[row]):
-                    if card is max_card_player_two:
-                        del player.board[row][i]
-                        break
+            pass
 
         elif og_card.ability.lower().strip() == "horn":
             while True:
@@ -669,7 +683,6 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
-
 
 
 
