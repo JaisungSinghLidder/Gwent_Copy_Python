@@ -152,7 +152,7 @@
     "is_affected_by_weather": false,
     "is_affected_by_horn": false,
     "card_type": "unit",
-    "ability": "tight bound"
+    "ability": "tight bond"
   },
   {
     "card_name": "dethmold",
@@ -185,7 +185,7 @@
     "is_affected_by_weather": false,
     "is_affected_by_horn": false,
     "card_type": "unit",
-    "ability": "tight bound"
+    "ability": "tight bond"
   },
   {
     "card_name": "siege engineer",
@@ -262,7 +262,29 @@
     "is_affected_by_weather": false,
     "is_affected_by_horn": false,
     "card_type": "weather",
-    "ability": "rain"
+    "ability": "torrential rain"
+  },
+  {
+    "card_name":"impenetrable fog",
+    "faction": "neutral",
+    "row": "none",
+    "base_strength": 0,
+    "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
+    "card_type": "weather",
+    "ability": "impenetrable fog"
+  },
+  {
+    "card_name": "skellige storm",
+    "faction": "neutral",
+    "row": "none",
+    "base_strength": 0,
+    "current_strength": 0,
+    "is_affected_by_weather": false,
+    "is_affected_by_horn": false,
+    "card_type": "weather",
+    "ability": "skellige storm"
   },
   {
     "card_name": "biting frost",
