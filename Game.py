@@ -423,27 +423,76 @@ class Game:
                         tight_bond_count.append(card)
 
 
-                #just pop one out to represent
+                #just pop one out to represent losing one card due to it being destroyed
+
                 tight_bond_count.pop()
 
 
                 for tight_bond_cards in tight_bond_count:
                     tight_bond_cards.current_strength *= tight_bond_cards.base_strength * len(tight_bond_count)
 
-            elif card.ability == "frost":
-                pass
-
-            elif card.ability == "rain":
-                pass
-
-            elif card.ability == ""
 
 
 
 
         #in the works
         if og_card.ability.lower().strip() == "scorch":
-            pass
+
+            max_strength_card = None
+            max_strength_of_card = 0
+            max_strength_card_player = None
+
+            #first trying to find the largest strength card in the first player board
+
+            for row in ["melee", "range", "siege"]:
+                for card in player.board[row]:
+                    if max_strength_of_card < card.current_strength:
+                        max_strength_card = card
+                        max_strength_of_card = card.current_strength
+                        max_strength_card_player = player
+
+
+
+            for row in ["melee", "range", "siege"]:
+                for card in opponent.board[row]:
+                    if max_strength_of_card < card.current_strength:
+                        max_strength_card = card
+                        max_strength_of_card = card.current_strength
+                        max_strength_card_player = opponent
+
+            #now we are going to go through and delete those card that are equal to it
+            #then we delete that card that we are originating from
+
+            for row in ["melee", "range", "siege"]:
+                for i, card in enumerate(player.board[row]):
+                    if max_strength_of_card == card.current_strength:
+                        cancel_effects_before_destroy(card, player)
+                        player.graveyard.append(card)
+                        del player.board[row][i]
+
+            for row in ["melee", "range", "siege"]:
+                for i, card in enumerate(opponent.board[row]):
+                    if max_strength_of_card == card.current_strength:
+                        cancel_effects_before_destroy(card, opponent)
+                        opponent.graveyard.append(card)
+                        del opponent.board[row][i]
+
+
+            #now we are going to delete the original max card
+
+            for row in ["melee", "range", "siege"]:
+                for i, card in enumerate(max_strength_card_player.board[row]):
+                    if card == max_strength_card:
+
+                        cancel_effects_before_destroy(max_strength_card, max_strength_card_player)
+
+                        max_strength_card_player.graveyard.append(max_strength_card)
+
+                        del max_strength_card_player.board[row][i]
+
+
+
+
 
         elif og_card.ability.lower().strip() == "horn":
             while True:
@@ -683,8 +732,6 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
-
-
 
 
 
