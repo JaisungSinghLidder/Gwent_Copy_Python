@@ -1,4 +1,4 @@
-from typing import List
+ffrom typing import List
 from General_Game_Space import Player
 from Card_Space.Card import Card
 import random
@@ -200,41 +200,62 @@ class Game:
         self.active_weather_effect.add(weather_effect)
 
         def biting_frost(player) -> None:
+
             for card in player.board["melee"]:
                 if card.ability.lower().strip() != "hero":
-                    card.is_affected_by_weather = True
                     card.current_strength = 1
+
+            player.melee_row_weather_effect = True
 
         def impenetrable_fog(player) -> None:
+
             for card in player.board["range"]:
                 if card.ability.lower().strip() != "hero":
-                    card.is_affected_by_weather = True
                     card.current_strength = 1
+
+            player.range_row_weather_effect = True
 
         def torrential_rain(player) -> None:
+
             for card in player.board["siege"]:
                 if card.ability.lower().strip() != "hero":
-                    card.is_affected_by_weather = True
                     card.current_strength = 1
 
-        def clear_weather() -> None:
+            player.siege_row_weather_effect = True
+
+
+        def clear_weather(player) -> None:
             #clearing all previous weather effects
             self.active_weather_effect.clear()
 
-            #doing it twice so we don't clear it twice
-            for row in ["melee", "range", "siege"]:
-                for card in self.player_one.board[row]:
-                    if card.is_affected_by_weather and card.is_affected_by_horn:
-                        card.current_strength = card.base_strength * 2
-                    elif card.is_affected_by_weather:
-                        card.current_strength = card.base_strength
+            #first we need to undo the effect of the weather
 
-            for row in ["melee", "range", "siege"]:
-                for card in self.player_two.board[row]:
-                    if card.is_affected_by_weather and card.is_affected_by_horn:
-                        card.current_strength = card.base_strength * 2
-                    elif card.is_affected_by_weather:
-                        card.current_strength = card.base_strength
+            if player.melee_row_weather_effect and player.melee_row_horn_effect:
+                 for card in player.board["melee"]:
+                     card.current_strength = card.base_strength * 2
+            elif player.melee_row_weather_effect:
+                for card in player.board["melee"]:
+                    card.current_strength = card.base_strength
+            elif player.range_row_weather_effect and player.range_row_horn_effect:
+                for card in player.board["range"]:
+                    card.current_strength = card.base_strength * 2
+            elif player.range_row_weather_effect:
+                for card in player.board["range"]:
+                    card.current_strength = card.base_strength
+            elif player.siege_row_weather_effect and player.siege_row_horn_effect:
+                for card in player.board["siege"]:
+                    card.current_strength = card.base_strength * 2
+            elif player.siege_row_weather_effect:
+                for card in player.board["siege"]:
+                    card.current_strength = card.base_strength
+
+
+            #setting the flags to false
+
+            player.melee_row_weather_effect = False
+            player.range_row_weather_effect = False
+            player.siege_row_weather_effect = False
+
 
         if weather_effect.lower().strip() == "biting frost":
 
@@ -269,15 +290,12 @@ class Game:
 
         elif weather_effect.lower().strip() == "clear weather":
             if self.active_weather_effect:
-                clear_weather()
+                clear_weather(self.player_one)
+
+                clear_weather(self.player_two)
             else:
                 print("There is no weather effect to clear")
 
-    #adding maintaining functions to keep checking for these effects
-    def maintain_weather_effects(self):
-        pass
-
-    #Maybe I will just to get rid of the reliance on the other systems
     def round_summary(self) -> None:
         print("Player one stats:")
         print(f"Sum: {self.player_one.sum} ")
@@ -377,19 +395,30 @@ class Game:
     #this will check for maintaining effects such as weather, horn, morale booster
     def maintain_effect(self, player: Player, card: Card):
 
-        #weather case
-        for other_card in player.board[card.row]:
-            if other_card.is_affected_by_weather:
-                card.is_affected_by_weather = True
+        #both case
+        if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
+            card.current_strength = 2
+        elif card.row == "range" and player.range_row_weather_effect and player.range_row_horn_effect:
+            card.current_strength = 2
+        elif card.row == "siege" and player.siege_row_weather_effect and player.siege_row_horn_effect:
+            card.current_strength = 2
+        else:
+            #weather case
+            if card.row == "melee" and player.melee_row_weather_effect:
                 card.current_strength = 1
-                break
+            elif card.row == "range" and player.range_row_weather_effect:
+                card.current_strength = 1
+            elif card.row == "siege" and player.siege_row_weather_effect:
+                card.current_strength = 1
 
-        #horn case
-        for other_card in player.board[card.row]:
-            if other_card.is_affected_by_horn:
-                card.is_affected_by_horn = True
-                card.current_strength *= 2
-                break
+            #horn case
+            if card.row == "melee" and player.melee_row_horn_effect:
+                card.current_strength = card.base_strength * 2
+            elif card.row == "range" and player.range_row_horn_effect:
+                card.current_strength = card.base_strength * 2
+            elif card.row == "siege" and player.siege_row_horn_effect:
+                card.current_strength = card.base_strength * 2
+
 
         #morale booster case
         #going to not break from the for loop since morale boost can be stacked on top of the row over and over again
@@ -414,7 +443,7 @@ class Game:
             #morale boost case
             if card.ability == "morale boost":
                 for other_card in player.board[card.row]:
-                    other_card.current_strength -= 1
+                    other_card.current_strength = card.base_strength
             elif card.ability == "tight bond":
 
                 tight_bond_count = []
@@ -495,43 +524,47 @@ class Game:
 
 
         elif og_card.ability.lower().strip() == "horn":
+
             while True:
                 chosen_row = input("What row do you want to double?")
                 if chosen_row == "melee":
+
                     for card in player.board["melee"]:
-                        card.is_affected_by_horn = True
-                        card.current_strength *= 2
-                        return chosen_row
+                        card.current_strength = card.base_strength * 2
+
+                    player.melee_row_horn_effect = True
+
                 elif chosen_row == "range":
+
                     for card in player.board["range"]:
-                        card.is_affected_by_horn = True
-                        card.current_strength *=2
-                        return chosen_row
+                        card.current_strength = card.base_strength * 2
+
+                    player.range_row_horn_effect = True
+
                 elif chosen_row == "siege":
                     for card in player.board["siege"]:
-                        card.is_affected_by_horn = True
-                        card.current_strength *= 2
-                        return chosen_row
+
+                        card.current_strength = card.base_strength * 2
+
+                    player.siege_row_horn_effect = True
+
+
                 print("Please type in either melee, range, or siege please")
 
 
-    def cancel_effects(self,player,card, chosen_row = None) -> None:
-        #this needs to change
+
+    def cancel_effects(self,player: Player,card: Card) -> None:
         if card.ability.lower().strip() == "tight bond":
             # Revert tight bond effect on other matching cards
             for row in ["melee", "range", "siege"]:
                 for other_card in player.board[row]:
                     if other_card == card:
-                        other_card.strength //= 2  # Undo the doubling
+                        other_card.strength = other_card.base_strength
         elif card.ability.lower().strip() == "morale boost":
             # Remove the +1 morale boost from same-row cards
             for other_card in player.board[card.row]:
                 if other_card is not card:
-                    other_card.current_strength -= 1
-        #now here need to add logic for undoing the commander horn's
-        elif card.ability.lower().strip() == "horn":
-            for card in player.board[chosen_row] and card.is_affected_by_horn:
-                card.current_strength //= 2 # Undo the doubling
+                    other_card.current_strength = other_card.base_strength
 
 
 
@@ -666,7 +699,8 @@ class Game:
     #adding a display hand feature
     def display_player_hand(self, player: Player) -> None:
         for card in player.hand:
-            print(card.card_name + " " + card.current_strength)
+            print(card.card_name + " " + str(card.current_strength))
+
 
     #drawing and redrawing feature:
     def player_starting_draw(self) -> None:
@@ -732,41 +766,6 @@ class Game:
 
         redraw_mechanic(self.player_one)
         redraw_mechanic(self.player_two)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
