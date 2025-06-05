@@ -22,6 +22,14 @@ class Player:
         self.turn_order_first = False
         self.ai_player = ai_player
         self.player_name = player_name
+        #these bool statements will judge whether a row is being affected by a weather effect
+        self.melee_row_weather_effect = False
+        self.range_row_weather_effect = False
+        self.siege_row_weather_effect = False
+        #these statements will do the weather effects; however, it will be the commanding horn
+        self.melee_row_horn_effect = False
+        self.range_row_horn_effect = False
+        self.siege_row_horn_effect = False
         #reintroducing player own sum
         self.sum = 0
 
