@@ -1,4 +1,4 @@
-ffrom typing import List
+from typing import List
 from General_Game_Space import Player
 from Card_Space.Card import Card
 import random
@@ -19,11 +19,11 @@ class Game:
         #An outright win case
         if self.player_one.sum > self.player_two.sum:
             self.player_two.lose_life()
-            print("Player one has won the round")
+            print(f"{self.player_one.player_name} has won the round")
             return "player one wins"
         elif self.player_two.sum > self.player_one.sum:
             self.player_one.lose_life()
-            print("Player two has one the round")
+            print(f"{self.player_two.player_name}has one the round")
             return "player two wins"
         #Tie cases
         elif self.player_one.sum == self.player_two.sum:
@@ -200,98 +200,73 @@ class Game:
         self.active_weather_effect.add(weather_effect)
 
         def biting_frost(player) -> None:
-
             for card in player.board["melee"]:
                 if card.ability.lower().strip() != "hero":
                     card.current_strength = 1
-
             player.melee_row_weather_effect = True
 
         def impenetrable_fog(player) -> None:
-
             for card in player.board["range"]:
                 if card.ability.lower().strip() != "hero":
                     card.current_strength = 1
-
             player.range_row_weather_effect = True
 
         def torrential_rain(player) -> None:
-
             for card in player.board["siege"]:
                 if card.ability.lower().strip() != "hero":
                     card.current_strength = 1
-
             player.siege_row_weather_effect = True
 
-
         def clear_weather(player) -> None:
-            #clearing all previous weather effects
+            # Clear all previous weather effects
             self.active_weather_effect.clear()
 
-            #first we need to undo the effect of the weather
-
-            if player.melee_row_weather_effect and player.melee_row_horn_effect:
-                 for card in player.board["melee"]:
-                     card.current_strength = card.base_strength * 2
-            elif player.melee_row_weather_effect:
+            # Restore strengths for all rows based on horn flags
+            if player.melee_row_weather_effect:
                 for card in player.board["melee"]:
-                    card.current_strength = card.base_strength
-            elif player.range_row_weather_effect and player.range_row_horn_effect:
+                    card.current_strength = card.base_strength * (2 if player.melee_row_horn_effect else 1)
+
+            if player.range_row_weather_effect:
                 for card in player.board["range"]:
-                    card.current_strength = card.base_strength * 2
-            elif player.range_row_weather_effect:
-                for card in player.board["range"]:
-                    card.current_strength = card.base_strength
-            elif player.siege_row_weather_effect and player.siege_row_horn_effect:
+                    card.current_strength = card.base_strength * (2 if player.range_row_horn_effect else 1)
+
+            if player.siege_row_weather_effect:
                 for card in player.board["siege"]:
-                    card.current_strength = card.base_strength * 2
-            elif player.siege_row_weather_effect:
-                for card in player.board["siege"]:
-                    card.current_strength = card.base_strength
+                    card.current_strength = card.base_strength * (2 if player.siege_row_horn_effect else 1)
 
-
-            #setting the flags to false
-
+            # Reset weather flags
             player.melee_row_weather_effect = False
             player.range_row_weather_effect = False
             player.siege_row_weather_effect = False
 
+        # Now apply the correct weather effect
+        weather_effect = weather_effect.lower().strip()
 
-        if weather_effect.lower().strip() == "biting frost":
-
+        if weather_effect == "biting frost":
             biting_frost(self.player_one)
-
             biting_frost(self.player_two)
 
-
-        elif weather_effect.lower().strip() == "impenetrable fog":
+        elif weather_effect == "impenetrable fog":
             impenetrable_fog(self.player_one)
-
             impenetrable_fog(self.player_two)
 
-        elif weather_effect.lower().strip() == "torrential rain":
+        elif weather_effect == "torrential rain":
             torrential_rain(self.player_one)
-
             torrential_rain(self.player_two)
 
-        elif weather_effect.lower().strip() == "skelliege storm":
+        elif weather_effect == "skellige storm":
             if "torrential rain" in self.active_weather_effect and "impenetrable fog" in self.active_weather_effect:
                 return
-
             elif "torrential rain" in self.active_weather_effect:
                 impenetrable_fog(self.player_one)
-
                 impenetrable_fog(self.player_two)
-
             elif "impenetrable fog" in self.active_weather_effect:
                 torrential_rain(self.player_one)
-
                 torrential_rain(self.player_two)
 
-        elif weather_effect.lower().strip() == "clear weather":
+        elif weather_effect == "clear weather":
             if self.active_weather_effect:
                 clear_weather(self.player_one)
-
                 clear_weather(self.player_two)
             else:
                 print("There is no weather effect to clear")
@@ -356,7 +331,6 @@ class Game:
                     if c.card_name == card_choice and c.card_type == "unit" and c.ability != "hero":
                         row = c.row
                         player.board[row].append(c)
-                        player.sum += c.current_strength
                         del player.graveyard[i]
                         break
 
@@ -571,11 +545,10 @@ class Game:
     #Calculating the strength of each player's board
     #Noveau:
     def calculate_strength(self, player: Player) -> None:
-        total = 0
         for row in ["melee", "range", "siege"]:
             for card in player.board[row]:
-                total += card.current_strength
-        player.sum = total
+                player.sum += card.current_strength
+
 
 
     #Maybe change it so the leader is
