@@ -25,20 +25,32 @@ def main():
     leader_player_one =  CardLoader.load_leaders_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\leader_cards.json")
     leader_player_two = CardLoader.load_leaders_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\leader_cards.json")
 
-    player_one_leader_choice = input("Player one, what leader do you want for your deck ")
 
+    # Player one leader selection
+    # also add a faction check by comparing it to the player's deck
+    # basically deck's faction must equal the leader's card faction
     player_one_leader_card = None
+    while not player_one_leader_card:
+        player_one_leader_choice = input("Player one, what leader do you want for your deck: ").strip().lower()
+        for leader_card in leader_player_one:
+            if leader_card.leader_name.strip().lower() == player_one_leader_choice and leader_card.faction.lower().strip() == player_one_deck.faction_name.lower().strip():
+                player_one_leader_card = leader_card
+                break
+        #because it will still be None since nothing was assigned to them
+        if not player_one_leader_card:
+            print(f"Invalid leader name or invalid faction. As a reminder your deck is {player_one_deck.faction_name}. Please try again.")
+
+    # Player two leader selection
     player_two_leader_card = None
-
-    for card in leader_player_one:
-        if card == player_one_leader_choice:
-            player_one_leader_card = card
-
-    player_two_leader_card = input("Player two, what leader do you want for your deck ")
-
-    for card in leader_player_two:
-        if card == player_two_leader_card:
-            player_two_leader_card = card
+    while not player_two_leader_card:
+        player_two_leader_choice = input("Player two, what leader do you want for your deck: ").strip().lower()
+        for leader_card in leader_player_two:
+            if leader_card.leader_name.strip().lower() == player_two_leader_choice and leader_card.faction.lower().strip() == player_two_deck.faction_name.lower().strip():
+                player_two_leader_card = leader_card
+                break
+        #because it will still be None since nothing was assigned to them
+        if not player_two_leader_card:
+            print(f"Invalid leader name or invalid faction. As a reminder your deck is {player_two_deck.faction_name}. Please try again.")
 
     #creating the players now
 
@@ -110,7 +122,7 @@ def main():
 
 
             #going to ask the user to play their card
-            if len(first_turn.hand) == 0:
+            if len(first_turn.hand) != 0:
                 first_turn_card_choice = input("\n Please pick a card in your hand to play")
 
                 #now we are going to play card
@@ -119,14 +131,18 @@ def main():
                 #deciding which effect to use
                 if played_card_first_turn.card_type == "unit":
                     game_state.use_card_ability(first_turn,played_card_first_turn)
+                    #the effects should only have to be maintained by unit cards
+                    game_state.maintain_effect(first_turn, played_card_first_turn)
                 elif played_card_first_turn.card_type == "weather":
-                    game_state.active_weather_effect(first_turn,played_card_first_turn)
+                    game_state.check_weather_effect(played_card_first_turn.ability)
                 elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
                     game_state.check_buff(first_turn, played_card_first_turn)
                 elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
                     chosen_row = game_state.check_buff(first_turn, played_card_first_turn)
             else:
                 print("You have no cards in your deck")
+
+
 
 
 
@@ -166,15 +182,22 @@ def main():
             # deciding which effect to use
             if played_card_second_turn.card_type == "unit":
                 game_state.use_card_ability(first_turn, played_card_second_turn)
+                # the effects should only have to be maintained by unit cards
+                game_state.maintain_effect(first_turn, played_card_first_turn)
             elif played_card_second_turn.card_type == "weather":
-                game_state.active_weather_effect(first_turn, played_card_second_turn)
+                game_state.check_weather_effect(played_card_first_turn.ability)
             elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
                 game_state.check_buff(first_turn, played_card_second_turn)
             elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
-                chosen_row = game_state.check_buff(first_turn, played_card_second_turn)
+                game_state.check_buff(first_turn, played_card_second_turn)
 
         #this block should probably be changed
         #something are wrong with these functions
+
+        #should calculate strength first for both players
+        game_state.calculate_strength(player_one)
+
+        game_state.calculate_strength(player_two)
 
         #now determine the winner
         game_state.determine_winner()
@@ -194,6 +217,8 @@ def main():
 #over here is the executable
 if __name__ == "__main__":
     main()
+
+
 
 
 
