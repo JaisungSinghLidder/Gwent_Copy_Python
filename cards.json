@@ -241,7 +241,7 @@
     "base_strength": 0,
     "current_strength": 0,
     "card_type": "weather",
-    "ability": "frost"
+    "ability": "biting frost"
   },
   {
     "card_name": "clear weather",
