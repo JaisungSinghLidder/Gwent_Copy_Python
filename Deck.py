@@ -23,8 +23,9 @@ class Deck:
                 return False
         return True
 
-    def load_deck_from_json(self, path: str, deck_size: int = 10):
+    def load_deck_from_json(self, path: str):
         self.cards = CardLoader.load_deck_from_json(path, self.faction_name)
+
 
     #Limiting deck to 10 cards for now
     def check_deck_size(self) -> bool:
