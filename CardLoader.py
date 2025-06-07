@@ -20,7 +20,7 @@ class CardLoader:
         return [Leader(**item) for item in data]
 
     @staticmethod
-    def load_deck_from_json(path: str, faction: str,  deck_size: int = 6) -> list[Card]:
+    def load_deck_from_json(path: str, faction: str,  deck_size: int = 20) -> list[Card]:
         cards = CardLoader.load_card_from_json(path)
 
         faction_cards = [card for card in cards if
