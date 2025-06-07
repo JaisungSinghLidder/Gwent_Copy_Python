@@ -154,13 +154,15 @@ def main():
         # now initializing the loop for the first player
         while not second_turn.passed or second_turn.hand == 0:
 
+            # we are now going to reset the card choice here to be careful
             second_turn_card_choice = None
-            # checking whether the playing wants to pass their turn
-            second_turn.passing_turn()
 
             game_state.display_player_hand(second_turn)
 
-            #checking whether the player should leave
+            # checking whether the playing wants to pass their turn
+            second_turn.passing_turn()
+
+            # this case will leave the loop if the player chooses to leave
             if second_turn.passed:
                 print(f"{second_turn.player_name} has passed their turn.")
                 break  # or continue, depending on structure
@@ -173,24 +175,17 @@ def main():
             if leader_choice.lower().strip() == "yes":
                 game_state.use_leader_ability(second_turn)
 
-            second_turn_card_choice = input("\n Please pick a card in your hand to play")
-
-
-            # now we are going to play card
-            played_card_second_turn = second_turn.play_card(second_turn_card_choice)
-
-
-            #going to ask the user to play their card
+            # going to ask the user to play their card
             if len(second_turn.hand) != 0:
                 second_turn_card_choice = input("\n Please pick a card in your hand to play")
 
-                #now we are going to play card
+                # now we are going to play card
                 played_card_second_turn = second_turn.play_card(second_turn_card_choice)
 
-                #deciding which effect to use
+                # deciding which effect to use
                 if played_card_second_turn.card_type == "unit":
-                    game_state.use_card_ability(second_turn,played_card_second_turn)
-                    #the effects should only have to be maintained by unit cards
+                    game_state.use_card_ability(second_turn, played_card_second_turn)
+                    # the effects should only have to be maintained by unit cards
                     game_state.maintain_effect(second_turn, played_card_second_turn)
                 elif played_card_second_turn.card_type == "weather":
                     game_state.check_weather_effect(played_card_second_turn.ability)
@@ -205,9 +200,9 @@ def main():
         #something are wrong with these functions
 
         #should calculate strength first for both players
-        game_state.calculate_strength(player_one)
+        game_state.calculate_strength(first_turn)
 
-        game_state.calculate_strength(player_two)
+        game_state.calculate_strength(second_turn)
 
         #now determine the winner
         game_state.determine_winner()
@@ -227,7 +222,6 @@ def main():
 #over here is the executable
 if __name__ == "__main__":
     main()
-
 
 
 
