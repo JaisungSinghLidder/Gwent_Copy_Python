@@ -179,17 +179,27 @@ def main():
             # now we are going to play card
             played_card_second_turn = second_turn.play_card(second_turn_card_choice)
 
-            # deciding which effect to use
-            if played_card_second_turn.card_type == "unit":
-                game_state.use_card_ability(first_turn, played_card_second_turn)
-                # the effects should only have to be maintained by unit cards
-                game_state.maintain_effect(first_turn, played_card_first_turn)
-            elif played_card_second_turn.card_type == "weather":
-                game_state.check_weather_effect(played_card_first_turn.ability)
-            elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
-                game_state.check_buff(first_turn, played_card_second_turn)
-            elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
-                game_state.check_buff(first_turn, played_card_second_turn)
+
+            #going to ask the user to play their card
+            if len(second_turn.hand) != 0:
+                second_turn_card_choice = input("\n Please pick a card in your hand to play")
+
+                #now we are going to play card
+                played_card_second_turn = second_turn.play_card(second_turn_card_choice)
+
+                #deciding which effect to use
+                if played_card_second_turn.card_type == "unit":
+                    game_state.use_card_ability(second_turn,played_card_second_turn)
+                    #the effects should only have to be maintained by unit cards
+                    game_state.maintain_effect(second_turn, played_card_second_turn)
+                elif played_card_second_turn.card_type == "weather":
+                    game_state.check_weather_effect(played_card_second_turn.ability)
+                elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
+                    game_state.check_buff(second_turn, played_card_second_turn)
+                elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
+                    chosen_row = game_state.check_buff(second_turn, played_card_second_turn)
+            else:
+                print("You have no cards in your deck")
 
         #this block should probably be changed
         #something are wrong with these functions
@@ -217,6 +227,9 @@ def main():
 #over here is the executable
 if __name__ == "__main__":
     main()
+
+
+
 
 
 
