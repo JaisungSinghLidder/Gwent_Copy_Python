@@ -148,8 +148,9 @@ def main():
 
         print(f"{second_turn.player_name}'s turn is now")
 
-
+        print()
         game_state.display_board()
+        print()
 
         # now initializing the loop for the first player
         while not second_turn.passed or second_turn.hand == 0:
@@ -196,6 +197,10 @@ def main():
             else:
                 print("You have no cards in your deck")
 
+        print()
+        game_state.display_board()
+        print()
+
         #this block should probably be changed
         #something are wrong with these functions
 
@@ -204,8 +209,14 @@ def main():
 
         game_state.calculate_strength(second_turn)
 
+        print()
+
         #now determine the winner
-        game_state.determine_winner()
+        round_winner = game_state.determine_winner()
+
+        print()
+
+        game_state.faction_ability(round_winner)
 
         #showing off the game stats
         game_state.round_summary()
@@ -222,7 +233,6 @@ def main():
 #over here is the executable
 if __name__ == "__main__":
     main()
-
 
 
 
