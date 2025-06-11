@@ -4,11 +4,6 @@ from Card_Space.Card import Card
 from Card_Space.Leader import Leader
 import random
 
-from DB.import_leader_cards import leader_cards
-
-
-#this class will be handling the json file loading
-
 class CardLoader:
 
 
