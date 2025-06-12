@@ -15,15 +15,18 @@ def main():
     #intializing the decks for the player
     #their faction is already intialized when the deck is created
     player_one_deck = Deck("northern realms")
-    player_one_deck.load_deck_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\cards.json")
+    player_one_deck.load_card_from_db(r"C:\Users\jaisu\PycharmProjects\GwentClone\DB\cards.db")
     player_two_deck = Deck("nilfgaardian")
-    player_two_deck.load_deck_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\cards.json")
+    player_two_deck.load_card_from_db(r"C:\Users\jaisu\PycharmProjects\GwentClone\DB\cards.db")
 
     #creating leaders now
     #will ask player what leader they want
 
-    leader_player_one =  CardLoader.load_leaders_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\leader_cards.json")
-    leader_player_two = CardLoader.load_leaders_from_json(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\leader_cards.json")
+    #will eventually change so that it will also be handle in deck
+
+    leader_player_one =  CardLoader.load_leader_card_from_db(r"C:\Users\jaisu\PycharmProjects\GwentClone\DB\leader_cards.db")
+    leader_player_two = CardLoader.load_leader_card_from_db(r"C:\Users\jaisu\PycharmProjects\GwentClone\DB\leader_cards.db")
+
 
 
     # Player one leader selection
