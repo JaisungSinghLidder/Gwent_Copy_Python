@@ -43,8 +43,8 @@ class CardLoader:
         c.execute("""
             SELECT card_name, faction, row, base_strength, current_strength, card_type, ability
             FROM cards
-            WHERE LOWER(faction) = ? or LOWER(faction = 'neutral'
-            """, (faction,))
+            WHERE LOWER(faction) = ? OR LOWER(faction) = 'neutral'
+        """, (faction,))
 
         rows = c.fetchall()
         conn.close()
@@ -63,7 +63,7 @@ class CardLoader:
             card_type = row[5],
             ability = row[6]
         ) for row in selected_rows]
-        
+
         return cards
 
     @staticmethod
