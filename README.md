@@ -15,3 +15,5 @@ https://www.youtube.com/watch?v=BEFY7IHs0HM&t=1332s
 This link can give you some free books to download
 
 https://arielrubinstein.org/gt/arielDocs/
+
+https://www.youtube.com/watch?v=UXW2yZndl7U 
