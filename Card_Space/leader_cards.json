@@ -1,0 +1,29 @@
+[
+
+  {
+    "leader_name": "foltest lord commander of the north",
+    "leader_ability": "clear",
+    "faction": "northern realms"
+  },
+  {
+    "leader_name": "eredin breacc glas the treacherous",
+    "leader_ability": "double spy",
+    "faction": "monster"
+  },
+  {
+    "leader_name": "emhyr var emreis the white flame",
+    "leader_ability": "look at opponent hand",
+    "faction": "nilfgaardian"
+  },
+  {
+    "leader_name": "francesa findabair queen of dol blathanna",
+    "leader_ability": "play a random card",
+    "faction": "scoia'tael"
+  },
+  {
+    "leader_name": "crach an craite",
+    "leader_ability": "shuffle all cards from each player back into their deck",
+    "faction": "skillege"
+  }
+
+]
