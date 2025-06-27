@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Card_Space.Card import Card
+from src.cards.Card import Card
 
 #just holding the data, so we are going to make them dataclass
 @dataclass

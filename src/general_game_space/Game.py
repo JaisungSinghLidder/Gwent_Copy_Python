@@ -1,6 +1,6 @@
 from typing import List
-from General_Game_Space import Player
-from Card_Space.Card import Card
+from src.general_game_space import Player
+from src.cards.Card import Card
 import random
 
 class Game:

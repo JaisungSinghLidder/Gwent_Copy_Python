@@ -1,7 +1,7 @@
 from typing import List, Dict
-from Card_Space.Card import Card
-from Card_Space.Deck import Deck
-from Card_Space.Leader import Leader
+from src.cards.Card import Card
+from src.cards.Deck import Deck
+from src.general_game_space.Leader import Leader
 
 class Player:
 

@@ -4,8 +4,8 @@ from Card import Card
 import json
 import random
 
-from Card_Space.Card import Card
-from Card_Space.CardLoader import CardLoader
+from src.cards.Card import Card
+from src.cards.CardLoader import CardLoader
 
 
 class Deck:

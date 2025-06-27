@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import random
 
 class Node(ABC):
     @abstractmethod

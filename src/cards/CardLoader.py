@@ -1,7 +1,7 @@
 import json
 import sqlite3
-from Card_Space.Card import Card
-from Card_Space.Leader import Leader
+from src.cards.Card import Card
+from src.general_game_space.Leader import Leader
 import random
 
 class CardLoader:
