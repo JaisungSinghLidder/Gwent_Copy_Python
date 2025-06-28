@@ -18,7 +18,8 @@ class PlayerState:
     leader_used: bool
     leader_card: Leader
     faction: str
-    passed: bool 
+    passed: bool
+    ai_player: bool
 
 
 
