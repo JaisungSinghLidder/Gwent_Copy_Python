@@ -5,5 +5,24 @@ from src.ai.Node import Node
 
 # we are inheriting from the abstract node class
 class GwentNode(Node):
-    pass
+
+    def __init__(self, game_state):
+        self.game_state = game_state
+
+
+    def find_children(self):
+        pass
+
+    def find_random_child(self):
+        pass
+
+    def is_terminal(self):
+        pass
+
+    def reward(self):
+        pass
+
+    def __eq__(self, other):
+        pass
+
 
