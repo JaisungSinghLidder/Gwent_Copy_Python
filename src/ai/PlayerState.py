@@ -3,7 +3,8 @@ from typing import List, Dict, Tuple
 from src.cards.Card import Card
 from src.general_game_space.Leader import Leader
 
-
+#a dataclass that should provide a snapshot view of the players' information
+#this will allow the MCTS to evaluate these conditions
 
 @dataclass(frozen=True)
 class PlayerState:

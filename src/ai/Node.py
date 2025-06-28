@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+#this is an abstract class that we will base the GwentNode off of
+
 class Node(ABC):
     @abstractmethod
     def find_children(self):
