@@ -9,7 +9,8 @@ class GwentNode(Node):
     def __init__(self, game_state, parent = None):
         self.game_state = game_state
         self.parent = parent
-        self.children = set()
+        #allowing duplicates in this scenario
+        self.children = []
         self.visits = 0
         self.total_reward = 0.0
 
