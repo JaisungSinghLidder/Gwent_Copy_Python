@@ -12,3 +12,17 @@ class GameState:
     round_counter: int
     weather_rows: Set[str]
 
+
+
+    def get_legal_moves(self):
+        pass
+
+    def apply_move(self,move):
+        pass
+
+    def is_terminal(self) -> bool:
+        pass
+
+    def get_reward(self):
+        pass
+
