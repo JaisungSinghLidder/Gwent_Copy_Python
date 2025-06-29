@@ -6,8 +6,12 @@ from src.ai.Node import Node
 # we are inheriting from the abstract node class
 class GwentNode(Node):
 
-    def __init__(self, game_state):
+    def __init__(self, game_state, parent = None):
         self.game_state = game_state
+        self.parent = parent
+        self.children = set()
+        self.visits = 0
+        self.total_reward = 0.0
 
 
     def find_children(self):
