@@ -1,6 +1,6 @@
 from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
-from typing import Set
+from typing import Set, List
 
 #a dataclass that should provide a snapshot view of the general game information
 #this will allow the MCTS to evaluate these conditions
@@ -12,10 +12,19 @@ class GameState:
     round_counter: int
     weather_rows: Set[str]
 
-
-
-    def get_legal_moves(self):
+    #this class will handle what is playable in the AI player's hand
+    
+    def is_playable(self):
         pass
+
+    def get_legal_moves(self) -> list:
+        legal_moves = []
+
+        pass
+
+
+
+
 
     def apply_move(self,move):
         pass
