@@ -13,12 +13,11 @@ class PlayerState:
     graveyard: Tuple[Card, ...]
     lives: int
     board: Dict[str, Tuple[Card, ...]]
-    turn_order: bool
+    passed: bool
     sum: int
     leader_used: bool
     leader_card: Leader
     faction: str
-    passed: bool
     ai_player: bool
 
 
