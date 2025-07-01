@@ -2,11 +2,12 @@ from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
 from typing import Set, List, Union
 from src.cards.Card import Card
+from copy import deepcopy
 
 #a dataclass that should provide a snapshot view of the general game information
 #this will allow the MCTS to evaluate these conditions
 
-@dataclass(frozen= True)
+@dataclass(frozen= False)
 class GameState:
     ai_player_state: PlayerState
     opponent_state: PlayerState
@@ -40,8 +41,23 @@ class GameState:
 
 
 
-    def apply_move(self,move):
-        pass
+    def apply_move(self, move: Union[Card, str]) -> "GameState":
+        new_state = deepcopy(self)
+
+        if move == "PASS":
+            new_state.ai_player_state.passed = True
+
+
+        elif move == "USE_LEADER":
+            new_state.ai_player_state.leader_used = True
+
+        elif isinstance(move, Card):
+            new_state.ai_player_state.hand.remove(move)
+            new_state.ai_player_state.board[move.row].append(move)
+
+        return new_state
+
+
 
     def is_terminal(self) -> bool:
         pass
