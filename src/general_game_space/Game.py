@@ -23,7 +23,6 @@ class Game:
     def determine_winner(self) -> str:
 
         #insert the winner here
-
         winner = GameLogic.determine_round_winner(self)
 
 
@@ -296,73 +295,9 @@ class Game:
 
 
     def use_card_ability(self, player, og_card) -> None:
-        opponent = None
+        GameLogic.use_card_ability(self, player, og_card)
 
-        if player == self.player_one:
-            opponent = self.player_two
-        else:
-            opponent = self.player_one
 
-        #going to change the implementation of the tight bond ability
-        if og_card.ability.lower().strip() == "tight bond":
-            # a list for holding all the tight bond cards
-            # because the calculation is not doubling
-            # it is the original strength * number of cards
-            tight_bond_cards = []
-
-            for row in ["melee", "range", "siege"]:
-                for card in player.board[row]:
-                    if og_card == card:
-                        tight_bond_cards.append(card)
-
-            for card in tight_bond_cards:
-                card.current_strength = card.base_strength * len(tight_bond_cards)
-
-        elif og_card.ability.lower().strip() == "medic":
-            if not player.graveyard:
-                print("There is no cards to heal")
-            else:
-                for card in player.graveyard:
-                    print(card.card_name)
-                card_choice = input("So what card do you want?")
-                for i, c in enumerate(player.graveyard):
-                    if c.card_name == card_choice and c.card_type == "unit" and c.ability != "hero":
-                        row = c.row
-                        player.board[row].append(c)
-                        del player.graveyard[i]
-                        break
-
-        elif og_card.ability.lower().strip() == "muster":
-            for i, card in enumerate(player.deck):
-                    if og_card == card:
-                        player.board[card.row].append(card)
-                        # we are using del so that we delete the specific index and not deleting all the cards with the same name
-                        del player.deck[i]
-
-        elif og_card.ability.lower().strip() == "morale boost":
-            for card in player.board[og_card.row]:
-                if og_card.card_name != card.card_name:
-                    card.current_strength += 1
-
-        elif og_card.ability.lower().strip() == "spy":
-            #spy's go on opponent's board
-            opponent.board[og_card.row].append(og_card)
-            for _ in range(2):
-                card = player.deck.draw_from_deck()
-                if card:
-                    player.hand.append(card)
-
-        elif og_card.ability.lower().strip() == "decoy":
-            for row in ["melee", "range", "siege"]:
-                for card in player.board[row]:
-                    print(card.card_name)
-            card_chosen = input("What card do you want?")
-            for row in ["melee", "range", "siege"]:
-                for i, card in enumerate(player.board[row]):
-                    if card.card_name == card_chosen:
-                        player.hand.append(card)
-                        player.board[row][i] = og_card
-                        return
 
     #this will check for maintaining effects such as weather, horn, morale booster
     def maintain_effect(self, player: Player, card: Card):
