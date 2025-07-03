@@ -1,7 +1,12 @@
 from typing import List
+
+from src.ai.GameState import GameState
 from src.general_game_space import Player
 from src.cards.Card import Card
+from src.general_game_space.GameLogic import GameLogic
 import random
+
+#note that this is now under some changes, so the class will fail right now
 
 class Game:
 
@@ -16,20 +21,13 @@ class Game:
         self.active_weather_effect = set()
 
     def determine_winner(self) -> str:
-        #An outright win case
-        if self.player_one.sum > self.player_two.sum:
-            self.player_two.lose_life()
-            print(f"{self.player_one.player_name} has won the round")
-            return "player one wins"
-        elif self.player_two.sum > self.player_one.sum:
-            self.player_one.lose_life()
-            print(f"{self.player_two.player_name}has one the round")
-            return "player two wins"
-        #Tie cases
-        elif self.player_one.sum == self.player_two.sum:
-            self.player_one.lose_life()
-            self.player_two.lose_life()
-            return "draw"
+
+        #insert the winner here
+
+        winner = GameLogic.determine_round_winner(self)
+
+
+        return winner
 
 
 
