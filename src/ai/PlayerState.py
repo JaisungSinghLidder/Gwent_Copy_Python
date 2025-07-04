@@ -19,6 +19,7 @@ class PlayerState:
     leader_card: Leader
     faction: str
     ai_player: bool
+    name: str
 
 
 
