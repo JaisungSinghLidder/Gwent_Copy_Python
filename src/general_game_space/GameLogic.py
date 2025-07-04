@@ -139,14 +139,104 @@ class GameLogic:
                 elif player_two.lives <= 0:
                     return "player one wins"
 
-
-
             if isinstance(game_or_game_state, Game):
                 end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
             elif isinstance(game_or_game_state, GameState):
                 end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
+
+
+        #no need to change the logic here
+        @staticmethod
+        def calculate_strength_logic(player: Union[Player, PlayerState]) -> None:
+            for row in ["melee", "range", "siege"]:
+                for card in player.board[row]:
+                    player.sum += card.current_strength
+
+
+        @staticmethod
+        def use_leader_ability_logic(game_or_game_state, ) -> None:
+
+            opponent = None
+
+            if player == self.player_one:
+                opponent = self.player_two
+            else:
+                opponent = self.player_one
+
+            if player.leader_used:
+                print("You have already used this ability")
+
+            else:
+                # basically using clear weather
+                if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
+
+                    if self.active_weather_effect:
+                        self.active_weather_effect.clear()
+                        # doing it twice so we don't clear it twice
+                        for row in ["melee", "range", "siege"]:
+                            for card in self.player_one.board[row]:
+                                if card.is_affected_by_weather and card.is_affected_by_horn:
+                                    card.current_strength = card.base_strength * 2
+                                elif card.is_affected_by_weather:
+                                    card.current_strength = card.base_strength
+
+                        for row in ["melee", "range", "siege"]:
+                            for card in self.player_two.board[row]:
+                                if card.is_affected_by_weather and card.is_affected_by_horn:
+                                    card.current_strength = card.base_strength * 2
+                                elif card.is_affected_by_weather:
+                                    card.current_strength = card.base_strength
+
+                    player.leader_used = True
+
+                # looking at 3 cards in your opponents hand
+                elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaardian":
+
+                    cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
+                    print("3 of the opponenets hand")
+                    for card in cards_to_show:
+                        print(card.card_name)
+
+                    player.leader_used = True
+
+                # boosting the strength by 3
+                elif player.leader_card.leader_ability.lower().strip() == "double spy" and player.leader_card.faction.lower().strip() == "monsters":
+
+                    for row in ["melee", "range", "siege"]:
+                        for card in self.player_one.board[row]:
+                            if card.ability == "spy":
+                                card.current_strength *= 2
+
+                    for row in ["melee", "range", "siege"]:
+                        for card in self.player_two.board[row]:
+                            if card.ability == "spy":
+                                card.current_strength *= 2
+
+                    player.leader_used = True
+
+                # lets you play special card from your deck
+
+                elif player.leader_card.leader_ability.lower().strip() == "play a random card" and player.leader_card.faction.lower().strip() == "scoia'tael":
+
+                    for card in player.deck:
+                        if card.card_type != " ":
+                            chosen_card = random.choice(player.deck)
+                            player.hand.append(chosen_card)
+                            player.deck.remove(chosen_card)
+                            print(f"{chosen_card}")
+
+                    player.leader_used = True
+
+                # shuffle all cards from each player's graveyard back into their decks
+                elif player.leader_card.leader_ability.lower().strip() == "crach an craite" and player.leader_card.faction.lower().strip() == "skellige":
+
+                    player.deck.extend(player.graveyard)
+                    player.graveyard.clear()
+                    random.shuffle(player.deck)
+
+                    player.leader_used = True
 
 
 
