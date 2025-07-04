@@ -1,6 +1,7 @@
 from src.ai.GameState import GameState
 from src.ai.PlayerState import PlayerState
 from src.general_game_space import Game, Player
+from src.cards.Card import Card
 from typing import Union
 from random import random
 
@@ -250,7 +251,158 @@ class GameLogic:
 
 
 
-            
+
+        @staticmethod
+        # this will check for maintaining effects such as weather, horn, morale booster
+        def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card):
+            def maintain_effect_player_input(Player: Union[Player, PlayerState]):
+                # both case
+                if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
+                    card.current_strength = 2
+                elif card.row == "range" and player.range_row_weather_effect and player.range_row_horn_effect:
+                    card.current_strength = 2
+                elif card.row == "siege" and player.siege_row_weather_effect and player.siege_row_horn_effect:
+                    card.current_strength = 2
+                else:
+                    # weather case
+                    if card.row == "melee" and player.melee_row_weather_effect:
+                        card.current_strength = 1
+                    elif card.row == "range" and player.range_row_weather_effect:
+                        card.current_strength = 1
+                    elif card.row == "siege" and player.siege_row_weather_effect:
+                        card.current_strength = 1
+
+                    # horn case
+                    if card.row == "melee" and player.melee_row_horn_effect:
+                        card.current_strength = card.base_strength * 2
+                    elif card.row == "range" and player.range_row_horn_effect:
+                        card.current_strength = card.base_strength * 2
+                    elif card.row == "siege" and player.siege_row_horn_effect:
+                        card.current_strength = card.base_strength * 2
+
+            if isinstance(game_or_game_state, Game):
+                maintain_effect_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+            elif isinstance(game_or_game_state, GameState):
+                maintain_effect_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+            else:
+                raise ValueError("Must input either a Game or GameState class")
+
+        @staticmethod
+        def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card):
+            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]):
+
+                opponent = None
+
+                if player == player_one:
+                    opponent = player_two
+                else:
+                    opponent = player_one
+
+                # this inner function go alongside the scorch
+                # just to cancel any effects that would happen alongside it
+                def cancel_effects_before_destroy(card: Card, player: Player):
+                    # morale boost case
+                    if card.ability == "morale boost":
+                        for other_card in player.board[card.row]:
+                            other_card.current_strength = card.base_strength
+                    elif card.ability == "tight bond":
+
+                        tight_bond_count = []
+                        for other_card in player.board[card.row]:
+                            if card == other_card:
+                                tight_bond_count.append(card)
+
+                        # just pop one out to represent losing one card due to it being destroyed
+
+                        tight_bond_count.pop()
+
+                        for tight_bond_cards in tight_bond_count:
+                            tight_bond_cards.current_strength *= tight_bond_cards.base_strength * len(tight_bond_count)
+
+                # in the works
+                if og_card.ability.lower().strip() == "scorch":
+
+                    max_strength_card = None
+                    max_strength_of_card = 0
+                    max_strength_card_player = None
+
+                    # first trying to find the largest strength card in the first player board
+
+                    for row in ["melee", "range", "siege"]:
+                        for card in player.board[row]:
+                            if max_strength_of_card < card.current_strength:
+                                max_strength_card = card
+                                max_strength_of_card = card.current_strength
+                                max_strength_card_player = player
+
+                    for row in ["melee", "range", "siege"]:
+                        for card in opponent.board[row]:
+                            if max_strength_of_card < card.current_strength:
+                                max_strength_card = card
+                                max_strength_of_card = card.current_strength
+                                max_strength_card_player = opponent
+
+                    # now we are going to go through and delete those card that are equal to it
+                    # then we delete that card that we are originating from
+
+                    for row in ["melee", "range", "siege"]:
+                        for i, card in enumerate(player.board[row]):
+                            if max_strength_of_card == card.current_strength:
+                                cancel_effects_before_destroy(card, player)
+                                player.graveyard.append(card)
+                                del player.board[row][i]
+
+                    for row in ["melee", "range", "siege"]:
+                        for i, card in enumerate(opponent.board[row]):
+                            if max_strength_of_card == card.current_strength:
+                                cancel_effects_before_destroy(card, opponent)
+                                opponent.graveyard.append(card)
+                                del opponent.board[row][i]
+
+                    # now we are going to delete the original max card
+
+                    for row in ["melee", "range", "siege"]:
+                        for i, card in enumerate(max_strength_card_player.board[row]):
+                            if card == max_strength_card:
+                                cancel_effects_before_destroy(max_strength_card, max_strength_card_player)
+
+                                max_strength_card_player.graveyard.append(max_strength_card)
+
+                                del max_strength_card_player.board[row][i]
 
 
 
+
+
+                elif og_card.ability.lower().strip() == "horn":
+
+                    while True:
+                        chosen_row = input("What row do you want to double?")
+                        if chosen_row == "melee":
+
+                            for card in player.board["melee"]:
+                                card.current_strength = card.base_strength * 2
+
+                            player.melee_row_horn_effect = True
+
+                        elif chosen_row == "range":
+
+                            for card in player.board["range"]:
+                                card.current_strength = card.base_strength * 2
+
+                            player.range_row_horn_effect = True
+
+                        elif chosen_row == "siege":
+                            for card in player.board["siege"]:
+                                card.current_strength = card.base_strength * 2
+
+                            player.siege_row_horn_effect = True
+
+                        return "Please type in either melee, range, or siege please"
+
+                if isinstance(game_or_game_state, Game):
+                    use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+                elif isinstance(game_or_game_state, GameState):
+                    use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+                else:
+                    raise ValueError("Must input either a Game or GameState class")
