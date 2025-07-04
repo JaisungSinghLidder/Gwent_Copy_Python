@@ -115,45 +115,38 @@ class GameLogic:
                 use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
             elif isinstance(game_or_game_state, GameState):
                 use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
-            else: 
+            else:
                 raise ValueError("Must input either a Game or GameState class")
 
         @staticmethod
         def end_game_checker(game_or_game_state: Union[Game, GameState]) -> str:
 
+            def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]):
+
+                p1_nilfgaardian = player_one.faction.lower() == "nilfgaardian"
+                p2_nilfgaardian = player_two.faction.lower() == "nilfgaardian"
+
+                # using <= just to make sure if a glitch happens and something became negative that it would error check for that.
+                if player_one.lives <= 0 and player_two.lives <= 0:
+                    if not p1_nilfgaardian and not p2_nilfgaardian:
+                        return "draw"
+                    elif p1_nilfgaardian and not p2_nilfgaardian:
+                        return "player one wins"
+                    elif not p1_nilfgaardian and p2_nilfgaardian:
+                        return "player two wins"
+                elif player_one.lives <= 0:
+                    return "player two wins"
+                elif player_two.lives <= 0:
+                    return "player one wins"
+
+
+
             if isinstance(game_or_game_state, Game):
-                p1_nilfgaardian = game_or_game_state.player_one.faction.lower() == "nilfgaardian"
-                p2_nilfgaardian = game_or_game_state.player_two.faction.lower() == "nilfgaardian"
-
-                # using <= just to make sure if a glitch happens and something became negative that it would error check for that.
-                if game_or_game_state.player_one.lives <= 0 and game_or_game_state.player_two.lives <= 0:
-                    if not p1_nilfgaardian and not p2_nilfgaardian:
-                        return "draw"
-                    elif p1_nilfgaardian and not p2_nilfgaardian:
-                        return "player one wins"
-                    elif not p1_nilfgaardian and p2_nilfgaardian:
-                        return "player two wins"
-                elif game_or_game_state.player_one.lives <= 0:
-                    return "player two wins"
-                elif game_or_game_state.player_two.lives <= 0:
-                    return "player one wins"
-
+                end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
             elif isinstance(game_or_game_state, GameState):
-                p1_nilfgaardian = game_or_game_state.ai_player_state.faction.lower() == "nilfgaardian"
-                p2_nilfgaardian = game_or_game_state.opponent_state.faction.lower() == "nilfgaardian"
-
-                # using <= just to make sure if a glitch happens and something became negative that it would error check for that.
-                if game_or_game_state.ai_player_state.lives <= 0 and game_or_game_state.opponent_state.lives <= 0:
-                    if not p1_nilfgaardian and not p2_nilfgaardian:
-                        return "draw"
-                    elif p1_nilfgaardian and not p2_nilfgaardian:
-                        return "player one wins"
-                    elif not p1_nilfgaardian and p2_nilfgaardian:
-                        return "player two wins"
-                elif game_or_game_state.ai_player_state.lives <= 0:
-                    return "player two wins"
-                elif game_or_game_state.opponent_state.lives <= 0:
-                    return "player one wins"
+                end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+            else:
+                raise ValueError("Must input either a Game or GameState class")
 
 
 
