@@ -20,6 +20,13 @@ class PlayerState:
     faction: str
     ai_player: bool
     name: str
+    melee_row_weather_effect : bool
+    range_row_weather_effect : bool
+    siege_row_weather_effect : bool
+    melee_row_horn_effect : bool
+    range_row_horn_effect : bool
+    siege_row_horn_effect : bool
+
 
 
 
