@@ -20,6 +20,7 @@ class Game:
         self.player_two.cards_to_keep: List[Card] =  []
         self.active_weather_effect = set()
 
+    #TRANSFER COMPLETED
     def determine_winner(self) -> str:
 
         #insert the winner here
@@ -29,7 +30,7 @@ class Game:
         return winner
 
 
-
+    #TRANSFER COMPLETED
     def end_game_checker(self) -> str:
         p1_nilfgaardian = self.player_one.faction.lower() == "nilfgaardian"
         p2_nilfgaardian = self.player_two.faction.lower() == "nilfgaardian"
@@ -52,7 +53,7 @@ class Game:
             print(f"{self.player_one.player_name} has won!")
             return "player one wins"
 
-
+    #DON'T TRANSFER
     def determine_turn_order(self)-> None:
 
         p1_scoia = self.player_one.faction.lower().strip() == "scoia'tael"
@@ -104,7 +105,8 @@ class Game:
     #skelllige: 2 random cards from the graveyard are placed on the battlefield at the start of the third round
     #monsters: keep random unit card out after each round
 
-    def faction_ability(self, round_winner) -> None:
+    #WILL COPY LATER:
+    def faction_ability(self, round_winner: str) -> None:
 
         def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
@@ -174,6 +176,7 @@ class Game:
 
 
 
+    #DON'T COPY: BECAUSE THE GAMESTATE WILL SNAPSHOT THE GAME, NO NEED TO KEEP TRACK OF CARDS, GAMES JOB
     #this function will play the cards that are supposed to be kept on field or going to be brought back
     def play_card_to_keep(self) -> None:
         if self.player_one.cards_to_keep:
@@ -189,20 +192,21 @@ class Game:
             self.player_two.cards_to_keep.clear()
 
     #Weather effect
-    def check_weather_effect(self, weather_effect) -> None:
+    #NEED TO ADD
+    def check_weather_effect(self, weather_effect: str) -> None:
         if weather_effect in self.active_weather_effect:
             print(f"{weather_effect} is already in use")
             return
 
         self.active_weather_effect.add(weather_effect)
 
-        def biting_frost(player) -> None:
+        def biting_frost(player: Player) -> None:
             for card in player.board["melee"]:
                 if card.ability.lower().strip() != "hero":
                     card.current_strength = 1
             player.melee_row_weather_effect = True
 
-        def impenetrable_fog(player) -> None:
+        def impenetrable_fog(player: Player) -> None:
             for card in player.board["range"]:
                 if card.ability.lower().strip() != "hero":
                     card.current_strength = 1
@@ -214,7 +218,7 @@ class Game:
                     card.current_strength = 1
             player.siege_row_weather_effect = True
 
-        def clear_weather(player) -> None:
+        def clear_weather(player: Player) -> None:
             # Clear all previous weather effects
             self.active_weather_effect.clear()
 
@@ -268,6 +272,7 @@ class Game:
             else:
                 print("There is no weather effect to clear")
 
+    #DON'T NEED TO COPY THIS: JUST FOR PLAYER
     def round_summary(self) -> None:
         print("Player one stats:")
         print(f"Sum: {self.player_one.sum} ")
@@ -276,11 +281,12 @@ class Game:
         print("Round:")
         print(f"{self.round_counter}")
 
+    #DON'T NEED TO COPY THIS: JUST FOR PLAYER
     def display_board(self) -> None:
         print("\n ===== BOARD =====")
 
         #change the player statement so that it prints out the right player
-        def print_player_board(player):
+        def print_player_board(player: Player):
             print(f"---- {player.player_name.capitalize()} ----")
             for row in ["melee", "range", "siege"]:
                 cards = player.board.get(row, [])
@@ -293,13 +299,13 @@ class Game:
         print_player_board(self.player_one)
         print_player_board(self.player_two)
 
-
-    def use_card_ability(self, player, og_card) -> None:
+    #TRANSFERRED
+    def use_card_ability(self, player: Player, og_card: Card) -> None:
         GameLogic.use_card_ability(self, player, og_card)
 
 
 
-    #this will check for maintaining effects such as weather, horn, morale booster
+    #TRANSFERRED
     def maintain_effect(self, player: Player, card: Card):
 
         #both case
@@ -334,7 +340,7 @@ class Game:
             if other_card.ability.lower().strip() == "morale boost":
                 card.current_strength += 1
 
-
+    #TRANSFERRED
     def check_buff(self, player: Player, og_card: Card):
 
         opponent = None
@@ -371,7 +377,6 @@ class Game:
 
 
 
-        #in the works
         if og_card.ability.lower().strip() == "scorch":
 
             max_strength_card = None
@@ -459,7 +464,8 @@ class Game:
                 print("Please type in either melee, range, or siege please")
 
 
-
+    #DON'T COPIED
+    #BOARD BASED ABILITY
     def cancel_effects(self,player: Player,card: Card) -> None:
         if card.ability.lower().strip() == "tight bond":
             # Revert tight bond effect on other matching cards
@@ -475,8 +481,7 @@ class Game:
 
 
 
-    #Calculating the strength of each player's board
-    #Noveau:
+    #TRANSFERRED
     def calculate_strength(self, player: Player) -> None:
         for row in ["melee", "range", "siege"]:
             for card in player.board[row]:
@@ -484,7 +489,6 @@ class Game:
 
 
 
-    #Maybe change it so the leader is
 
     #have to add a leader ability now
     #probably just going to add 5 because I don't want to add all the variants into the deck
@@ -494,6 +498,7 @@ class Game:
     #4)Scoia'tael: Francesca Findabair - QUeen of Dol Blathanna - Play a random card from your deck
     #5)Skillege: Crach an Craite - Shuffle all cards from each player graveyards back into their decks
 
+    #TRANSFERRED
     def use_leader_ability(self, player: Player) -> None:
 
         opponent = None
@@ -579,7 +584,7 @@ class Game:
 
                 player.leader_used = True
 
-
+    #DON'T COPY: FOR THE GAME TO FIX  THE ROUND AFTER EVERYTHING IS COMPLETED
     def round_resolve(self) -> None:
         self.player_one.round_end()
         self.player_two.round_end()
@@ -602,13 +607,15 @@ class Game:
             self.player_one.turn_order_first = True
         self.round_counter += 1
 
-    #adding a display hand feature
+    #DON'T NEED TO COPY
+    #PLAYER FEATURE
     def display_player_hand(self, player: Player) -> None:
         for card in player.hand:
             print(card.card_name + " " + str(card.current_strength))
 
 
-    #drawing and redrawing feature:
+    #DON'T NEED TO COPY
+    #AI SHOULDN'T BE CALCULATING EVERY DRAW CHANCE
     def player_starting_draw(self) -> None:
 
         #only going to draw 5 cards because I wanted to shorten hands to make the game better
