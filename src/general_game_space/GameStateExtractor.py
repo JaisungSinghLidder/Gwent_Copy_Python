@@ -27,8 +27,34 @@ class GameStateExtractor():
             playerLeaderCard = copy.deepcopy(player.leader_card)
             playerFaction = copy.deepcopy(player.faction)
             playerAIPlayer = copy.deepcopy(player.ai_player)
+            player_name = copy.deepcopy(player.player_name)
+            melee_row_weather_effect = copy.deepcopy(player.melee_row_weather_effect)
+            range_row_weather_effect = copy.deepcopy(player.range_row_weather_effect)
+            siege_row_weather_effect = copy.deepcopy(player.siege_row_weather_effect)
+            melee_row_horn_effect = copy.deepcopy(player.melee_row_horn_effect)
+            range_row_horn_effect = copy.deepcopy(player.range_row_horn_effect)
+            siege_row_horn_effect = copy.deepcopy(player.siege_row_horn_effect)
 
-            return PlayerState(playerHand, playerGraveyard, playerLives, playerBoard, playerPassed, playerSum, playerLeaderUsed, playerLeaderCard, playerFaction, playerAIPlayer)
+            #formatted for easier view of variables for me
+            return PlayerState(
+                playerHand,
+                playerGraveyard,
+                playerLives,
+                playerBoard,
+                playerPassed,
+                playerSum,
+                playerLeaderUsed,
+                playerLeaderCard,
+                playerFaction,
+                playerAIPlayer,
+                player_name,
+                melee_row_weather_effect,
+                range_row_weather_effect,
+                siege_row_weather_effect,
+                melee_row_horn_effect,
+                range_row_horn_effect,
+                siege_row_horn_effect
+            )
 
         playerOneState = extract_player_info(game.player_one)
 
