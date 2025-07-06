@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 from src.cards.Card import Card
 from src.general_game_space.Leader import Leader
 
@@ -9,17 +9,17 @@ from src.general_game_space.Leader import Leader
 @dataclass(frozen=False)
 class PlayerState:
 
-    hand: Tuple[Card, ...]
-    graveyard: Tuple[Card, ...]
+    hand: List[Card, ...]
+    graveyard: List[Card, ...]
     lives: int
-    board: Dict[str, Tuple[Card, ...]]
+    board: Dict[str, List[Card, ...]]
     passed: bool
     sum: int
     leader_used: bool
     leader_card: Leader
     faction: str
     ai_player: bool
-    name: str
+    player_name: str
     melee_row_weather_effect : bool
     range_row_weather_effect : bool
     siege_row_weather_effect : bool
