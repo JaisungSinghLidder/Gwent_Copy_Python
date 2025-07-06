@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, Tuple, List
 from src.cards.Card import Card
 from src.general_game_space.Leader import Leader
@@ -9,10 +9,10 @@ from src.general_game_space.Leader import Leader
 @dataclass(frozen=False)
 class PlayerState:
 
-    hand: List[Card, ...]
-    graveyard: List[Card, ...]
+    hand: List[Card]
+    graveyard: List[Card]
     lives: int
-    board: Dict[str, List[Card, ...]]
+    board: Dict[str, List[Card]]
     passed: bool
     sum: int
     leader_used: bool
@@ -26,6 +26,7 @@ class PlayerState:
     melee_row_horn_effect : bool
     range_row_horn_effect : bool
     siege_row_horn_effect : bool
+    opponent_hand: List[Card] = field(default_factory=list)
 
 
 
