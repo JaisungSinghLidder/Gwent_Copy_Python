@@ -306,7 +306,7 @@ class Game:
 
 
     #TRANSFERRED
-    def maintain_effect(self, player: Player, card: Card):
+    def maintain_effect(self, player: Player, card: Card) -> None:
 
         #both case
         if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
@@ -341,7 +341,7 @@ class Game:
                 card.current_strength += 1
 
     #TRANSFERRED
-    def check_buff(self, player: Player, og_card: Card):
+    def check_buff(self, player: Player, og_card: Card) -> None:
 
         opponent = None
 
