@@ -410,7 +410,7 @@ class GameLogic:
                     raise ValueError("Must input either a Game or GameState class")
 
         @staticmethod
-        def faction_ability(self, round_winner: str ) -> None:
+        def faction_ability(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
 
             def monster_keep_card(player, board) -> None:
                 valid_rows = [row for row in board if board[row]]
@@ -433,43 +433,51 @@ class GameLogic:
                             del player.graveyard[i]
                             break
 
-            # monster's block
-            if self.player_one.faction.lower().strip() == "monsters" and self.player_two.faction.lower().strip() == "monsters":
+            def faction_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
+                # monster's block
+                if  player_one.faction.lower().strip() == "monsters" and player_two.faction.lower().strip() == "monsters":
 
-                monster_keep_card(self.player_one, self.player_one.board)
+                    monster_keep_card(player_one, player_one.board)
 
-                monster_keep_card(self.player_two, self.player_two.board)
+                    monster_keep_card(player_two, player_two.board)
 
-            elif self.player_one.faction.lower().strip() == "monsters":
-                monster_keep_card(self.player_one, self.player_one.board)
+                elif player_one.faction.lower().strip() == "monsters":
+                    monster_keep_card(player_one, player_one.board)
 
-            elif self.player_two.faction.lower().strip() == "monsters":
-                monster_keep_card(self.player_two, self.player_two.board)
+                elif player_two.faction.lower().strip() == "monsters":
+                    monster_keep_card(player_two, player_two.board)
 
-            # northern realm's block
-            if self.player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
+                # northern realm's block
+                if player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
 
-                northern_realms_draw_card(self.player_one)
+                    northern_realms_draw_card(player_one)
 
-            elif self.player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
+                elif player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
 
-                northern_realms_draw_card(self.player_two)
+                    northern_realms_draw_card(player_two)
 
-            # skellige's block
+                # skellige's block
 
-            # only works on round 3
-            if self.round_counter == 3:
+                # only works on round 3
+                if game_or_game_state.round_counter == 3:
 
-                if self.player_one.faction.lower().strip() == "skellige" and self.player_two.faction.lower().strip() == "skellige":
+                    if player_one.faction.lower().strip() == "skellige" and player_two.faction.lower().strip() == "skellige":
 
-                    skellige_draw_from_graveyard(self.player_one)
+                        skellige_draw_from_graveyard(player_one)
 
-                    skellige_draw_from_graveyard(self.player_two)
+                        skellige_draw_from_graveyard(player_two)
 
-                elif self.player_one.faction.lower().strip() == "skellige":
+                    elif player_one.faction.lower().strip() == "skellige":
 
-                    skellige_draw_from_graveyard(self.player_one)
+                        skellige_draw_from_graveyard(player_one)
 
-                elif self.player_two.faction.lower().strip() == "skellige":
+                    elif player_two.faction.lower().strip() == "skellige":
 
-                    skellige_draw_from_graveyard(self.player_two)
+                        skellige_draw_from_graveyard(player_two)
+
+            if isinstance(game_or_game_state, Game):
+                faction_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+            elif isinstance(game_or_game_state, GameState):
+                faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+            else:
+                raise ValueError("Must input either a Game or GameState class")
