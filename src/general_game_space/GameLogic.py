@@ -15,7 +15,7 @@ class GameLogic:
     @staticmethod
     def determine_round_winner(game_or_gamestate: Union[Game, GameState]) -> str:
 
-        def determining_winner_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]):
+        def determining_winner_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
             if player_one.sum > player_two.sum:
                 player_two.lose_life()
                 return "player one wins"
@@ -44,7 +44,7 @@ class GameLogic:
     def use_card_ability(game_or_game_state: Union[Game, GameState], player: Union[Player,  PlayerState], og_card) -> None:
 
 
-        def use_card_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]):
+        def use_card_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> None:
 
             opponent = None
 
@@ -124,7 +124,7 @@ class GameLogic:
         @staticmethod
         def end_game_checker(game_or_game_state: Union[Game, GameState]) -> str:
 
-            def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]):
+            def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
 
                 p1_nilfgaardian = player_one.faction.lower() == "nilfgaardian"
                 p2_nilfgaardian = player_two.faction.lower() == "nilfgaardian"
@@ -160,7 +160,7 @@ class GameLogic:
 
         @staticmethod
         def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
-            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]):
+            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
                 opponent = None
 
                 if player == player_one:
@@ -198,6 +198,8 @@ class GameLogic:
                     # looking at 3 cards in your opponents hand
                     elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaardian":
 
+
+                        #NEED TO CHANGE THIS FOR THE AI AND HUMAN PLAYER
                         cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
                         print("3 of the opponenets hand")
                         for card in cards_to_show:
@@ -254,8 +256,8 @@ class GameLogic:
 
         @staticmethod
         # this will check for maintaining effects such as weather, horn, morale booster
-        def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card):
-            def maintain_effect_player_input(Player: Union[Player, PlayerState]):
+        def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card) -> None:
+            def maintain_effect_player_input(Player: Union[Player, PlayerState]) -> None:
                 # both case
                 if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
                     card.current_strength = 2
@@ -288,8 +290,8 @@ class GameLogic:
                 raise ValueError("Must input either a Game or GameState class")
 
         @staticmethod
-        def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card):
-            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]):
+        def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card) -> None:
+            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
                 opponent = None
 
@@ -300,7 +302,7 @@ class GameLogic:
 
                 # this inner function go alongside the scorch
                 # just to cancel any effects that would happen alongside it
-                def cancel_effects_before_destroy(card: Card, player: Player):
+                def cancel_effects_before_destroy(card: Card, player: Player) -> None:
                     # morale boost case
                     if card.ability == "morale boost":
                         for other_card in player.board[card.row]:
@@ -406,3 +408,68 @@ class GameLogic:
                     use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
                 else:
                     raise ValueError("Must input either a Game or GameState class")
+
+        @staticmethod
+        def faction_ability(self, round_winner: str ) -> None:
+
+            def monster_keep_card(player, board) -> None:
+                valid_rows = [row for row in board if board[row]]
+                if valid_rows:
+                    chosen_row = random.choice(valid_rows)
+                    card_to_keep = random.choice(board[chosen_row])
+                    player.cards_to_keep.append(card_to_keep)
+
+            def northern_realms_draw_card(player) -> None:
+                extra_card_player = player.deck.draw_from_deck()
+                player.hand.append(extra_card_player)
+
+            def skellige_draw_from_graveyard(player) -> None:
+                # not checking for two cards because you can't win a round by placing somehow less than two cards the whole game in total
+                for _ in range(2):
+                    card_to_keep = random.choice(player.graveyard)
+                    player.cards_to_keep.append(card_to_keep)
+                    for i, c in enumerate(player.graveyard):
+                        if c is card_to_keep:
+                            del player.graveyard[i]
+                            break
+
+            # monster's block
+            if self.player_one.faction.lower().strip() == "monsters" and self.player_two.faction.lower().strip() == "monsters":
+
+                monster_keep_card(self.player_one, self.player_one.board)
+
+                monster_keep_card(self.player_two, self.player_two.board)
+
+            elif self.player_one.faction.lower().strip() == "monsters":
+                monster_keep_card(self.player_one, self.player_one.board)
+
+            elif self.player_two.faction.lower().strip() == "monsters":
+                monster_keep_card(self.player_two, self.player_two.board)
+
+            # northern realm's block
+            if self.player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
+
+                northern_realms_draw_card(self.player_one)
+
+            elif self.player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
+
+                northern_realms_draw_card(self.player_two)
+
+            # skellige's block
+
+            # only works on round 3
+            if self.round_counter == 3:
+
+                if self.player_one.faction.lower().strip() == "skellige" and self.player_two.faction.lower().strip() == "skellige":
+
+                    skellige_draw_from_graveyard(self.player_one)
+
+                    skellige_draw_from_graveyard(self.player_two)
+
+                elif self.player_one.faction.lower().strip() == "skellige":
+
+                    skellige_draw_from_graveyard(self.player_one)
+
+                elif self.player_two.faction.lower().strip() == "skellige":
+
+                    skellige_draw_from_graveyard(self.player_two)
