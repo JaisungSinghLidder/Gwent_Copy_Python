@@ -7,16 +7,16 @@ from copy import deepcopy
 #a dataclass that should provide a snapshot view of the general game information
 #this will allow the MCTS to evaluate these conditions
 
-@dataclass(frozen= False)
+@dataclass(frozen = False)
 class GameState:
     ai_player_state: PlayerState
     opponent_state: PlayerState
     round_counter: int
-    weather_rows: Set[str]
+    active_weather_effects: Set[str]
 
     #this class will handle what is playable in the AI player's hand
     #the AI need this class because it needs to be able to discern what it can do so that when it generates the tree
-    #the tree isn't filled with wrong moves
+    #isn't filled with wrong moves
     #IMPLEMENTATION_NOTE: this method need to be pretty comprehensive and prevent any illegal moves
 
     def get_legal_moves(self) -> List[Union[Card, str]]:
@@ -47,7 +47,6 @@ class GameState:
         if move == "PASS":
             new_state.ai_player_state.passed = True
 
-
         elif move == "USE_LEADER":
             new_state.ai_player_state.leader_used = True
 
@@ -56,7 +55,6 @@ class GameState:
             new_state.ai_player_state.board[move.row].append(move)
 
         return new_state
-
 
 
     def is_terminal(self) -> bool:
