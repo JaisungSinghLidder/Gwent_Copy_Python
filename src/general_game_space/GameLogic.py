@@ -200,10 +200,15 @@ class GameLogic:
 
 
                         #NEED TO CHANGE THIS FOR THE AI AND HUMAN PLAYER
-                        cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
-                        print("3 of the opponenets hand")
-                        for card in cards_to_show:
-                            print(card.card_name)
+                        if opponent.ai_player:
+                            cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
+                            print("3 of the opponenets hand")
+                            for card in cards_to_show:
+                                print(card.card_name)
+                        else:
+                            cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
+                            for card in cards_to_show:
+                                player.opponent_hand(card)
 
                         player.leader_used = True
 
