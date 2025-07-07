@@ -257,43 +257,6 @@ class GameLogic:
             raise ValueError("Must input either a Game or GameState class")
 
 
-
-
-    @staticmethod
-    # this will check for maintaining effects such as weather, horn, morale booster
-    def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card) -> None:
-        def maintain_effect_player_input(player: Union[Player, PlayerState]) -> None:
-            # both case
-            if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
-                card.current_strength = 2
-            elif card.row == "range" and player.range_row_weather_effect and player.range_row_horn_effect:
-                card.current_strength = 2
-            elif card.row == "siege" and player.siege_row_weather_effect and player.siege_row_horn_effect:
-                card.current_strength = 2
-            else:
-                # weather case
-                if card.row == "melee" and player.melee_row_weather_effect:
-                    card.current_strength = 1
-                elif card.row == "range" and player.range_row_weather_effect:
-                    card.current_strength = 1
-                elif card.row == "siege" and player.siege_row_weather_effect:
-                    card.current_strength = 1
-
-                # horn case
-                if card.row == "melee" and player.melee_row_horn_effect:
-                    card.current_strength = card.base_strength * 2
-                elif card.row == "range" and player.range_row_horn_effect:
-                    card.current_strength = card.base_strength * 2
-                elif card.row == "siege" and player.siege_row_horn_effect:
-                    card.current_strength = card.base_strength * 2
-
-        if isinstance(game_or_game_state, Game):
-            maintain_effect_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-        elif isinstance(game_or_game_state, GameState):
-            maintain_effect_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
-        else:
-            raise ValueError("Must input either a Game or GameState class")
-
     @staticmethod
     def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card) -> None:
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
