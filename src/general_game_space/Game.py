@@ -96,74 +96,15 @@ class Game:
     #skelllige: 2 random cards from the graveyard are placed on the battlefield at the start of the third round
     #monsters: keep random unit card out after each round
 
-    #WILL COPY LATER:
+    #DID TRANSFER :
     def faction_ability(self, round_winner: str) -> None:
 
-        def monster_keep_card(player, board) -> None:
-            valid_rows = [row for row in board if board[row]]
-            if valid_rows:
-                chosen_row = random.choice(valid_rows)
-                card_to_keep = random.choice(board[chosen_row])
-                player.cards_to_keep.append(card_to_keep)
-
-        def northern_realms_draw_card(player) -> None:
-            extra_card_player = player.deck.draw_from_deck()
-            player.hand.append(extra_card_player)
-
-        def skellige_draw_from_graveyard(player) -> None:
-            #not checking for two cards because you can't win a round by placing somehow less than two cards the whole game in total
-            for _ in range(2):
-                card_to_keep = random.choice(player.graveyard)
-                player.cards_to_keep.append(card_to_keep)
-                for i, c in enumerate(player.graveyard):
-                    if c is card_to_keep:
-                        del player.graveyard[i]
-                        break
+        GameLogic.faction_ability(self, round_winner)
 
 
 
 
-        # monster's block
-        if self.player_one.faction.lower().strip() == "monsters" and self.player_two.faction.lower().strip() == "monsters":
 
-            monster_keep_card(self.player_one, self.player_one.board)
-
-            monster_keep_card(self.player_two, self.player_two.board)
-
-        elif self.player_one.faction.lower().strip() == "monsters":
-            monster_keep_card(self.player_one, self.player_one.board)
-
-        elif self.player_two.faction.lower().strip() == "monsters":
-            monster_keep_card(self.player_two, self.player_two.board)
-
-        #northern realm's block
-        if self.player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
-
-            northern_realms_draw_card(self.player_one)
-
-        elif self.player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
-
-            northern_realms_draw_card(self.player_two)
-
-
-        #skellige's block
-
-        #only works on round 3
-        if self.round_counter == 3:
-
-            if self.player_one.faction.lower().strip() == "skellige" and self.player_two.faction.lower().strip() == "skellige":
-
-                skellige_draw_from_graveyard(self.player_one)
-
-                skellige_draw_from_graveyard(self.player_two)
-
-            elif self.player_one.faction.lower().strip() == "skellige":
-
-                skellige_draw_from_graveyard(self.player_one)
-
-            elif self.player_two.faction.lower().strip() == "skellige":
-
-                skellige_draw_from_graveyard(self.player_two)
 
 
 
@@ -184,6 +125,7 @@ class Game:
 
     #Weather effect
     #NEED TO ADD
+    #Won't add this to game logic, because I will simply snapshot the game state after this
     def check_weather_effect(self, weather_effect: str) -> None:
         if weather_effect in self.active_weather_effect:
             print(f"{weather_effect} is already in use")

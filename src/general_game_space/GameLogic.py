@@ -416,7 +416,7 @@ class GameLogic:
 
 
     @staticmethod
-    def faction_ability(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
+    def faction_ability_logic(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
 
         def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
@@ -487,3 +487,6 @@ class GameLogic:
             faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
+
+
+
