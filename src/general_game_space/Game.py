@@ -32,26 +32,17 @@ class Game:
 
     #TRANSFER COMPLETED
     def end_game_checker(self) -> str:
-        p1_nilfgaardian = self.player_one.faction.lower() == "nilfgaardian"
-        p2_nilfgaardian = self.player_two.faction.lower() == "nilfgaardian"
 
-        #using <= just to make sure if a glitch happens and something became negative that it would error check for that.
-        if self.player_one.lives <= 0 and self.player_two.lives <= 0:
-            if not p1_nilfgaardian and not p2_nilfgaardian:
-                print("A draw has taken place, nobody wins")
-                return "draw"
-            elif p1_nilfgaardian and not p2_nilfgaardian:
-                print(f"{self.player_one.player_name} has activated its ability and {self.player_two.player_name} has lost")
-                return "player one wins"
-            elif not p1_nilfgaardian and p2_nilfgaardian:
-                print(f"{self.player_two.player_name} has activated its ability and {self.player_one.player_name} has lost")
-                return "player two wins"
-        elif self.player_one.lives <= 0:
-            print(f"{self.player_two.player_name} has won!")
-            return "player two wins"
-        elif self.player_two.lives <= 0:
+        winning_statement = GameLogic.end_game_checker(self)
+
+        if winning_statement == "draw":
+            print("A draw has taken place, nobody wins")
+        elif winning_statement == "player one wins":
             print(f"{self.player_one.player_name} has won!")
-            return "player one wins"
+        elif winning_statement == "player two wins":
+            print(f"{self.player_two.player_name} has won!")
+
+        return winning_statement
 
     #DON'T TRANSFER
     def determine_turn_order(self)-> None:
