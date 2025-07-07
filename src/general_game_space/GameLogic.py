@@ -153,10 +153,13 @@ class GameLogic:
     #no need to change the logic here
     @staticmethod
     def calculate_strength_logic(player: Union[Player, PlayerState]) -> None:
+        total = 0
+
         for row in ["melee", "range", "siege"]:
             for card in player.board[row]:
-                player.sum += card.current_strength
+                total += card.current_strength
 
+        player.sum = total
 
     @staticmethod
     def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
@@ -257,6 +260,7 @@ class GameLogic:
             raise ValueError("Must input either a Game or GameState class")
 
 
+    #need to change for AI version
     @staticmethod
     def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card) -> None:
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
