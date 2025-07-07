@@ -262,7 +262,7 @@ class GameLogic:
     @staticmethod
     # this will check for maintaining effects such as weather, horn, morale booster
     def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card) -> None:
-        def maintain_effect_player_input(Player: Union[Player, PlayerState]) -> None:
+        def maintain_effect_player_input(player: Union[Player, PlayerState]) -> None:
             # both case
             if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
                 card.current_strength = 2
@@ -408,11 +408,12 @@ class GameLogic:
                     return "Please type in either melee, range, or siege please"
 
             if isinstance(game_or_game_state, Game):
-                use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+                use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
             elif isinstance(game_or_game_state, GameState):
-                use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+                use_leader_ability_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
+
 
     @staticmethod
     def faction_ability(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
