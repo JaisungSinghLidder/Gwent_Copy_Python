@@ -416,9 +416,7 @@ class Game:
 
     #TRANSFERRED
     def calculate_strength(self, player: Player) -> None:
-        for row in ["melee", "range", "siege"]:
-            for card in player.board[row]:
-                player.sum += card.current_strength
+        GameLogic.calculate_strength_logic(player)
 
 
 
