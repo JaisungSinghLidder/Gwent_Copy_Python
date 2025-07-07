@@ -121,368 +121,368 @@ class GameLogic:
             else:
                 raise ValueError("Must input either a Game or GameState class")
 
-        @staticmethod
-        def end_game_checker(game_or_game_state: Union[Game, GameState]) -> str:
+    @staticmethod
+    def end_game_checker(game_or_game_state: Union[Game, GameState]) -> str:
 
-            def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
+        def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
 
-                p1_nilfgaardian = player_one.faction.lower() == "nilfgaardian"
-                p2_nilfgaardian = player_two.faction.lower() == "nilfgaardian"
+            p1_nilfgaardian = player_one.faction.lower() == "nilfgaardian"
+            p2_nilfgaardian = player_two.faction.lower() == "nilfgaardian"
 
-                # using <= just to make sure if a glitch happens and something became negative that it would error check for that.
-                if player_one.lives <= 0 and player_two.lives <= 0:
-                    if not p1_nilfgaardian and not p2_nilfgaardian:
-                        return "draw"
-                    elif p1_nilfgaardian and not p2_nilfgaardian:
-                        return "player one wins"
-                    elif not p1_nilfgaardian and p2_nilfgaardian:
-                        return "player two wins"
-                elif player_one.lives <= 0:
-                    return "player two wins"
-                elif player_two.lives <= 0:
+            # using <= just to make sure if a glitch happens and something became negative that it would error check for that.
+            if player_one.lives <= 0 and player_two.lives <= 0:
+                if not p1_nilfgaardian and not p2_nilfgaardian:
+                    return "draw"
+                elif p1_nilfgaardian and not p2_nilfgaardian:
                     return "player one wins"
+                elif not p1_nilfgaardian and p2_nilfgaardian:
+                    return "player two wins"
+            elif player_one.lives <= 0:
+                return "player two wins"
+            elif player_two.lives <= 0:
+                return "player one wins"
 
-            if isinstance(game_or_game_state, Game):
-                end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, GameState):
-                end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+        if isinstance(game_or_game_state, Game):
+            end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+        elif isinstance(game_or_game_state, GameState):
+            end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+        else:
+            raise ValueError("Must input either a Game or GameState class")
+
+
+    #no need to change the logic here
+    @staticmethod
+    def calculate_strength_logic(player: Union[Player, PlayerState]) -> None:
+        for row in ["melee", "range", "siege"]:
+            for card in player.board[row]:
+                player.sum += card.current_strength
+
+
+    @staticmethod
+    def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
+        def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
+            opponent = None
+
+            if player == player_one:
+                opponent = player_two
             else:
-                raise ValueError("Must input either a Game or GameState class")
+                opponent = player_one
 
+            #returning function here, might make a function that if the ai get's this back it knows that the leader_used has already been used as an edge case check
+            if player.leader_used:
+                return "You have already used this ability"
 
-        #no need to change the logic here
-        @staticmethod
-        def calculate_strength_logic(player: Union[Player, PlayerState]) -> None:
-            for row in ["melee", "range", "siege"]:
-                for card in player.board[row]:
-                    player.sum += card.current_strength
+            else:
+                # basically using clear weather
+                if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
 
-
-        @staticmethod
-        def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
-            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
-                opponent = None
-
-                if player == player_one:
-                    opponent = player_two
-                else:
-                    opponent = player_one
-
-                #returning function here, might make a function that if the ai get's this back it knows that the leader_used has already been used as an edge case check
-                if player.leader_used:
-                    return "You have already used this ability"
-
-                else:
-                    # basically using clear weather
-                    if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
-
-                        if game_or_game_state.active_weather_effects:
-                            game_or_game_state.active_weather_effect.clear()
-                            # doing it twice so we don't clear it twice
-                            for row in ["melee", "range", "siege"]:
-                                for card in player.board[row]:
-                                    if card.is_affected_by_weather and card.is_affected_by_horn:
-                                        card.current_strength = card.base_strength * 2
-                                    elif card.is_affected_by_weather:
-                                        card.current_strength = card.base_strength
-
-                            for row in ["melee", "range", "siege"]:
-                                for card in opponent.board[row]:
-                                    if card.is_affected_by_weather and card.is_affected_by_horn:
-                                        card.current_strength = card.base_strength * 2
-                                    elif card.is_affected_by_weather:
-                                        card.current_strength = card.base_strength
-
-                        player.leader_used = True
-
-                    # looking at 3 cards in your opponents hand
-                    elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaardian":
-
-
-                        #NEED TO CHANGE THIS FOR THE AI AND HUMAN PLAYER
-                        if opponent.ai_player:
-                            cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
-                            print("3 of the opponenets hand")
-                            for card in cards_to_show:
-                                print(card.card_name)
-                        else:
-                            cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
-                            for card in cards_to_show:
-                                player.opponent_hand(card)
-
-                        player.leader_used = True
-
-                    # boosting the strength by 3
-                    elif player.leader_card.leader_ability.lower().strip() == "double spy" and player.leader_card.faction.lower().strip() == "monsters":
+                    if game_or_game_state.active_weather_effects:
+                        game_or_game_state.active_weather_effect.clear()
+                        # doing it twice so we don't clear it twice
+                        for row in ["melee", "range", "siege"]:
+                            for card in player.board[row]:
+                                if card.is_affected_by_weather and card.is_affected_by_horn:
+                                    card.current_strength = card.base_strength * 2
+                                elif card.is_affected_by_weather:
+                                    card.current_strength = card.base_strength
 
                         for row in ["melee", "range", "siege"]:
-                            for card in player .board[row]:
-                                if card.ability == "spy":
-                                    card.current_strength *= 2
+                            for card in opponent.board[row]:
+                                if card.is_affected_by_weather and card.is_affected_by_horn:
+                                    card.current_strength = card.base_strength * 2
+                                elif card.is_affected_by_weather:
+                                    card.current_strength = card.base_strength
 
-                        for row in ["melee", "range", "siege"]:
-                            for card in opponent.player_two.board[row]:
-                                if card.ability == "spy":
-                                    card.current_strength *= 2
+                    player.leader_used = True
 
-                        player.leader_used = True
+                # looking at 3 cards in your opponents hand
+                elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaardian":
 
-                    # lets you play special card from your deck
 
-                    elif player.leader_card.leader_ability.lower().strip() == "play a random card" and player.leader_card.faction.lower().strip() == "scoia'tael":
+                    #NEED TO CHANGE THIS FOR THE AI AND HUMAN PLAYER
+                    if opponent.ai_player:
+                        cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
+                        print("3 of the opponenets hand")
+                        for card in cards_to_show:
+                            print(card.card_name)
+                    else:
+                        cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
+                        for card in cards_to_show:
+                            player.opponent_hand(card)
 
-                        for card in player.deck:
-                            if card.card_type != " ":
-                                chosen_card = random.choice(player.deck)
-                                player.hand.append(chosen_card)
-                                player.deck.remove(chosen_card)
-                                print(f"{chosen_card}")
+                    player.leader_used = True
 
-                        player.leader_used = True
+                # boosting the strength by 3
+                elif player.leader_card.leader_ability.lower().strip() == "double spy" and player.leader_card.faction.lower().strip() == "monsters":
 
-                    # shuffle all cards from each player's graveyard back into their decks
-                    elif player.leader_card.leader_ability.lower().strip() == "crach an craite" and player.leader_card.faction.lower().strip() == "skellige":
+                    for row in ["melee", "range", "siege"]:
+                        for card in player .board[row]:
+                            if card.ability == "spy":
+                                card.current_strength *= 2
 
-                        player.deck.extend(player.graveyard)
-                        player.graveyard.clear()
-                        random.shuffle(player.deck)
+                    for row in ["melee", "range", "siege"]:
+                        for card in opponent.player_two.board[row]:
+                            if card.ability == "spy":
+                                card.current_strength *= 2
 
-                        player.leader_used = True
+                    player.leader_used = True
+
+                # lets you play special card from your deck
+
+                elif player.leader_card.leader_ability.lower().strip() == "play a random card" and player.leader_card.faction.lower().strip() == "scoia'tael":
+
+                    for card in player.deck:
+                        if card.card_type != " ":
+                            chosen_card = random.choice(player.deck)
+                            player.hand.append(chosen_card)
+                            player.deck.remove(chosen_card)
+                            print(f"{chosen_card}")
+
+                    player.leader_used = True
+
+                # shuffle all cards from each player's graveyard back into their decks
+                elif player.leader_card.leader_ability.lower().strip() == "crach an craite" and player.leader_card.faction.lower().strip() == "skellige":
+
+                    player.deck.extend(player.graveyard)
+                    player.graveyard.clear()
+                    random.shuffle(player.deck)
+
+                    player.leader_used = True
+
+        if isinstance(game_or_game_state, Game):
+            use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+        elif isinstance(game_or_game_state, GameState):
+            use_leader_ability_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+        else:
+            raise ValueError("Must input either a Game or GameState class")
+
+
+
+
+    @staticmethod
+    # this will check for maintaining effects such as weather, horn, morale booster
+    def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card) -> None:
+        def maintain_effect_player_input(Player: Union[Player, PlayerState]) -> None:
+            # both case
+            if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
+                card.current_strength = 2
+            elif card.row == "range" and player.range_row_weather_effect and player.range_row_horn_effect:
+                card.current_strength = 2
+            elif card.row == "siege" and player.siege_row_weather_effect and player.siege_row_horn_effect:
+                card.current_strength = 2
+            else:
+                # weather case
+                if card.row == "melee" and player.melee_row_weather_effect:
+                    card.current_strength = 1
+                elif card.row == "range" and player.range_row_weather_effect:
+                    card.current_strength = 1
+                elif card.row == "siege" and player.siege_row_weather_effect:
+                    card.current_strength = 1
+
+                # horn case
+                if card.row == "melee" and player.melee_row_horn_effect:
+                    card.current_strength = card.base_strength * 2
+                elif card.row == "range" and player.range_row_horn_effect:
+                    card.current_strength = card.base_strength * 2
+                elif card.row == "siege" and player.siege_row_horn_effect:
+                    card.current_strength = card.base_strength * 2
+
+        if isinstance(game_or_game_state, Game):
+            maintain_effect_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+        elif isinstance(game_or_game_state, GameState):
+            maintain_effect_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+        else:
+            raise ValueError("Must input either a Game or GameState class")
+
+    @staticmethod
+    def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card) -> None:
+        def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
+
+            opponent = None
+
+            if player == player_one:
+                opponent = player_two
+            else:
+                opponent = player_one
+
+            # this inner function go alongside the scorch
+            # just to cancel any effects that would happen alongside it
+            def cancel_effects_before_destroy(card: Card, player: Player) -> None:
+                # morale boost case
+                if card.ability == "morale boost":
+                    for other_card in player.board[card.row]:
+                        other_card.current_strength = card.base_strength
+                elif card.ability == "tight bond":
+
+                    tight_bond_count = []
+                    for other_card in player.board[card.row]:
+                        if card == other_card:
+                            tight_bond_count.append(card)
+
+                    # just pop one out to represent losing one card due to it being destroyed
+
+                    tight_bond_count.pop()
+
+                    for tight_bond_cards in tight_bond_count:
+                        tight_bond_cards.current_strength *= tight_bond_cards.base_strength * len(tight_bond_count)
+
+            # in the works
+            if og_card.ability.lower().strip() == "scorch":
+
+                max_strength_card = None
+                max_strength_of_card = 0
+                max_strength_card_player = None
+
+                # first trying to find the largest strength card in the first player board
+
+                for row in ["melee", "range", "siege"]:
+                    for card in player.board[row]:
+                        if max_strength_of_card < card.current_strength:
+                            max_strength_card = card
+                            max_strength_of_card = card.current_strength
+                            max_strength_card_player = player
+
+                for row in ["melee", "range", "siege"]:
+                    for card in opponent.board[row]:
+                        if max_strength_of_card < card.current_strength:
+                            max_strength_card = card
+                            max_strength_of_card = card.current_strength
+                            max_strength_card_player = opponent
+
+                # now we are going to go through and delete those card that are equal to it
+                # then we delete that card that we are originating from
+
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(player.board[row]):
+                        if max_strength_of_card == card.current_strength:
+                            cancel_effects_before_destroy(card, player)
+                            player.graveyard.append(card)
+                            del player.board[row][i]
+
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(opponent.board[row]):
+                        if max_strength_of_card == card.current_strength:
+                            cancel_effects_before_destroy(card, opponent)
+                            opponent.graveyard.append(card)
+                            del opponent.board[row][i]
+
+                # now we are going to delete the original max card
+
+                for row in ["melee", "range", "siege"]:
+                    for i, card in enumerate(max_strength_card_player.board[row]):
+                        if card == max_strength_card:
+                            cancel_effects_before_destroy(max_strength_card, max_strength_card_player)
+
+                            max_strength_card_player.graveyard.append(max_strength_card)
+
+                            del max_strength_card_player.board[row][i]
+
+
+
+
+
+            elif og_card.ability.lower().strip() == "horn":
+
+                while True:
+                    chosen_row = input("What row do you want to double?")
+                    if chosen_row == "melee":
+
+                        for card in player.board["melee"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.melee_row_horn_effect = True
+
+                    elif chosen_row == "range":
+
+                        for card in player.board["range"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.range_row_horn_effect = True
+
+                    elif chosen_row == "siege":
+                        for card in player.board["siege"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.siege_row_horn_effect = True
+
+                    return "Please type in either melee, range, or siege please"
 
             if isinstance(game_or_game_state, Game):
-                use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+                use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
             elif isinstance(game_or_game_state, GameState):
-                use_leader_ability_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+                use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
 
+    @staticmethod
+    def faction_ability(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
 
+        def monster_keep_card(player, board) -> None:
+            valid_rows = [row for row in board if board[row]]
+            if valid_rows:
+                chosen_row = random.choice(valid_rows)
+                card_to_keep = random.choice(board[chosen_row])
+                player.cards_to_keep.append(card_to_keep)
 
+        def northern_realms_draw_card(player) -> None:
+            extra_card_player = player.deck.draw_from_deck()
+            player.hand.append(extra_card_player)
 
-        @staticmethod
-        # this will check for maintaining effects such as weather, horn, morale booster
-        def maintain_effect(game_or_game_state: Union[Game, GameState], card: Card) -> None:
-            def maintain_effect_player_input(Player: Union[Player, PlayerState]) -> None:
-                # both case
-                if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
-                    card.current_strength = 2
-                elif card.row == "range" and player.range_row_weather_effect and player.range_row_horn_effect:
-                    card.current_strength = 2
-                elif card.row == "siege" and player.siege_row_weather_effect and player.siege_row_horn_effect:
-                    card.current_strength = 2
-                else:
-                    # weather case
-                    if card.row == "melee" and player.melee_row_weather_effect:
-                        card.current_strength = 1
-                    elif card.row == "range" and player.range_row_weather_effect:
-                        card.current_strength = 1
-                    elif card.row == "siege" and player.siege_row_weather_effect:
-                        card.current_strength = 1
+        def skellige_draw_from_graveyard(player) -> None:
+            # not checking for two cards because you can't win a round by placing somehow less than two cards the whole game in total
+            for _ in range(2):
+                card_to_keep = random.choice(player.graveyard)
+                player.cards_to_keep.append(card_to_keep)
+                for i, c in enumerate(player.graveyard):
+                    if c is card_to_keep:
+                        del player.graveyard[i]
+                        break
 
-                    # horn case
-                    if card.row == "melee" and player.melee_row_horn_effect:
-                        card.current_strength = card.base_strength * 2
-                    elif card.row == "range" and player.range_row_horn_effect:
-                        card.current_strength = card.base_strength * 2
-                    elif card.row == "siege" and player.siege_row_horn_effect:
-                        card.current_strength = card.base_strength * 2
+        def faction_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
+            # monster's block
+            if  player_one.faction.lower().strip() == "monsters" and player_two.faction.lower().strip() == "monsters":
 
-            if isinstance(game_or_game_state, Game):
-                maintain_effect_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, GameState):
-                maintain_effect_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
-            else:
-                raise ValueError("Must input either a Game or GameState class")
+                monster_keep_card(player_one, player_one.board)
 
-        @staticmethod
-        def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card) -> None:
-            def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
+                monster_keep_card(player_two, player_two.board)
 
-                opponent = None
+            elif player_one.faction.lower().strip() == "monsters":
+                monster_keep_card(player_one, player_one.board)
 
-                if player == player_one:
-                    opponent = player_two
-                else:
-                    opponent = player_one
+            elif player_two.faction.lower().strip() == "monsters":
+                monster_keep_card(player_two, player_two.board)
 
-                # this inner function go alongside the scorch
-                # just to cancel any effects that would happen alongside it
-                def cancel_effects_before_destroy(card: Card, player: Player) -> None:
-                    # morale boost case
-                    if card.ability == "morale boost":
-                        for other_card in player.board[card.row]:
-                            other_card.current_strength = card.base_strength
-                    elif card.ability == "tight bond":
+            # northern realm's block
+            if player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
 
-                        tight_bond_count = []
-                        for other_card in player.board[card.row]:
-                            if card == other_card:
-                                tight_bond_count.append(card)
+                northern_realms_draw_card(player_one)
 
-                        # just pop one out to represent losing one card due to it being destroyed
+            elif player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
 
-                        tight_bond_count.pop()
+                northern_realms_draw_card(player_two)
 
-                        for tight_bond_cards in tight_bond_count:
-                            tight_bond_cards.current_strength *= tight_bond_cards.base_strength * len(tight_bond_count)
+            # skellige's block
 
-                # in the works
-                if og_card.ability.lower().strip() == "scorch":
+            # only works on round 3
+            if game_or_game_state.round_counter == 3:
 
-                    max_strength_card = None
-                    max_strength_of_card = 0
-                    max_strength_card_player = None
+                if player_one.faction.lower().strip() == "skellige" and player_two.faction.lower().strip() == "skellige":
 
-                    # first trying to find the largest strength card in the first player board
+                    skellige_draw_from_graveyard(player_one)
 
-                    for row in ["melee", "range", "siege"]:
-                        for card in player.board[row]:
-                            if max_strength_of_card < card.current_strength:
-                                max_strength_card = card
-                                max_strength_of_card = card.current_strength
-                                max_strength_card_player = player
+                    skellige_draw_from_graveyard(player_two)
 
-                    for row in ["melee", "range", "siege"]:
-                        for card in opponent.board[row]:
-                            if max_strength_of_card < card.current_strength:
-                                max_strength_card = card
-                                max_strength_of_card = card.current_strength
-                                max_strength_card_player = opponent
+                elif player_one.faction.lower().strip() == "skellige":
 
-                    # now we are going to go through and delete those card that are equal to it
-                    # then we delete that card that we are originating from
+                    skellige_draw_from_graveyard(player_one)
 
-                    for row in ["melee", "range", "siege"]:
-                        for i, card in enumerate(player.board[row]):
-                            if max_strength_of_card == card.current_strength:
-                                cancel_effects_before_destroy(card, player)
-                                player.graveyard.append(card)
-                                del player.board[row][i]
+                elif player_two.faction.lower().strip() == "skellige":
 
-                    for row in ["melee", "range", "siege"]:
-                        for i, card in enumerate(opponent.board[row]):
-                            if max_strength_of_card == card.current_strength:
-                                cancel_effects_before_destroy(card, opponent)
-                                opponent.graveyard.append(card)
-                                del opponent.board[row][i]
+                    skellige_draw_from_graveyard(player_two)
 
-                    # now we are going to delete the original max card
-
-                    for row in ["melee", "range", "siege"]:
-                        for i, card in enumerate(max_strength_card_player.board[row]):
-                            if card == max_strength_card:
-                                cancel_effects_before_destroy(max_strength_card, max_strength_card_player)
-
-                                max_strength_card_player.graveyard.append(max_strength_card)
-
-                                del max_strength_card_player.board[row][i]
-
-
-
-
-
-                elif og_card.ability.lower().strip() == "horn":
-
-                    while True:
-                        chosen_row = input("What row do you want to double?")
-                        if chosen_row == "melee":
-
-                            for card in player.board["melee"]:
-                                card.current_strength = card.base_strength * 2
-
-                            player.melee_row_horn_effect = True
-
-                        elif chosen_row == "range":
-
-                            for card in player.board["range"]:
-                                card.current_strength = card.base_strength * 2
-
-                            player.range_row_horn_effect = True
-
-                        elif chosen_row == "siege":
-                            for card in player.board["siege"]:
-                                card.current_strength = card.base_strength * 2
-
-                            player.siege_row_horn_effect = True
-
-                        return "Please type in either melee, range, or siege please"
-
-                if isinstance(game_or_game_state, Game):
-                    use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-                elif isinstance(game_or_game_state, GameState):
-                    use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
-                else:
-                    raise ValueError("Must input either a Game or GameState class")
-
-        @staticmethod
-        def faction_ability(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
-
-            def monster_keep_card(player, board) -> None:
-                valid_rows = [row for row in board if board[row]]
-                if valid_rows:
-                    chosen_row = random.choice(valid_rows)
-                    card_to_keep = random.choice(board[chosen_row])
-                    player.cards_to_keep.append(card_to_keep)
-
-            def northern_realms_draw_card(player) -> None:
-                extra_card_player = player.deck.draw_from_deck()
-                player.hand.append(extra_card_player)
-
-            def skellige_draw_from_graveyard(player) -> None:
-                # not checking for two cards because you can't win a round by placing somehow less than two cards the whole game in total
-                for _ in range(2):
-                    card_to_keep = random.choice(player.graveyard)
-                    player.cards_to_keep.append(card_to_keep)
-                    for i, c in enumerate(player.graveyard):
-                        if c is card_to_keep:
-                            del player.graveyard[i]
-                            break
-
-            def faction_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
-                # monster's block
-                if  player_one.faction.lower().strip() == "monsters" and player_two.faction.lower().strip() == "monsters":
-
-                    monster_keep_card(player_one, player_one.board)
-
-                    monster_keep_card(player_two, player_two.board)
-
-                elif player_one.faction.lower().strip() == "monsters":
-                    monster_keep_card(player_one, player_one.board)
-
-                elif player_two.faction.lower().strip() == "monsters":
-                    monster_keep_card(player_two, player_two.board)
-
-                # northern realm's block
-                if player_one.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player one wins":
-
-                    northern_realms_draw_card(player_one)
-
-                elif player_two.faction.lower().strip() == "northern realms" and round_winner.lower().strip() == "player two wins":
-
-                    northern_realms_draw_card(player_two)
-
-                # skellige's block
-
-                # only works on round 3
-                if game_or_game_state.round_counter == 3:
-
-                    if player_one.faction.lower().strip() == "skellige" and player_two.faction.lower().strip() == "skellige":
-
-                        skellige_draw_from_graveyard(player_one)
-
-                        skellige_draw_from_graveyard(player_two)
-
-                    elif player_one.faction.lower().strip() == "skellige":
-
-                        skellige_draw_from_graveyard(player_one)
-
-                    elif player_two.faction.lower().strip() == "skellige":
-
-                        skellige_draw_from_graveyard(player_two)
-
-            if isinstance(game_or_game_state, Game):
-                faction_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, GameState):
-                faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
-            else:
-                raise ValueError("Must input either a Game or GameState class")
+        if isinstance(game_or_game_state, Game):
+            faction_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+        elif isinstance(game_or_game_state, GameState):
+            faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+        else:
+            raise ValueError("Must input either a Game or GameState class")
