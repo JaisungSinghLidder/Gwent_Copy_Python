@@ -12,6 +12,7 @@ from random import random
 
 class GameLogic:
 
+    #ai needs to be able to determine the round winner
     @staticmethod
     def determine_round_winner(game_or_gamestate: Union[Game, GameState]) -> str:
 
@@ -39,7 +40,7 @@ class GameLogic:
 
 
     #note that we need the card and the player card
-
+    #ai should be able to understand how the ai is able to use a card ability
     @staticmethod
     def use_card_ability(game_or_game_state: Union[Game, GameState], player: Union[Player,  PlayerState], og_card) -> None:
 
@@ -121,6 +122,7 @@ class GameLogic:
             else:
                 raise ValueError("Must input either a Game or GameState class")
 
+    #ai should know how to end the game and how to check that case, also to use nilfgaardian case to it advantage
     @staticmethod
     def end_game_checker(game_or_game_state: Union[Game, GameState]) -> str:
 
@@ -160,6 +162,8 @@ class GameLogic:
                 total += card.current_strength
 
         player.sum = total
+
+    #ai needs to be able to use its' own leader ability
 
     @staticmethod
     def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
@@ -261,8 +265,9 @@ class GameLogic:
 
 
     #need to change for AI version
+    #need to change the player union
     @staticmethod
-    def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Player, og_card: Card) -> None:
+    def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Union[Player, PlayerState], og_card: Card) -> None:
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
             opponent = None
@@ -274,6 +279,7 @@ class GameLogic:
 
             # this inner function go alongside the scorch
             # just to cancel any effects that would happen alongside it
+            #this should be fine for the AI implementation
             def cancel_effects_before_destroy(card: Card, player: Player) -> None:
                 # morale boost case
                 if card.ability == "morale boost":
@@ -294,6 +300,7 @@ class GameLogic:
                         tight_bond_cards.current_strength *= tight_bond_cards.base_strength * len(tight_bond_count)
 
             # in the works
+
             if og_card.ability.lower().strip() == "scorch":
 
                 max_strength_card = None
@@ -347,9 +354,10 @@ class GameLogic:
 
 
 
-
+            #need to create an Ai
             elif og_card.ability.lower().strip() == "horn":
 
+                if player.ai
                 while True:
                     chosen_row = input("What row do you want to double?")
                     if chosen_row == "melee":
@@ -382,6 +390,7 @@ class GameLogic:
                 raise ValueError("Must input either a Game or GameState class")
 
 
+    #the ai should know this as well
     @staticmethod
     def faction_ability_logic(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
 
