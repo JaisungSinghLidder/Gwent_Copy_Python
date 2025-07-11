@@ -2,7 +2,7 @@ from src.ai.GameState import GameState
 from src.ai.PlayerState import PlayerState
 from src.general_game_space import Game, Player
 from src.cards.Card import Card
-from typing import Union
+from typing import Union, Optional
 from random import random
 
 
@@ -267,7 +267,7 @@ class GameLogic:
     #need to change for AI version
     #need to change the player union
     @staticmethod
-    def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Union[Player, PlayerState], og_card: Card) -> None:
+    def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
             opponent = None
@@ -358,6 +358,7 @@ class GameLogic:
             elif og_card.ability.lower().strip() == "horn":
 
                 if not player.ai_player:
+
                     while True:
                         chosen_row = input("What row do you want to double?")
                         if chosen_row == "melee":
@@ -385,7 +386,6 @@ class GameLogic:
 
                 #now the ai part here we need to discuss logic
                 #the ai should put it towards the highest strength row?
-                #
 
                 elif player.ai_player:
                     pass
