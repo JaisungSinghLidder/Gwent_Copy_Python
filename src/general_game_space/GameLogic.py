@@ -357,30 +357,38 @@ class GameLogic:
             #need to create an Ai
             elif og_card.ability.lower().strip() == "horn":
 
-                if player.ai
-                while True:
-                    chosen_row = input("What row do you want to double?")
-                    if chosen_row == "melee":
+                if not player.ai_player:
+                    while True:
+                        chosen_row = input("What row do you want to double?")
+                        if chosen_row == "melee":
 
-                        for card in player.board["melee"]:
-                            card.current_strength = card.base_strength * 2
+                            for card in player.board["melee"]:
+                                card.current_strength = card.base_strength * 2
 
-                        player.melee_row_horn_effect = True
+                            player.melee_row_horn_effect = True
 
-                    elif chosen_row == "range":
+                        elif chosen_row == "range":
 
-                        for card in player.board["range"]:
-                            card.current_strength = card.base_strength * 2
+                            for card in player.board["range"]:
+                                card.current_strength = card.base_strength * 2
 
-                        player.range_row_horn_effect = True
+                            player.range_row_horn_effect = True
 
-                    elif chosen_row == "siege":
-                        for card in player.board["siege"]:
-                            card.current_strength = card.base_strength * 2
+                        elif chosen_row == "siege":
+                            for card in player.board["siege"]:
+                                card.current_strength = card.base_strength * 2
 
-                        player.siege_row_horn_effect = True
+                            player.siege_row_horn_effect = True
 
-                    return "Please type in either melee, range, or siege please"
+                        return "Please type in either melee, range, or siege please"
+
+
+                #now the ai part here we need to discuss logic
+                #the ai should put it towards the highest strength row?
+                #
+
+                elif player.ai_player:
+                    pass
 
             if isinstance(game_or_game_state, Game):
                 use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
