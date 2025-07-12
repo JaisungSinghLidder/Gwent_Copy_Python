@@ -296,9 +296,10 @@ class GameLogic:
     @staticmethod
     def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
         #use the leader ability logic player input
-        def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
+        def check_buff_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
-            # opponent = None
+            # grabbing opponent = None
+
             opponent = None
 
             # setting the player_one
@@ -441,9 +442,9 @@ class GameLogic:
                         player.siege_row_horn_effect = True
 
             if isinstance(game_or_game_state, Game):
-                use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+                check_buff_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
             elif isinstance(game_or_game_state, GameState):
-                use_leader_ability_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+                check_buff_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
 
