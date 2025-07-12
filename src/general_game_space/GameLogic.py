@@ -388,7 +388,26 @@ class GameLogic:
                 #the ai should put it towards the highest strength row?
 
                 elif player.ai_player:
-                    pass
+
+                    if selected_row == "melee":
+
+                        for card in player.board["melee"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.melee_row_horn_effect = True
+
+                    elif selected_row == "range":
+
+                        for card in player.board["range"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.range_row_horn_effect = True
+
+                    elif selected_row == "siege":
+                        for card in player.board["siege"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.siege_row_horn_effect = True
 
             if isinstance(game_or_game_state, Game):
                 use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
