@@ -29,6 +29,11 @@ class GameState:
 
         # running through the cards through the hand
         for card in self.ai_player_state.hand:
+
+            #checking here if the medic card can target any graveyard card
+            if card.ability == "medic":
+                if not self.ai_player_state.graveyard:
+                    continue
             #checking the cards here
             legal_moves.append(card)
 
