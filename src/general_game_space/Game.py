@@ -48,7 +48,7 @@ class Game:
     def determine_turn_order(self)-> None:
 
         p1_scoia = self.player_one.faction.lower().strip() == "scoia'tael"
-        p2_scoia = self.player_two.faction.lower().strip() == "scoia'tael"
+        p2_scoia = self.player_two.factoin.lower().strip() == "scoia'tael"
 
 
         def coin_flip():
@@ -110,6 +110,7 @@ class Game:
 
     #DON'T COPY: BECAUSE THE GAMESTATE WILL SNAPSHOT THE GAME, NO NEED TO KEEP TRACK OF CARDS, GAMES JOB
     #this function will play the cards that are supposed to be kept on field or going to be brought back
+
     def play_card_to_keep(self) -> None:
         if self.player_one.cards_to_keep:
             for card in self.player_one.cards_to_keep:
@@ -124,8 +125,8 @@ class Game:
             self.player_two.cards_to_keep.clear()
 
     #Weather effect
-    #NEED TO ADD
     #Won't add this to game logic, because I will simply snapshot the game state after this
+
     def check_weather_effect(self, weather_effect: str) -> None:
         if weather_effect in self.active_weather_effect:
             print(f"{weather_effect} is already in use")
@@ -238,7 +239,7 @@ class Game:
 
 
 
-    #TRANSFERRED
+    #don't need to maintain effect, will snapshot after this take place
     def maintain_effect(self, player: Player, card: Card) -> None:
 
         #both case
@@ -286,10 +287,12 @@ class Game:
         #this inner function go alongside the scorch
         #just to cancel any effects that would happen alongside it
         def cancel_effects_before_destroy(card: Card, player: Player):
+
             #morale boost case
             if card.ability == "morale boost":
                 for other_card in player.board[card.row]:
                     other_card.current_strength = card.base_strength
+
             elif card.ability == "tight bond":
 
                 tight_bond_count = []
@@ -431,89 +434,8 @@ class Game:
 
     #TRANSFERRED
     def use_leader_ability(self, player: Player) -> None:
+        GameLogic.use_leader_ability_logic(self, player)
 
-        opponent = None
-
-        if player == self.player_one:
-            opponent = self.player_two
-        else:
-            opponent = self.player_one
-
-
-        if player.leader_used:
-            print("You have already used this ability")
-
-        else:
-            #basically using clear weather
-            if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
-
-                if self.active_weather_effect:
-                    self.active_weather_effect.clear()
-                    # doing it twice so we don't clear it twice
-                    for row in ["melee", "range", "siege"]:
-                        for card in self.player_one.board[row]:
-                            if card.is_affected_by_weather and card.is_affected_by_horn:
-                                card.current_strength = card.base_strength * 2
-                            elif card.is_affected_by_weather:
-                                card.current_strength = card.base_strength
-
-                    for row in ["melee", "range", "siege"]:
-                        for card in self.player_two.board[row]:
-                            if card.is_affected_by_weather and card.is_affected_by_horn:
-                                card.current_strength = card.base_strength * 2
-                            elif card.is_affected_by_weather:
-                                card.current_strength = card.base_strength
-
-                player.leader_used = True
-
-            #looking at 3 cards in your opponents hand
-            elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaardian":
-
-                cards_to_show = random.sample(opponent.hand, min(3,len(opponent.hand)))
-                print("3 of the opponenets hand")
-                for card in cards_to_show:
-                    print(card.card_name)
-
-                player.leader_used = True
-
-            # boosting the strength by 3
-            elif player.leader_card.leader_ability.lower().strip() == "double spy" and player.leader_card.faction.lower().strip() == "monsters":
-
-                for row in ["melee", "range", "siege"]:
-                    for card in self.player_one.board[row]:
-                        if card.ability == "spy":
-                            card.current_strength *= 2
-
-                for row in ["melee", "range", "siege"]:
-                    for card in self.player_two.board[row]:
-                        if card.ability == "spy":
-                            card.current_strength *= 2
-
-                player.leader_used = True
-
-            #lets you play special card from your deck
-
-            elif player.leader_card.leader_ability.lower().strip() == "play a random card" and player.leader_card.faction.lower().strip() == "scoia'tael":
-
-                for card in player.deck:
-                    if card.card_type != " ":
-                        chosen_card = random.choice(player.deck)
-                        player.hand.append(chosen_card)
-                        player.deck.remove(chosen_card)
-                        print(f"{chosen_card}")
-
-                player.leader_used = True
-
-            # shuffle all cards from each player's graveyard back into their decks
-            elif player.leader_card.leader_ability.lower().strip() == "crach an craite" and player.leader_card.faction.lower().strip() == "skellige":
-
-
-                player.deck.extend(player.graveyard)
-                player.graveyard.clear()
-                random.shuffle(player.deck)
-
-
-                player.leader_used = True
 
     #DON'T COPY: FOR THE GAME TO FIX  THE ROUND AFTER EVERYTHING IS COMPLETED
     def round_resolve(self) -> None:
