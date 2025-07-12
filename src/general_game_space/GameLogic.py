@@ -41,14 +41,18 @@ class GameLogic:
 
     #note that we need the card and the player card
     #ai should be able to understand how the ai is able to use a card ability
+
     @staticmethod
     def use_card_ability(game_or_game_state: Union[Game, GameState], player: Union[Player,  PlayerState], og_card) -> None:
 
-
+        #use the player ability input:
         def use_card_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> None:
+
+            #first the opponent should be set 0
 
             opponent = None
 
+            #setting the players
             if player == player_one:
                 opponent = player_two
             else:
@@ -61,18 +65,23 @@ class GameLogic:
                 # it is the original strength * number of cards
                 tight_bond_cards = []
 
+
                 for row in ["melee", "range", "siege"]:
                     for card in player.board[row]:
                         if og_card == card:
                             tight_bond_cards.append(card)
 
+
                 for card in tight_bond_cards:
                     card.current_strength = card.base_strength * len(tight_bond_cards)
 
+            #bring back card from the graveyard
             elif og_card.ability.lower().strip() == "medic":
+                #if there was no graveyard
                 if not player.graveyard:
                     print("There is no cards to heal")
                 else:
+                    #for card in the graveyards
                     for card in player.graveyard:
                         print(card.card_name)
                     card_choice = input("So what card do you want?")
@@ -83,6 +92,7 @@ class GameLogic:
                             del player.graveyard[i]
                             break
 
+            #delete specific index
             elif og_card.ability.lower().strip() == "muster":
                 for i, card in enumerate(player.deck):
                         if og_card == card:
@@ -90,11 +100,13 @@ class GameLogic:
                             # we are using del so that we delete the specific index and not deleting all the cards with the same name
                             del player.deck[i]
 
+            #morale booster
             elif og_card.ability.lower().strip() == "morale boost":
                 for card in player.board[og_card.row]:
                     if og_card.card_name != card.card_name:
                         card.current_strength += 1
 
+            #the spy
             elif og_card.ability.lower().strip() == "spy":
                 #spy's go on opponent's board
                 opponent.board[og_card.row].append(og_card)
@@ -103,6 +115,7 @@ class GameLogic:
                     if card:
                         player.hand.append(card)
 
+            #decoy
             elif og_card.ability.lower().strip() == "decoy":
                 for row in ["melee", "range", "siege"]:
                     for card in player.board[row]:
@@ -114,6 +127,7 @@ class GameLogic:
                             player.hand.append(card)
                             player.board[row][i] = og_card
                             return
+
 
             if isinstance(game_or_game_state, Game):
                 use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
@@ -128,26 +142,34 @@ class GameLogic:
 
         def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
 
+            #setting the nilfgaardian equal the nilfgaardian
             p1_nilfgaardian = player_one.faction.lower() == "nilfgaardian"
             p2_nilfgaardian = player_two.faction.lower() == "nilfgaardian"
 
             # using <= just to make sure if a glitch happens and something became negative that it would error check for that.
             if player_one.lives <= 0 and player_two.lives <= 0:
+
                 if not p1_nilfgaardian and not p2_nilfgaardian:
                     return "draw"
+
                 elif p1_nilfgaardian and not p2_nilfgaardian:
                     return "player one wins"
+
                 elif not p1_nilfgaardian and p2_nilfgaardian:
                     return "player two wins"
+
             elif player_one.lives <= 0:
                 return "player two wins"
+
             elif player_two.lives <= 0:
                 return "player one wins"
 
         if isinstance(game_or_game_state, Game):
             end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+
         elif isinstance(game_or_game_state, GameState):
             end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+
         else:
             raise ValueError("Must input either a Game or GameState class")
 
@@ -155,6 +177,7 @@ class GameLogic:
     #no need to change the logic here
     @staticmethod
     def calculate_strength_logic(player: Union[Player, PlayerState]) -> None:
+
         total = 0
 
         for row in ["melee", "range", "siege"]:
@@ -164,12 +187,15 @@ class GameLogic:
         player.sum = total
 
     #ai needs to be able to use its' own leader ability
-
     @staticmethod
     def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
+
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
+
+            #Opponent none
             opponent = None
 
+            #setting players
             if player == player_one:
                 opponent = player_two
             else:
@@ -183,6 +209,7 @@ class GameLogic:
                 # basically using clear weather
                 if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
 
+                    #setting the active weather effects
                     if game_or_game_state.active_weather_effects:
                         game_or_game_state.active_weather_effect.clear()
                         # doing it twice so we don't clear it twice
@@ -200,13 +227,13 @@ class GameLogic:
                                 elif card.is_affected_by_weather:
                                     card.current_strength = card.base_strength
 
+                    #the player here is being used
                     player.leader_used = True
 
                 # looking at 3 cards in your opponents hand
                 elif player.leader_card.leader_ability.lower().strip() == "look at opponent hand" and player.leader_card.faction.lower().strip() == "nilfgaardian":
 
 
-                    #NEED TO CHANGE THIS FOR THE AI AND HUMAN PLAYER
                     if opponent.ai_player:
                         cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
                         print("3 of the opponenets hand")
@@ -268,10 +295,13 @@ class GameLogic:
     #need to change the player union
     @staticmethod
     def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
+        #use the leader ability logic player input
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
+            # opponent = None
             opponent = None
 
+            # setting the player_one
             if player == player_one:
                 opponent = player_two
             else:
@@ -287,6 +317,7 @@ class GameLogic:
                         other_card.current_strength = card.base_strength
                 elif card.ability == "tight bond":
 
+                    #
                     tight_bond_count = []
                     for other_card in player.board[card.row]:
                         if card == other_card:
