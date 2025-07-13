@@ -125,7 +125,7 @@ class Game:
             self.player_two.cards_to_keep.clear()
 
     #Weather effect
-    #Won't add this to game logic, because I will simply snapshot the game state after this
+    #will have to add to allow the ai to be able to simulate the next moves
 
     def check_weather_effect(self, weather_effect: str) -> None:
         if weather_effect in self.active_weather_effect:

@@ -192,7 +192,7 @@ class GameLogic:
 
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
 
-            #Opponent none
+            #Opponent = None
             opponent = None
 
             #setting players
@@ -522,6 +522,88 @@ class GameLogic:
             faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
+
+
+    #coverting this into a lite method for the ai, just to handle the
+
+    def check_weather_effect_MCTS(game_state : GameState, weather_effect: str) -> str:
+
+        if weather_effect in game_state.active_weather_effect:
+            return "already happened"
+
+        game_state.active_weather_effect.add(weather_effect)
+
+        def biting_frost(player: Player) -> None:
+            for card in player.board["melee"]:
+                if card.ability.lower().strip() != "hero":
+                    card.current_strength = 1
+            player.melee_row_weather_effect = True
+
+        def impenetrable_fog(player: Player) -> None:
+            for card in player.board["range"]:
+                if card.ability.lower().strip() != "hero":
+                    card.current_strength = 1
+            player.range_row_weather_effect = True
+
+        def torrential_rain(player) -> None:
+            for card in player.board["siege"]:
+                if card.ability.lower().strip() != "hero":
+                    card.current_strength = 1
+            player.siege_row_weather_effect = True
+
+        def clear_weather(player: Player) -> None:
+            # Clear all previous weather effects
+            game_state.active_weather_effect.clear()
+
+            # Restore strengths for all rows based on horn flags
+            if player.melee_row_weather_effect:
+                for card in player.board["melee"]:
+                    card.current_strength = card.base_strength * (2 if player.melee_row_horn_effect else 1)
+
+            if player.range_row_weather_effect:
+                for card in player.board["range"]:
+                    card.current_strength = card.base_strength * (2 if player.range_row_horn_effect else 1)
+
+            if player.siege_row_weather_effect:
+                for card in player.board["siege"]:
+                    card.current_strength = card.base_strength * (2 if player.siege_row_horn_effect else 1)
+
+            # Reset weather flags
+            player.melee_row_weather_effect = False
+            player.range_row_weather_effect = False
+            player.siege_row_weather_effect = False
+
+        # Now apply the correct weather effect
+        weather_effect = weather_effect.lower().strip()
+
+        if weather_effect == "biting frost":
+            biting_frost(game_state.ai_player_state)
+            biting_frost(game_state.opponent_state)
+
+        elif weather_effect == "impenetrable fog":
+            impenetrable_fog(game_state.ai_player_state)
+            impenetrable_fog(game_state.opponent_state)
+
+        elif weather_effect == "torrential rain":
+            torrential_rain(game_state.ai_player_state)
+            torrential_rain(game_state.opponent_state)
+
+        elif weather_effect == "skellige storm":
+            if "torrential rain" in game_state.active_weather_effect and "impenetrable fog" in game_state.active_weather_effect:
+                return "already happened"
+            elif "torrential rain" in game_state.active_weather_effect:
+                impenetrable_fog(game_state.ai_player_state)
+                impenetrable_fog(game_state.opponent_state)
+            elif "impenetrable fog" in game_state.active_weather_effect:
+                torrential_rain(game_state.ai_player_state)
+                torrential_rain(game_state.opponent_state)
+
+        elif weather_effect == "clear weather":
+            if game_state.active_weather_effect:
+                clear_weather(game_state.ai_player_state)
+                clear_weather(game_state.opponent_state)
+            else:
+                return "already happened"
 
 
 
