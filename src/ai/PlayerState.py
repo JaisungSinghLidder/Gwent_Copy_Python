@@ -28,8 +28,7 @@ class PlayerState:
     siege_row_horn_effect : bool
     opponent_hand: List[Card] = field(default_factory=list)
 
-#maybe add play card???? because the player add the play?? The player should add it own
-#code duplication on both player logic
+
 
 
 
