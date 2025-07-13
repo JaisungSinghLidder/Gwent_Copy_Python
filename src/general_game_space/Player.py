@@ -2,6 +2,7 @@ from typing import List, Dict
 from src.cards.Card import Card
 from src.cards.Deck import Deck
 from src.general_game_space.Leader import Leader
+from src.general_game_space.PlayerLogic import PlayerLogic
 
 class Player:
 
@@ -36,6 +37,7 @@ class Player:
 
     #adding a draw hand implementation later after typing is completed
 
+    #do not need to import draw_card_to_hand
     def draw_card_to_hand(self) -> None:
         card = self.deck.draw_from_deck()
         if card is not None:
@@ -43,40 +45,26 @@ class Player:
         else:
             print(f"{self.player_name}'s deck is empty. No card drawn.")
 
+    #need to port this over player logic
     def play_card(self, card_name: str) -> Card | None:
 
-        while True:
-            if not self.hand:
-                print("You have nothing in your hand")
-                return None
+        PlayerLogic.play_card(self, card_name)
 
-            for i, card in enumerate(self.hand):
-                if card.card_name.lower().strip() == card_name.lower().strip():
-                    if card.card_type.lower().strip() == "unit":
-                        self.board[card.row].append(card)
-                        return self.hand.pop(i)
-                    elif card.card_type.lower().strip() == "weather":
-                        self.graveyard.append(card)
-                        return self.hand.pop(i)
-                    #note to myself, create a case for this
-                    elif card.card_type.lower().strip() == "buff":
-                        self.graveyard.append(card)
-                        return self.hand.pop(i)
-
-            print("That card doesn't exist, please try again")
-            card_name = input("Enter a valid card name:")
-
+    #no need
     def lose_life(self) -> None:
         self.lives -= 1
 
+    #no need
     def lose_game(self) -> str:
         if self.lives == 0:
             return "Defeated"
 
+    #maybe?
     def check_lives(self) -> int:
         return self.lives
 
-    def display_hand(self) -> None:
+    #no need
+    def display_hands(self) -> None:
         print("Displaying your hand")
         for card in self.hand:
             print(f"{card.card_name} | {card.strength} | {card.ability}")
@@ -88,25 +76,19 @@ class Player:
             for card in cards:
                 print(f"{card.card_name} | {card.strength} | {card.ability}")
 
-
+    #maybe
     def passing_turn(self) -> None:
-        while True:
-            choice = input("Do you want to pass this round: yes or no?").lower()
-            if choice.lower().strip() == "yes":
-                self.passed = True
-                break
-            elif choice.lower().strip() == "no":
-                self.passed = False
-                break
-            else:
-                print("Please input either yes or no?")
 
+        PlayerLogic.passing_turn(self)
+
+
+    #no need
     def can_use_leader(self) -> bool:
         if not self.leader_used:
             return True
         else:
             return False
-
+    #no need
     def round_end(self) -> None:
         for row in self.board.values():
             self.graveyard.extend(row)
