@@ -7,6 +7,7 @@ from typing import Union, Optional
 
 class PlayerLogic:
 
+    @staticmethod
     def play_card(player_or_player_state: Union[Player, PlayerState], card_name: str) -> Card | None | str:
 
 
@@ -52,4 +53,34 @@ class PlayerLogic:
                     elif card.card_type.lower().strip() == "buff":
                         player_or_player_state.graveyard.append(card)
                         return player_or_player_state.hand.pop(i)
-                    
+
+        else:
+            raise ValueError("Need to enter either a player or player state values")
+
+    @staticmethod
+    def passing_turn(player_or_player_state: Union[Player, PlayerState], passChoice: Optional[str]) -> None:
+
+        if isinstance(player_or_player_state,  Player):
+
+            while True:
+                choice = input("Do you want to pass this round: yes or no?").lower()
+                if choice.lower().strip() == "yes":
+                    player_or_player_state.passed = True
+                    break
+                elif choice.lower().strip() == "no":
+                    player_or_player_state.passed = False
+                    break
+                else:
+                    print("Please input either yes or no?")
+
+        elif isinstance(player_or_player_state, PlayerState):
+
+            if player_or_player_state.lower().strip() == "yes":
+                player_or_player_state.passed = True
+
+            elif player_or_player_state.lower().strip() == "no":
+                player_or_player_state.passed = False
+
+
+
+
