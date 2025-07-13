@@ -1,6 +1,7 @@
 from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
 from typing import Set, List, Union
+from src.general_game_space.PlayerLogic import PlayerLogic
 from src.cards.Card import Card
 from copy import deepcopy
 
@@ -45,19 +46,28 @@ class GameState:
         return legal_moves
 
 
-
+    #lots of integration with the apply moves
     def apply_move(self, move: Union[Card, str]) -> "GameState":
         new_state = deepcopy(self)
 
-        if move == "PASS":
-            new_state.ai_player_state.passed = True
+        if isinstance(move, str):
+            if move == "PASS":
+                new_state.ai_player_state.passed = True
 
-        elif move == "USE_LEADER":
-            new_state.ai_player_state.leader_used = True
+            #need to play leader
+            elif move == "USE_LEADER":
+                new_state.ai_player_state.leader_used = True
 
-        elif isinstance(move, Card):
-            new_state.ai_player_state.hand.remove(move)
-            new_state.ai_player_state.board[move.row].append(move)
+        if isinstance(move, Card):
+            #need to use the player logic
+            #the basic unit
+            if move.ability == "unit":
+                PlayerLogic.play_card(new_state.ai_player_state, move.card_name)
+            elif move.ability == "weather":
+                pass
+
+            elif move.ability == "buff":
+                pass
 
         return new_state
 
