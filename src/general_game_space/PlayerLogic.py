@@ -75,10 +75,10 @@ class PlayerLogic:
 
         elif isinstance(player_or_player_state, PlayerState):
 
-            if player_or_player_state.lower().strip() == "yes":
+            if passChoice.lower().strip() == "yes":
                 player_or_player_state.passed = True
 
-            elif player_or_player_state.lower().strip() == "no":
+            elif passChoice.lower().strip() == "no":
                 player_or_player_state.passed = False
 
 
