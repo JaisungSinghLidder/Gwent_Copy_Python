@@ -44,10 +44,26 @@ class GameState:
             #what to do here, this here needs to change
             #the logic is weak!
             if card.ability == "horn":
-                for row in ["melee", "range", "siege"]:
-                    row_cards = self.ai_player_state.board[row]
-                    #appending the row so that we can bring over the row as well
-                    legal_moves.append((card,row))
+                #checking whether there are any cards in the ai's board
+                has_any_cards = any(self.ai_player_state.board[row] for row in ["melee", "range", "siege"])
+
+                #skip this card if there is no card on the board period
+                if not has_any_cards:
+                    continue
+
+                if any(self.ai_player_state.board["melee"]):
+                    horn_row = "melee"
+                    legal_moves.append((card,horn_row))
+
+                if any(self.ai_player_state.board["range"]):
+                    horn_row = "range"
+                    legal_moves.append((card, horn_row))
+
+                if any(self.ai_player_state.board["siege"]):
+                    horn_row = "siege"
+                    legal_moves.append((card, horn_row))
+
+
 
 
             #going to make it illegal for the ai that if the no cards, it shouldn't play scorch
