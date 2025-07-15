@@ -95,7 +95,12 @@ class GameState:
                     legal_moves.append(card)
 
 
-            #I should apply the other words here that have other abilites
+            if card.card_type == "weather":
+
+                if card.card_name not in self.active_weather_effect:
+                    legal_moves.append(card)
+
+
 
 
         #allowing the passing the turn
