@@ -21,7 +21,7 @@ class GameState:
     #the AI need this class because it needs to be able to discern what it can do so that when it generates the tree
     #isn't filled with wrong moves
     #IMPLEMENTATION_NOTE: this method need to be pretty comprehensive and prevent any illegal moves
-
+    #this will also filter out bad moves that serve no purpose
     def get_legal_moves(self) -> List[Union[Card, str]]:
         legal_moves = []
 
@@ -41,11 +41,42 @@ class GameState:
             legal_moves.append(card)
 
             #we need to append the commander horn ability
+            #what to do here, this here needs to change
+            #the logic is weak!
             if card.ability == "horn":
                 for row in ["melee", "range", "siege"]:
                     row_cards = self.ai_player_state.board[row]
                     #appending the row so that we can bring over the row as well
                     legal_moves.append((card,row))
+
+
+            #going to make it illegal for the ai that if the no cards, it shouldn't play scorch
+            #also if there is only hero cards, as hero cards are unaffected by scorch
+            if card.ability == "scorch":
+                # Assume that all cards are heroes until proven otherwise
+                only_heroes = True
+
+                #checking if there is any cards in the opponent state
+                has_any_cards = any(self.opponent_state.board[row] for row in ["melee", "range", "siege"])
+
+                #if the opponent has no cards, then why bother with scorching it?
+                if not has_any_cards:
+                    continue
+
+
+                for row in ["melee", "range","siege"]:
+                    for opponent_card in self.opponent_state.board[row]:
+                        if opponent_card.ability != "hero":
+                            only_heroes = False
+                            break
+
+                    if not only_heroes:
+                        break
+
+
+
+                if not only_heroes:
+                    legal_moves.append(card)
 
 
             #I should apply the other words here that have other abilites
@@ -84,6 +115,7 @@ class GameState:
             elif move.ability == "buff":
 
                 GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move)
+
 
 
 
