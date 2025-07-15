@@ -1,6 +1,8 @@
 from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
 from typing import Set, List, Union
+
+from src.general_game_space.GameLogic import GameLogic
 from src.general_game_space.PlayerLogic import PlayerLogic
 from src.cards.Card import Card
 from copy import deepcopy
@@ -13,7 +15,7 @@ class GameState:
     ai_player_state: PlayerState
     opponent_state: PlayerState
     round_counter: int
-    active_weather_effects: Set[str]
+    active_weather_effect: Set[str]
 
     #this class will handle what is playable in the AI player's hand
     #the AI need this class because it needs to be able to discern what it can do so that when it generates the tree
@@ -37,6 +39,16 @@ class GameState:
                     continue
             #checking the cards here
             legal_moves.append(card)
+
+            #we need to append the commander horn ability
+            if card.ability == "horn":
+                for row in ["melee", "range", "siege"]:
+                    row_cards = self.ai_player_state.board[row]
+                    #appending the row so that we can bring over the row as well
+                    legal_moves.append((card,row))
+
+
+            #I should apply the other words here that have other abilites
 
 
         #allowing the passing the turn
@@ -62,12 +74,18 @@ class GameState:
             #need to use the player logic
             #the basic unit
             if move.ability == "unit":
+
                 PlayerLogic.play_card(new_state.ai_player_state, move.card_name)
+
             elif move.ability == "weather":
-                pass
+
+                GameLogic.check_weather_effect_MCTS(new_state, move.card_name)
 
             elif move.ability == "buff":
-                pass
+
+                GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move)
+
+
 
         return new_state
 
