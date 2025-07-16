@@ -1,3 +1,5 @@
+from operator import contains
+
 from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
 from typing import Set, List, Union
@@ -35,10 +37,12 @@ class GameState:
 
             #northen realms is going to be a simple weather check
             if self.ai_player_state.faction == "northern realms":
-                if not self.active_weather_effect:
-                    legal_moves.append("USE_LEADER")
+                if self.active_weather_effect:
+                    legal_moves.append("USE LEADER")
 
-            
+            elif self.ai_player_state.faction == ""
+
+
         # running through the cards through the hand
         for card in self.ai_player_state.hand:
 
