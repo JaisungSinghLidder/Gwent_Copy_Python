@@ -2,7 +2,7 @@ from operator import contains
 
 from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
-from typing import Set, List, Union
+from typing import Set, List, Union, Optional
 
 from src.general_game_space.GameLogic import GameLogic
 from src.general_game_space.PlayerLogic import PlayerLogic
@@ -152,7 +152,8 @@ class GameState:
 
 
     #lots of integration with the apply moves
-    def apply_move(self, move: Union[Card, str]) -> "GameState":
+    #so this will take only one legal move so that it can build the tree piece by piece through it childern
+    def apply_move(self, move: Union[Card, str], row: Optional[str]) -> "GameState":
         new_state = deepcopy(self)
 
         if isinstance(move, str):
@@ -168,6 +169,7 @@ class GameState:
             #the basic unit
             if move.ability == "unit":
 
+                #may need to add some other stuff
                 PlayerLogic.play_card(new_state.ai_player_state, move.card_name)
 
             elif move.ability == "weather":
@@ -176,7 +178,17 @@ class GameState:
 
             elif move.ability == "buff":
 
-                GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move)
+                #checking whether it is a scorch or a horn
+
+                #horn
+                if row:
+                    GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move, row)
+                #scorch
+                else:
+                    GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move)
+
+
+
 
 
 
