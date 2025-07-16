@@ -27,9 +27,18 @@ class GameState:
 
         #this case is for the leader
         #we are going to append a string because using a leader card is a special case
+        # now we need to check for faction and illegal moves for that faction in tow
         if not self.ai_player_state.leader_used:
-            legal_moves.append("USE_LEADER")
 
+            #okay now we need to check for behaviour of players
+            #might need to create a sub function
+
+            #northen realms is going to be a simple weather check
+            if self.ai_player_state.faction == "northern realms":
+                if not self.active_weather_effect:
+                    legal_moves.append("USE_LEADER")
+
+            
         # running through the cards through the hand
         for card in self.ai_player_state.hand:
 
