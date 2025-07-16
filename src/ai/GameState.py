@@ -38,9 +38,11 @@ class GameState:
             #northen realms is going to be a simple weather check
             if self.ai_player_state.faction == "northern realms":
                 if self.active_weather_effect:
-                    legal_moves.append("USE LEADER")
+                    legal_moves.append("USE_LEADER")
 
-            elif self.ai_player_state.faction == ""
+            elif self.ai_player_state.faction == "nilfgaardian":
+                if self.opponent_state.hand:
+                    legal_moves.append("USE_LEADER")
 
 
         # running through the cards through the hand
