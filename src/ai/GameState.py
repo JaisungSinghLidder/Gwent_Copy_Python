@@ -57,6 +57,18 @@ class GameState:
                     if thereSpy:
                         legal_moves.append("USE_LEADER")
 
+            elif self.ai_player_state.faction == "scoia'tael":
+                # because it's always going to be with a deck
+                # we can just append this rule
+
+                legal_moves.append("USE_LEADER")
+
+            elif self.ai_player_state.faction == "skillege":
+
+                if self.ai_player_state.graveyard:
+                    legal_moves.append("USE_LEADER")
+
+
 
 
         # running through the cards through the hand
