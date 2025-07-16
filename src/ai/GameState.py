@@ -171,6 +171,8 @@ class GameState:
 
                 #may need to add some other stuff
                 PlayerLogic.play_card(new_state.ai_player_state, move.card_name)
+                #updating the player's board
+                GameLogic.maintain_effect_logic(new_state.ai_player_state, move)
 
             elif move.ability == "weather":
 
@@ -178,7 +180,7 @@ class GameState:
 
             elif move.ability == "buff":
 
-                #checking whether it is a scorch or a horn
+                #checking whether it is a scorch or a horn case
 
                 #horn
                 if row:
@@ -195,10 +197,11 @@ class GameState:
 
         return new_state
 
-
+    #this will use the end game checker to checker whether the game is ended, should be pretty similar
     def is_terminal(self) -> bool:
         pass
 
+    #complicated structure here that will have to reward certain actions for the ai to deem better actions versus worse actions
     def get_reward(self):
         pass
 
