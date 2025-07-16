@@ -44,6 +44,20 @@ class GameState:
                 if self.opponent_state.hand:
                     legal_moves.append("USE_LEADER")
 
+            #doubling the spy card by two
+            elif self.ai_player_state.faction == "monsters":
+                #check whether there is a spy to double on the board
+                thereSpy = False
+
+                for row in ["melee", "range", "siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        if card.ability == "spy":
+                            thereSpy = True
+
+                    if thereSpy:
+                        legal_moves.append("USE_LEADER")
+
+
 
         # running through the cards through the hand
         for card in self.ai_player_state.hand:
