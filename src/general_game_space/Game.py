@@ -239,7 +239,7 @@ class Game:
 
 
 
-    #don't need to maintain effect, will snapshot after this take place
+    #ignore previous, will need this class over on game logic so I can update child classes
     def maintain_effect(self, player: Player, card: Card) -> None:
 
         #both case

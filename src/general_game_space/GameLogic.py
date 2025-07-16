@@ -526,6 +526,7 @@ class GameLogic:
 
     #coverting this into a lite method for the ai, just to handle the
 
+    @staticmethod
     def check_weather_effect_MCTS(game_state : GameState, weather_effect: str) -> str:
 
         if weather_effect in game_state.active_weather_effect:
@@ -607,3 +608,37 @@ class GameLogic:
 
 
 
+    @staticmethod
+    def maintain_effect_logic(player: Union[Player, PlayerState], card: Card) -> None:
+
+        #both case
+        if card.row == "melee" and player.melee_row_weather_effect and player.melee_row_horn_effect:
+            card.current_strength = 2
+        elif card.row == "range" and player.range_row_weather_effect and player.range_row_horn_effect:
+            card.current_strength = 2
+        elif card.row == "siege" and player.siege_row_weather_effect and player.siege_row_horn_effect:
+            card.current_strength = 2
+        else:
+            #weather case
+            if card.row == "melee" and player.melee_row_weather_effect:
+                card.current_strength = 1
+            elif card.row == "range" and player.range_row_weather_effect:
+                card.current_strength = 1
+            elif card.row == "siege" and player.siege_row_weather_effect:
+                card.current_strength = 1
+
+            #horn case
+            if card.row == "melee" and player.melee_row_horn_effect:
+                card.current_strength = card.base_strength * 2
+            elif card.row == "range" and player.range_row_horn_effect:
+                card.current_strength = card.base_strength * 2
+            elif card.row == "siege" and player.siege_row_horn_effect:
+                card.current_strength = card.base_strength * 2
+
+
+        #morale booster case
+        #going to not break from the for loop since morale boost can be stacked on top of the row over and over again
+
+        for other_card in player.board[card.row]:
+            if other_card.ability.lower().strip() == "morale boost":
+                card.current_strength += 1
