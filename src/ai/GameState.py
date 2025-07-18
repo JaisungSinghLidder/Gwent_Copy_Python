@@ -251,13 +251,146 @@ class GameState:
             else:
                 reward -= 0.8
 
-
+            #dealing with players' lives
             if self.ai_player_state.lives > self.opponent_state.lives:
                 reward += 0.6
             else:
-                reward += 0.6
+                reward -= 0.6
 
-            
+            #case where it all horns are affected
+            if self.ai_player_state.siege_row_horn_effect and self.ai_player_state.range_row_horn_effect and self.ai_player_state.melee_row_horn_effect:
+                #creating a counter for cards
+                cardCounter = 0
+
+                for row in ["melee", "range", "siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+            #case where it siege and range
+            elif self.ai_player_state.siege_row_horn_effect and self.ai_player_state.range_row_horn_effect:
+                #creating a counter for cards
+                cardCounter = 0
+
+                for row in ["range", "siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+                cardCounter = 0
+
+                for row in ["melee"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward -= 0.2 * cardCounter
+
+
+            #case where it is siege and melee
+            elif self.ai_player_state.siege_row_horn_effect and self.ai_player_state.melee_row_horn_effect:
+                #creating a counter for cards
+                cardCounter = 0
+
+                #rewarding it for cards in these row
+                for row in ["melee", "siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+                cardCounter = 0
+
+                for row in ["range"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward -= 0.2 * cardCounter
+
+            #case with range and melee
+            elif self.ai_player_state.siege_row_horn_effect and self.ai_player_state.range_row_horn_effect and self.ai_player_state.melee_row_horn_effect:
+                #creating a counter for cards
+                cardCounter = 0
+
+                for row in ["melee", "range"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+                cardCounter = 0
+
+                for row in ["siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward -= 0.2 * cardCounter
+
+            #case with siege
+            elif self.ai_player_state.siege_row_horn_effect:
+                #creating a counter for cards
+                cardCounter = 0
+
+                for row in ["siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+                cardCounter = 0
+
+                for row in ["melee", "range"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward -= 0.2 * cardCounter
+
+            # case with range
+            elif self.ai_player_state.range_row_horn_effect:
+                # creating a counter for cards
+                cardCounter = 0
+
+                for row in ["range"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+                cardCounter = 0
+
+                for row in ["melee", "siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward -= 0.2 * cardCounter
+
+            # case with melee
+            elif self.ai_player_state.range_row_horn_effect:
+                # creating a counter for cards
+                cardCounter = 0
+
+                for row in ["melee"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward += 0.2 * cardCounter
+
+                cardCounter = 0
+
+                for row in ["range", "siege"]:
+                    for card in self.ai_player_state.board[row]:
+                        cardCounter += 1
+
+                reward -= 0.2 * cardCounter
+
+
+
+
+
+
+
+
 
 
 
