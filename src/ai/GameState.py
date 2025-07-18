@@ -213,6 +213,55 @@ class GameState:
 
     #complicated structure here that will have to reward certain actions for the ai to deem better actions versus worse actions
     #the get reward will read itself.
-    def get_reward(self):
-        pass
+    def get_reward(self, is_terminal_result: bool) -> float:
+
+        #just setting the reward here just in case
+        reward = 0
+
+
+        #this reward structure has two cases
+
+        #the first case is simply checking if it can win, if it terminal, it will take the win, or the draw, and if worst-case, it will take the worst
+
+        #checking whether it is a terminal victory:
+        if is_terminal_result:
+            result = GameLogic.end_game_checker(self)
+
+
+            #ai is player two
+            if result == "player two wins":
+                reward += 2.0
+            elif result == "player one wins":
+                reward -= 2.0
+            else:
+                #just showcasing that a draw will neither harm nor show gain to a player
+                reward += 0
+
+        #now showing the
+        else:
+            #getting how many cards' are in the ai's hand
+            ai_hand = len(self.ai_player_state.hand)
+
+            #giving a reward on how many cards it has it own hand
+            reward += 0.1 * ai_hand
+
+            #dealing with if the power is better or not
+            if self.ai_player_state.sum > self.opponent_state.sum:
+                reward += 0.8
+            else:
+                reward -= 0.8
+
+
+            if self.ai_player_state.lives > self.opponent_state.lives:
+                reward += 0.6
+            else:
+                reward += 0.6
+
+            
+
+
+
+
+
+
 
