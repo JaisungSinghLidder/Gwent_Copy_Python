@@ -198,8 +198,20 @@ class GameState:
         return new_state
 
     #this will use the end game checker to checker whether the game is ended, should be pretty similar
+    #just caring whether the game has ended or not.
+
     def is_terminal(self) -> bool:
-        pass
+        result = GameLogic.end_game_checker(self)
+
+        #simply check to see which result it finalize
+        
+        if result == "draw" or result == "player one wins" or result == "player two wins":
+            return True
+        else:
+            return False
+
+
+
 
     #complicated structure here that will have to reward certain actions for the ai to deem better actions versus worse actions
     def get_reward(self):
