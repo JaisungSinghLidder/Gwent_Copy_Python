@@ -200,7 +200,7 @@ class GameState:
     #this will use the end game checker to checker whether the game is ended, should be pretty similar
     #just caring whether the game has ended or not.
 
-    def is_terminal_game(self) -> bool:
+    def is_terminal(self) -> bool:
         result = GameLogic.end_game_checker(self)
 
         #simply check to see which result it finalize
@@ -209,11 +209,6 @@ class GameState:
             return True
         else:
             return False
-
-
-    def is_terminal_round(self) -> bool:
-        pass
-
 
 
     #complicated structure here that will have to reward certain actions for the ai to deem better actions versus worse actions
