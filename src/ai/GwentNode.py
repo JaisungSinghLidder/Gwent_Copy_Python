@@ -1,5 +1,7 @@
+from typing import Union, List
 from src.ai.PlayerState import PlayerState
 from src.ai.GameState import GameState
+from src.cards.Card import Card
 from src.ai.Node import Node
 
 
@@ -15,7 +17,9 @@ class GwentNode(Node):
         self.total_reward = 0.0
 
     #so this is to find the next legal moves in the position
-    def find_children(self):
+    #use the return of the list that the game state creates
+
+    def find_children(self, legal_moves: List[Union[Card, str]]):
         pass
 
     #to randomly pick a legal move child
