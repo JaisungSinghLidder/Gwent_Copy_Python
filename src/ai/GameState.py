@@ -513,6 +513,15 @@ class GameState:
 
                 reward += 0.2 * cardCounter
 
+    #creating a hash function
+    def __hash__(self):
+        return hash((
+            self.ai_player_state,
+            self.opponent_state,
+            self.round_counter,
+            frozenset(self.active_weather_effect)
+        ))
+
 
 
 

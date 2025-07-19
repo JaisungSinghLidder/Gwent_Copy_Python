@@ -82,3 +82,6 @@ class GwentNode(Node):
         return self.game_state == other.game_state
 
 
+    def
+
+
