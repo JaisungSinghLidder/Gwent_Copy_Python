@@ -19,8 +19,50 @@ class GwentNode(Node):
     #so this is to find the next legal moves in the position
     #use the return of the list that the game state creates
 
-    def find_children(self, legal_moves: List[Union[Card, str]]):
-        pass
+    def find_children(self):
+
+
+        #getting a list of all the legal moves that can happen within the game
+        legal_moves = self.game_state.get_legal_moves()
+
+        #going through and picking up a move in legal moves
+        for move in legal_moves:
+            #checking whether the class is a tuple, because it will then have that row variable beside it
+
+            if isinstance(move, tuple):
+
+                #extracting the move/card
+                play_move = move[0]
+
+                #extracting the row
+                play_row = move[1]
+
+                #creating a new state
+                new_state = self.game_state.apply_move(play_move, play_row)
+                #now creating a child node
+                #where this node is now it's parent
+                child_node = GwentNode(new_state, parent = self)
+                #now appending the child node
+                self.children.append(child_node)
+
+            #regular case
+            else:
+
+                new_state = self.game_state.apply_move(move)
+                # now creating a child node
+                # where this node is now it's parent
+                child_node = GwentNode(new_state, parent=self)
+                # now appending the child node
+                self.children.append(child_node)
+
+
+
+
+
+
+
+
+
 
     #to randomly pick a legal move child
     def find_random_child(self):
