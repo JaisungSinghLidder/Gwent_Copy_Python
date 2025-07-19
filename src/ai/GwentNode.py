@@ -19,7 +19,7 @@ class GwentNode(Node):
     #so this is to find the next legal moves in the position
     #use the return of the list that the game state creates
 
-    def find_children(self):
+    def find_children(self) -> None:
 
 
         #getting a list of all the legal moves that can happen within the game
@@ -69,13 +69,16 @@ class GwentNode(Node):
         pass
 
     #deciding whether it is terminal
-    def is_terminal(self):
+    def is_terminal(self) -> bool:
         return self.game_state.is_terminal()
 
-    def reward(self):
+    def reward(self) -> float:
         return self.game_state.reward()
 
-    def __eq__(self, other):
-        pass
+    def __eq__(self, other: GameState) -> bool:
+        if not isinstance(other, GwentNode):
+            return False
+
+        return self.game_state == other.game_state
 
 
