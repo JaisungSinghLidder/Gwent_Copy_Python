@@ -17,12 +17,18 @@ class MCTS:
 
     #searches through to find the best possible for the tree
     def search(self, root: GwentNode, num_simulations: int) -> GwentNode:
-        pass
+        current = self
+
 
     #we are going to navigate the tree using the UCT formula to find a promising node to expand
     #it will go along until it finds a leaf
     def selection(self, node: GwentNode) -> GwentNode:
-        pass
+        
+        current = node
+        while current.is_expanded:
+            current = current.best_child()
+
+        return current
 
     #add more child nodes to the tree from the selected node
     def expansion(self, node: GwentNode) -> GwentNode:
