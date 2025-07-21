@@ -92,11 +92,18 @@ class GwentNode(Node):
     def __hash__(self):
         hash(self.game_state)
 
+    #exploitation
     def Q(self) -> float:
         return self.total_reward / (1 + self.visits)
 
+    #exploration
     def U(self) -> float:
-        pass
+
+
+        #using an exploration constant here, which is 1.41
+
+        c = 1.41
+        return c * (math.sqrt(self.parent.visits) / (1 + self.visits))
 
     # this just selects the most promising move (aka the best child GwentNode)
 
