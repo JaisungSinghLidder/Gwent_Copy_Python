@@ -99,7 +99,7 @@ class Game:
     #DID TRANSFER :
     def faction_ability(self, round_winner: str) -> None:
 
-        GameLogic.faction_ability(self, round_winner)
+        GameLogic.faction_ability_logic(self, round_winner)
 
 
 
