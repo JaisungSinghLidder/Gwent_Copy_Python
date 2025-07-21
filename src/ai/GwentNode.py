@@ -103,10 +103,11 @@ class GwentNode(Node):
         #using an exploration constant here, which is 1.41
 
         c = 1.41
+
         return c * (math.sqrt(self.parent.visits) / (1 + self.visits))
 
     # this just selects the most promising move (aka the best child GwentNode)
 
-    def best_child(self, node: "GwentNode") -> "GwentNode":
-        pass
+    def best_child(self) -> "GwentNode":
+        return max(self.children, key=lambda node: node.Q() + node.U())
 
