@@ -3,6 +3,10 @@ from src.ai.PlayerState import PlayerState
 from src.ai.GameState import GameState
 from src.cards.Card import Card
 from src.ai.Node import Node
+#debugging it by adding imports
+import numpy as np
+import math
+
 
 
 # we are inheriting from the abstract node class
@@ -15,7 +19,6 @@ class GwentNode(Node):
         self.children = []
         self.visits = 0
         self.total_reward = 0.0
-        self.number_visits = 0
         #checking here if it's node has been expanded
         self.is_expanded = False
 
@@ -88,15 +91,14 @@ class GwentNode(Node):
     def __hash__(self):
         hash(self.game_state)
 
-    # this just selects the most promising move (aka the best child GwentNode)
-
-    def best_child(self, node: "GwentNode") -> "GwentNode":
-        pass
-
     def Q(self) -> float:
-        pass
+        return self.total_reward / (1 + self.visits)
 
     def U(self) -> float:
         pass
 
+    # this just selects the most promising move (aka the best child GwentNode)
+
+    def best_child(self, node: "GwentNode") -> "GwentNode":
+        pass
 
