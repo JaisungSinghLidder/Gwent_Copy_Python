@@ -9,20 +9,24 @@ class MCTS:
         pass
 
 
-    def search(self):
+    def search(self, root: GwentNode, num_simulations: int) -> GwentNode:
         pass
 
-    def select(self):
+    def selection(self, node: GwentNode) -> GwentNode:
         pass
 
-    def expand(self):
+    def expansion(self, node: GwentNode) -> GwentNode:
         pass
 
-    def simulate(self):
+    def best_uct(self, node: GwentNode) -> GwentNode:
         pass
 
-    def backpropagation(self):
+    def rollout(self, node: GwentNode) -> float:
         pass
 
-    def best_child(self):
+
+    def backpropagation(self, node:GwentNode, reward: float) -> None:
+        pass
+
+    def best_child(self, node: GwentNode) -> GwentNode:
         pass
