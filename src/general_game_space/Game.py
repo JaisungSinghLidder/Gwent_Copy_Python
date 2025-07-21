@@ -240,6 +240,7 @@ class Game:
 
 
     #ignore previous, will need this class over on game logic so I can update child classes
+    #transferred
     def maintain_effect(self, player: Player, card: Card) -> None:
 
         #both case
