@@ -15,6 +15,9 @@ class GwentNode(Node):
         self.children = []
         self.visits = 0
         self.total_reward = 0.0
+        self.number_visits = 0
+        #checking here if it's node has been expanded
+        self.is_expanded = False
 
     #so this is to find the next legal moves in the position
     #use the return of the list that the game state creates
@@ -84,5 +87,16 @@ class GwentNode(Node):
 
     def __hash__(self):
         hash(self.game_state)
+
+    # this just selects the most promising move (aka the best child GwentNode)
+
+    def best_child(self, node: "GwentNode") -> "GwentNode":
+        pass
+
+    def Q(self) -> float:
+        pass
+
+    def U(self) -> float:
+        pass
 
 

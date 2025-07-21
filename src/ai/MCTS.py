@@ -40,7 +40,4 @@ class MCTS:
     def backpropagation(self, node:GwentNode, reward: float) -> None:
         pass
 
-    #this just selects the most promising move (aka the best child GwentNode)
 
-    def best_child(self, node: GwentNode) -> GwentNode:
-        pass
