@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 from src.ai.PlayerState import PlayerState
 from src.ai.GameState import GameState
 from src.cards.Card import Card
@@ -9,10 +9,11 @@ import math
 
 
 
+
 # we are inheriting from the abstract node class
 class GwentNode(Node):
 
-    def __init__(self, game_state, parent = None):
+    def __init__(self, game_state: GameState, parent: Optional["GwentNode", None] = None):
         self.game_state = game_state
         self.parent = parent
         #allowing duplicates in this scenario
