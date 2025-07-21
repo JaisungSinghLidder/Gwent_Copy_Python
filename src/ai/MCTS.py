@@ -1,4 +1,6 @@
 from src.ai.GwentNode import GwentNode
+import math
+import random
 
 
 
@@ -39,6 +41,6 @@ class MCTS:
         pass
 
     #this just selects the most promising move (aka the best child GwentNode)
-    
+
     def best_child(self, node: GwentNode) -> GwentNode:
         pass
