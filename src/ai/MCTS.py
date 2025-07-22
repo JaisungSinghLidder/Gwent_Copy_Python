@@ -23,7 +23,7 @@ class MCTS:
     #we are going to navigate the tree using the UCT formula to find a promising node to expand
     #it will go along until it finds a leaf
     def selection(self, node: GwentNode) -> GwentNode:
-        
+
         current = node
         while current.is_expanded:
             current = current.best_child()
@@ -32,7 +32,18 @@ class MCTS:
 
     #add more child nodes to the tree from the selected node
     def expansion(self, node: GwentNode) -> GwentNode:
-        pass
+
+        #when there is terminal, then just return the node
+        if node.is_terminal():
+            return node
+
+
+        node.children = node.find_children()
+
+        node.is_expanded = True
+
+        return random.choice(node.children)
+
 
     #UCT OR "UPPER CONFIDENCE BOUND APPLIED TO TREES" is an essential formula we will be using
     def best_uct(self, node: GwentNode) -> GwentNode:
