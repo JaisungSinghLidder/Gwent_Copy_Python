@@ -19,3 +19,5 @@ https://arielrubinstein.org/gt/arielDocs/
 https://www.youtube.com/watch?v=UXW2yZndl7U 
 
 https://arxiv.org/abs/1712.01815
+
+https://www.chessprogramming.org/UCT
