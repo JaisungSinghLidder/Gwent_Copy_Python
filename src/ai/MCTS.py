@@ -16,6 +16,7 @@ class MCTS:
         pass
 
     #searches through to find the best possible for the tree
+    #the main driver function where it will contain every other functions
     def search(self, root: GwentNode, num_simulations: int) -> GwentNode:
         current = self
 
@@ -46,7 +47,26 @@ class MCTS:
 
     #UCT OR "UPPER CONFIDENCE BOUND APPLIED TO TREES" is an essential formula we will be using
     def best_uct(self, node: GwentNode) -> GwentNode:
-        pass
+
+        best_score = float('-inf')
+
+        best_child = None
+
+        for child in node.children:
+            if child.visits == 0:
+                #if we haven't visited the child, then it is going to be an infinity amount
+                uct_score  = float('inf')
+            else:
+                #creating the uct score calculation
+                uct_score = child.Q() + child.U()
+
+
+            if uct_score > best_score:
+                best_score = uct_score
+                best_child = child
+
+        return best_child
+
 
     #the rollout is going to be a simulation of a game state and will give us a reward based on that random game state
     def rollout(self, node: GwentNode) -> float:
