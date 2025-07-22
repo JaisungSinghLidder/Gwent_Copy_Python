@@ -37,8 +37,7 @@ class MCTS:
         if node.is_terminal():
             return node
 
-
-        node.children = node.find_children()
+        node.find_children()
 
         node.is_expanded = True
 
