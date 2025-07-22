@@ -101,7 +101,7 @@ class GwentNode(Node):
 
 
         #using an exploration constant here, which is 1.41
-
+        #1.41 which is ~sqrt(2), which is ported over from the UCB1 formula
         c = 1.41
 
         return c * (math.sqrt(self.parent.visits) / (1 + self.visits))
