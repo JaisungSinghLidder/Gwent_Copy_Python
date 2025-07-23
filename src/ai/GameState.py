@@ -166,26 +166,43 @@ class GameState:
     #so this will take only one legal move so that it can build the tree piece by piece through it children
 
     #might need to change this to be more flexible
-    def apply_move(self, move: Union[Card, str], row: Optional[str]) -> "GameState":
+    def apply_move(self, move: Union[Card, str], row: Optional[str], player : PlayerState) -> "GameState":
+
         new_state = deepcopy(self)
 
         if isinstance(move, str):
             if move == "PASS":
-                new_state.ai_player_state.passed = True
+
+                if player == self.ai_player_state:
+                    new_state.ai_player_state.passed = True
+                else:
+                    new_state.opponent_state.passed = True
 
             #need to play leader
             elif move == "USE_LEADER":
-                new_state.ai_player_state.leader_used = True
+                if player == self.ai_player_state:
+                    new_state.ai_player_state.passed = True
+                else:
+                    new_state.opponent_state.passed = True
 
         if isinstance(move, Card):
             #need to use the player logic
             #the basic unit
             if move.ability == "unit":
 
-                #may need to add some other stuff
-                PlayerLogic.play_card(new_state.ai_player_state, move.card_name)
-                #updating the player's board
-                GameLogic.maintain_effect_logic(new_state.ai_player_state, move)
+
+                if player == self.ai_player_state:
+
+                    PlayerLogic.play_card(new_state.ai_player_state, move.card_name)
+
+                    GameLogic.maintain_effect_logic(new_state.ai_player_state, move)
+
+                else:
+                    PlayerLogic.play_card(new_state.opponent_state, move.card_name)
+
+                    GameLogic.maintain_effect_logic(new_state.opponent_state, move)
+
+
 
             elif move.ability == "weather":
 
@@ -196,16 +213,22 @@ class GameState:
                 #checking whether it is a scorch or a horn case
 
                 #horn
-                if row:
-                    GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move, row)
-                #scorch
+
+                if player == self.ai_player_state:
+
+                    if row:
+                        GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move, row)
+                    # scorch
+                    else:
+                        GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move)
+
                 else:
-                    GameLogic.check_buff_logic(new_state, new_state.ai_player_state, move)
 
-
-
-
-
+                    if row:
+                        GameLogic.check_buff_logic(new_state, new_state.opponent_state, move, row)
+                    # scorch
+                    else:
+                        GameLogic.check_buff_logic(new_state, new_state.opponent_state, move)
 
 
         return new_state
