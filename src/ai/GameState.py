@@ -9,6 +9,9 @@ from src.general_game_space.PlayerLogic import PlayerLogic
 from src.cards.Card import Card
 from copy import deepcopy
 
+
+import random
+
 #a dataclass that should provide a snapshot view of the general game information
 #this will allow the MCTS to evaluate these conditions
 
@@ -160,7 +163,9 @@ class GameState:
 
 
     #lots of integration with the apply moves
-    #so this will take only one legal move so that it can build the tree piece by piece through it childern
+    #so this will take only one legal move so that it can build the tree piece by piece through it children
+
+    #might need to change this to be more flexible
     def apply_move(self, move: Union[Card, str], row: Optional[str]) -> "GameState":
         new_state = deepcopy(self)
 
@@ -536,8 +541,11 @@ class GameState:
     #just choosing random moves for simplicity
     #could later make a rule based one or even a min MCTS for the main MCTS to play against
 
-    def get_random_move(self):
-        pass
+    def get_random_move(self, legal_moves: List[Union[Card, str]] ) -> Union[Card, str]:
+
+        random_move = random.choice(legal_moves)
+
+        return random_move
 
 
 
