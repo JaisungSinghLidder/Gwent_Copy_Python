@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from src.ai.GwentNode import GwentNode
 from src.ai.GameState import GameState
 import math
@@ -71,7 +73,65 @@ class MCTS:
 
     #the rollout is going to be a simulation of a game state and will give us a reward based on that random game state
     def rollout(self, node: GwentNode) -> float:
-        pass
+        sim_state = deepcopy(node.game_state)
+
+
+        ai_moves = []
+
+        player_moves = []
+
+
+        while not sim_state.is_terminal():
+            # now we need to check the passed turn and which one goes first
+
+
+
+            if not sim_state.ai_player_state.passed:
+
+                ai_moves = sim_state.get_legal_moves(sim_state.ai_player_state)
+
+                ai_move = sim_state.get_random_move(ai_moves)
+
+                if isinstance(ai_move, tuple):
+
+                    sim_state.apply_move(ai_move[0], ai_move[1], sim_state.ai_player_state)
+
+
+
+                else:
+
+                    sim_state.apply_move(ai_move, sim_state.ai_player_state)
+
+
+
+
+            else:
+
+                player_moves = sim_state.get_legal_moves(sim_state.ai_player_state)
+
+                player_move = sim_state.get_random_move(player_moves)
+
+                if isinstance(player_move, tuple):
+
+                    sim_state.apply_move(player_move[0], player_move[1], sim_state.opponent_state)
+
+
+
+                else:
+
+                    sim_state.apply_move(player_move, sim_state.opponent_state)
+
+
+
+
+
+
+
+
+
+
+
+
 
     #this is going to propagate the result of the rollout all the way up the tree so that it can update the counts and reward
     def backpropagation(self, node:GwentNode, reward: float) -> None:
