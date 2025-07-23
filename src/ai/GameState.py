@@ -523,6 +523,15 @@ class GameState:
         ))
 
 
+    #creating a get random function so that during rollout it can play moves that the MCTS can compare against
+    #because we need to further the game on human side during the simulation
+    #just choosing random moves for simplicity
+    #could later make a rule based one or even a min MCTS for the main MCTS to play against
+
+    def get_random_move(self):
+        pass 
+
+
 
 
 
