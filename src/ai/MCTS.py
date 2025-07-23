@@ -1,4 +1,5 @@
 from src.ai.GwentNode import GwentNode
+from src.ai.GameState import GameState
 import math
 import random
 
