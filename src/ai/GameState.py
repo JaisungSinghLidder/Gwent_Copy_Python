@@ -266,9 +266,9 @@ class GameState:
 
             #ai is player two
             if result == "player two wins":
-                reward += 6.0
+                reward += 8.0
             elif result == "player one wins":
-                reward -= 6.0
+                reward -= 8.0
             else:
                 #just showcasing that a draw will neither harm nor show gain to a player
                 reward += 0
