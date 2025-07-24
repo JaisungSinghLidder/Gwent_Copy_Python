@@ -73,6 +73,7 @@ class MCTS:
 
     #the rollout is going to be a simulation of a game state and will give us a reward based on that random game state
     def rollout(self, node: GwentNode) -> float:
+
         sim_state = deepcopy(node.game_state)
 
 
@@ -107,11 +108,15 @@ class MCTS:
 
             else:
 
-                player_moves = sim_state.get_legal_moves(sim_state.ai_player_state)
+
+                player_moves = sim_state.get_legal_moves(sim_state.opponent_state)
 
                 player_move = sim_state.get_random_move(player_moves)
 
+
+
                 if isinstance(player_move, tuple):
+
 
                     sim_state.apply_move(player_move[0], player_move[1], sim_state.opponent_state)
 
