@@ -75,71 +75,61 @@ class MCTS:
     #might be bad implementation, current rollout is O(n^3), which is terrible
 
     def rollout(self, node: GwentNode) -> float:
+
+
         sim_state = deepcopy(node.game_state)
 
+        state_reward = 0
 
-        first_player = None
+        terminal_state = False
 
-        second_player = None
+
+        current_player = sim_state.ai_player_state
+
+        other_player = sim_state.opponent_state
 
         while not sim_state.is_terminal():
 
+            if not current_player.passed:
 
-            if sim_state.ai_player_state.passed:
+                legal_moves = sim_state.get_legal_moves(current_player)
 
+                if legal_moves:
 
-                first_player = sim_state.opponent_state
-                second_player = sim_state.ai_player_state
+                    move = sim_state.get_random_move(legal_moves)
 
-            else:
+                    if isinstance(move, tuple):
 
-                first_player = sim_state.ai_player_state
-                second_player = sim_state.opponent_state
+                        sim_state = sim_state.apply_move(move[0], move[1], current_player)
 
+                        terminal_state = sim_state.is_terminal()
 
-            #first player block
+                        state_reward += sim_state.get_reward(terminal_state)
 
-            while not first_player.passed:
+                    else:
 
+                        sim_state = sim_state.apply_move(move, None,  current_player)
 
-                legal_moves_first_player = sim_state.get_legal_moves(first_player)
+                        terminal_state = sim_state.is_terminal()
 
-                if not legal_moves_first_player:
-                    sim_state = sim_state.apply_move("Pass", None, first_player)
-
-                first_player_move = sim_state.get_random_move(legal_moves_first_player)
-
-                if isinstance(first_player_move, tuple):
-
-                    sim_state = sim_state.apply_move(first_player_move[0], first_player_move[1], first_player)
-
+                        state_reward += sim_state.get_reward(terminal_state)
                 else:
 
-                    sim_state = sim_state.apply_move(first_player_move, None, first_player)
+                    sim_state = sim_state.apply_move("PASS", None, current_player)
+
+                    terminal_state = sim_state.is_terminal()
+
+                    state_reward += sim_state.get_reward(terminal_state)
 
 
-            #second player block
+            current_player, other_player = other_player, current_player
 
-            while not second_player.passed:
+        terminal_state = sim_state.is_terminal()
 
-                legal_moves_second_player = sim_state.get_legal_moves(second_player)
+        state_reward += sim_state.get_reward(terminal_state)
 
-                second_player_move = sim_state.get_random_move(legal_moves_second_player)
+        return state_reward
 
-                if isinstance(second_player_move, tuple):
-
-                    sim_state = sim_state.apply_move(second_player_move[0], second_player_move[1], second_player)
-
-                else:
-
-                    sim_state = sim_state.apply_move(second_player_move, None, second_player)
-
-
-
-
-
-
-        return sim_state.get_result()
 
 
 
