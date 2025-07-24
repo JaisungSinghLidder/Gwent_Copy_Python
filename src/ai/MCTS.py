@@ -134,7 +134,14 @@ class MCTS:
 
 
     #this is going to propagate the result of the rollout all the way up the tree so that it can update the counts and reward
-    def backpropagation(self, node:GwentNode, reward: float) -> None:
-        pass
+    def backpropagate(self, node: GwentNode, reward: float):
+        current = node
+        flip = 1
+        while current is not None:
+            current.visits += 1
+            current.total_value += flip * reward
+            flip *= -1
+            current = current.parent
+
 
 
