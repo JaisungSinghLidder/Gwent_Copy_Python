@@ -72,6 +72,8 @@ class MCTS:
 
 
     #the rollout is going to be a simulation of a game state and will give us a reward based on that random game state
+    #might be bad implementation, current rollout is O(n^3), which is terrible
+
     def rollout(self, node: GwentNode) -> float:
         sim_state = deepcopy(node.game_state)
 
@@ -97,32 +99,40 @@ class MCTS:
 
             #first player block
 
-            legal_moves_first_player = sim_state.get_legal_moves(first_player)
+            while not first_player.passed:
 
-            first_player_move = sim_state.get_random_move(legal_moves_first_player)
 
-            if isinstance(first_player_move, tuple):
+                legal_moves_first_player = sim_state.get_legal_moves(first_player)
 
-                sim_state = sim_state.apply_move(first_player_move[0], first_player_move[1], first_player)
+                if not legal_moves_first_player:
+                    sim_state = sim_state.apply_move("Pass", None, first_player)
 
-            else:
+                first_player_move = sim_state.get_random_move(legal_moves_first_player)
 
-                sim_state = sim_state.apply_move(first_player_move, first_player)
+                if isinstance(first_player_move, tuple):
+
+                    sim_state = sim_state.apply_move(first_player_move[0], first_player_move[1], first_player)
+
+                else:
+
+                    sim_state = sim_state.apply_move(first_player_move, None, first_player)
 
 
             #second player block
 
-            legal_moves_second_player = sim_state.get_legal_moves(second_player)
+            while not second_player.passed:
 
-            second_player_move = sim_state.get_random_move(legal_moves_second_player)
+                legal_moves_second_player = sim_state.get_legal_moves(second_player)
 
-            if isinstance(second_player_move, tuple):
+                second_player_move = sim_state.get_random_move(legal_moves_second_player)
 
-                sim_state = sim_state.apply_move(second_player_move[0], second_player_move[2], second_player)
+                if isinstance(second_player_move, tuple):
 
-            else:
+                    sim_state = sim_state.apply_move(second_player_move[0], second_player_move[1], second_player)
 
-                sim_state = sim_state.apply_move(second_player_move, second_player)
+                else:
+
+                    sim_state = sim_state.apply_move(second_player_move, None, second_player)
 
 
 
