@@ -73,68 +73,33 @@ class MCTS:
 
     #the rollout is going to be a simulation of a game state and will give us a reward based on that random game state
     def rollout(self, node: GwentNode) -> float:
-
         sim_state = deepcopy(node.game_state)
 
-
-        ai_moves = []
-
-        player_moves = []
-
-
         while not sim_state.is_terminal():
-            # now we need to check the passed turn and which one goes first
-
-
 
             if not sim_state.ai_player_state.passed:
 
-                ai_moves = sim_state.get_legal_moves(sim_state.ai_player_state)
+                legal_moves = sim_state.get_legal_moves(sim_state.ai_player_state)
+                move = sim_state.get_random_move(legal_moves)
 
-                ai_move = sim_state.get_random_move(ai_moves)
+                if isinstance(move, tuple):
+                    sim_state = sim_state.apply_move(move[0], move[1], sim_state.ai_player_state)
+                else:
+                    sim_state = sim_state.apply_move(move, None, sim_state.ai_player_state)
 
-                if isinstance(ai_move, tuple):
+            if not sim_state.opponent_state.passed:
 
-                    sim_state.apply_move(ai_move[0], ai_move[1], sim_state.ai_player_state)
+                legal_moves = sim_state.get_legal_moves(sim_state.opponent_state)
+                move = sim_state.get_random_move(legal_moves)
 
+                if isinstance(move, tuple):
 
+                    sim_state = sim_state.apply_move(move[0], move[1], sim_state.opponent_state)
 
                 else:
+                    sim_state = sim_state.apply_move(move, None, sim_state.opponent_state)
 
-                    sim_state.apply_move(ai_move, sim_state.ai_player_state)
-
-
-
-
-            else:
-
-
-                player_moves = sim_state.get_legal_moves(sim_state.opponent_state)
-
-                player_move = sim_state.get_random_move(player_moves)
-
-
-
-                if isinstance(player_move, tuple):
-
-
-                    sim_state.apply_move(player_move[0], player_move[1], sim_state.opponent_state)
-
-
-
-                else:
-
-                    sim_state.apply_move(player_move, sim_state.opponent_state)
-
-
-
-
-
-
-
-
-
-
+        return sim_state.get_result()
 
 
 
