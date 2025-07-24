@@ -166,7 +166,7 @@ class GameState:
     #so this will take only one legal move so that it can build the tree piece by piece through it children
 
     #might need to change this to be more flexible
-    def apply_move(self, move: Union[Card, str], row: Optional[str], player : PlayerState) -> "GameState":
+    def apply_move(self, move: Union[Card, str], row: Optional[str], player: PlayerState) -> "GameState":
 
         new_state = deepcopy(self)
 
@@ -266,9 +266,9 @@ class GameState:
 
             #ai is player two
             if result == "player two wins":
-                reward += 2.0
+                reward += 6.0
             elif result == "player one wins":
-                reward -= 2.0
+                reward -= 6.0
             else:
                 #just showcasing that a draw will neither harm nor show gain to a player
                 reward += 0
@@ -569,6 +569,8 @@ class GameState:
         random_move = random.choice(legal_moves)
 
         return random_move
+
+
 
 
 
