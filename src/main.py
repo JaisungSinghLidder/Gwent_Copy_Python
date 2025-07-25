@@ -59,7 +59,8 @@ def main():
     #creating the players now
 
     player_one = Player(player_one_deck, player_one_leader_card, "northern realms", False, "Dave")
-    player_two = Player(player_two_deck, player_two_leader_card, "nilfgaardian", False, "Steve")
+    #now creating an AI player for the second person
+    player_two = Player(player_two_deck, player_two_leader_card, "nilfgaardian", True, "Steve The Robot")
 
     #now creating the game state
 
@@ -110,51 +111,63 @@ def main():
             if second_turn.passed:
                 print(f"{second_turn.player_name} has passed their turn")
 
+
+
             if not first_turn.passed:
-                #we are now going to reset the card choice here to be careful
-                first_turn_card_choice = None
 
-                game_state.display_player_hand(first_turn)
+                #human logic
+                if not first_turn.ai:
 
-                #checking whether the playing wants to pass their turn
+                    #we are now going to reset the card choice here to be careful
+                    first_turn_card_choice = None
 
-                if first_turn.hand == 0:
-                    first_turn.passed = True
-                    print("You have no cards, automatically passing your turn")
-                else:
-                    first_turn.passing_turn()
+                    game_state.display_player_hand(first_turn)
 
+                    #checking whether the playing wants to pass their turn
 
-                #now checking whether a user wants to use their leader
-                #this is happening in the game class because this ability affects the whole board
-
-                if not first_turn.passed:
-                    leader_choice = input("Do you want to use your leader card?")
-
-                    if leader_choice.lower().strip() == "yes":
-                        game_state.use_leader_ability(first_turn)
-
-
-                    #going to ask the user to play their card
-                    if len(first_turn.hand) != 0:
-                        first_turn_card_choice = input("\n Please pick a card in your hand to play")
-
-                        #now we are going to play card
-                        played_card_first_turn = first_turn.play_card(first_turn_card_choice)
-
-                        #deciding which effect to use
-                        if played_card_first_turn.card_type == "unit":
-                            game_state.use_card_ability(first_turn,played_card_first_turn)
-                            #the effects should only have to be maintained by unit cards
-                            game_state.maintain_effect(first_turn, played_card_first_turn)
-                        elif played_card_first_turn.card_type == "weather":
-                            game_state.check_weather_effect(played_card_first_turn.ability)
-                        elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
-                            game_state.check_buff(first_turn, played_card_first_turn)
-                        elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
-                            chosen_row = game_state.check_buff(first_turn, played_card_first_turn)
+                    if first_turn.hand == 0:
+                        first_turn.passed = True
+                        print("You have no cards, automatically passing your turn")
                     else:
-                        print("You have no cards in your deck")
+                        first_turn.passing_turn()
+
+
+                    #now checking whether a user wants to use their leader
+                    #this is happening in the game class because this ability affects the whole board
+
+                    if not first_turn.passed:
+                        leader_choice = input("Do you want to use your leader card?")
+
+                        if leader_choice.lower().strip() == "yes":
+                            game_state.use_leader_ability(first_turn)
+
+
+                        #going to ask the user to play their card
+                        if len(first_turn.hand) != 0:
+                            first_turn_card_choice = input("\n Please pick a card in your hand to play")
+
+                            #now we are going to play card
+                            played_card_first_turn = first_turn.play_card(first_turn_card_choice)
+
+                            #deciding which effect to use
+                            if played_card_first_turn.card_type == "unit":
+                                game_state.use_card_ability(first_turn,played_card_first_turn)
+                                #the effects should only have to be maintained by unit cards
+                                game_state.maintain_effect(first_turn, played_card_first_turn)
+                            elif played_card_first_turn.card_type == "weather":
+                                game_state.check_weather_effect(played_card_first_turn.ability)
+                            elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
+                                game_state.check_buff(first_turn, played_card_first_turn)
+                            elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
+                                chosen_row = game_state.check_buff(first_turn, played_card_first_turn)
+                        else:
+                            print("You have no cards in your deck")
+
+                #AI logic
+                else:
+
+                    pass
+
 
 
 
@@ -168,46 +181,51 @@ def main():
 
         if not second_turn.passed:
 
-            second_turn_card_choice = None
+            #human logic
+            if not second_turn.ai:
+                second_turn_card_choice = None
 
-            game_state.display_player_hand(second_turn)
+                game_state.display_player_hand(second_turn)
 
-            if second_turn.hand == 0:
-                second_turn.passed = True
-                print("You have no cards, automatically passing your turn")
-            else:
-                second_turn.passing_turn()
-
-
-            if not second_turn.passed:
-                # now checking whether a user wants to use their leader
-                # this is happening in the game class because this ability affects the whole board
-
-                leader_choice = input("Do you want to use your leader card?")
-
-                if leader_choice.lower().strip() == "yes":
-                    game_state.use_leader_ability(second_turn)
-
-                # going to ask the user to play their card
-                if len(second_turn.hand) != 0:
-                    second_turn_card_choice = input("\n Please pick a card in your hand to play")
-
-                    # now we are going to play card
-                    played_card_second_turn = second_turn.play_card(second_turn_card_choice)
-
-                    # deciding which effect to use
-                    if played_card_second_turn.card_type == "unit":
-                        game_state.use_card_ability(second_turn, played_card_second_turn)
-                        # the effects should only have to be maintained by unit cards
-                        game_state.maintain_effect(second_turn, played_card_second_turn)
-                    elif played_card_second_turn.card_type == "weather":
-                        game_state.check_weather_effect(played_card_second_turn.ability)
-                    elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
-                        game_state.check_buff(second_turn, played_card_second_turn)
-                    elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
-                        chosen_row = game_state.check_buff(second_turn, played_card_second_turn)
+                if second_turn.hand == 0:
+                    second_turn.passed = True
+                    print("You have no cards, automatically passing your turn")
                 else:
-                    print("You have no cards in your deck")
+                    second_turn.passing_turn()
+
+
+                if not second_turn.passed:
+                    # now checking whether a user wants to use their leader
+                    # this is happening in the game class because this ability affects the whole board
+
+                    leader_choice = input("Do you want to use your leader card?")
+
+                    if leader_choice.lower().strip() == "yes":
+                        game_state.use_leader_ability(second_turn)
+
+                    # going to ask the user to play their card
+                    if len(second_turn.hand) != 0:
+                        second_turn_card_choice = input("\n Please pick a card in your hand to play")
+
+                        # now we are going to play card
+                        played_card_second_turn = second_turn.play_card(second_turn_card_choice)
+
+                        # deciding which effect to use
+                        if played_card_second_turn.card_type == "unit":
+                            game_state.use_card_ability(second_turn, played_card_second_turn)
+                            # the effects should only have to be maintained by unit cards
+                            game_state.maintain_effect(second_turn, played_card_second_turn)
+                        elif played_card_second_turn.card_type == "weather":
+                            game_state.check_weather_effect(played_card_second_turn.ability)
+                        elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
+                            game_state.check_buff(second_turn, played_card_second_turn)
+                        elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
+                            chosen_row = game_state.check_buff(second_turn, played_card_second_turn)
+                    else:
+                        print("You have no cards in your deck")
+            #AI logic
+            else:
+                pass
 
         print()
         game_state.display_board()
