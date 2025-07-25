@@ -1,7 +1,9 @@
 from copy import deepcopy
+from typing import Union, Tuple
 
 from src.ai.GwentNode import GwentNode
 from src.ai.GameState import GameState
+from src.cards.Card import Card
 import math
 import random
 
@@ -15,16 +17,14 @@ class MCTS:
     #we will search through the tree, create a process of backpropagation along the tree to eventually find the best node in the tree
     #I highly recommended using this links I had put in the ReadMe file to understand how a MCTS works
 
-    def __init__(self):
-        pass
 
     #searches through to find the best possible for the tree
     #the main driver function where it will contain every other functions
     def search(self, root: GwentNode, num_simulations: int) -> GwentNode:
         for _ in range(num_simulations):
-            node = self.select(root)
-            if not node.is_fully_expanded():
-                node = self.expand(node)
+            node = self.selection(root)
+            if not node.is_expanded:
+                node = self.expansion(node)
             reward = self.rollout(node)
             self.backpropagate(node, reward)
 
@@ -142,7 +142,7 @@ class MCTS:
 
 
     #this is going to propagate the result of the rollout all the way up the tree so that it can update the counts and reward
-    def backpropagate(self, node: GwentNode, reward: float):
+    def backpropagate(self, node: GwentNode, reward: float) -> None:
         current = node
         flip = 1
         while current is not None:
@@ -153,3 +153,6 @@ class MCTS:
 
 
 
+
+    def get_move_from_node(self, node: GwentNode) -> Union[str, Card, Tuple[str, Card]]:
+        return node.move
