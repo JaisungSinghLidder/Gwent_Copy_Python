@@ -282,9 +282,50 @@ def main():
                             chosen_row = game_state.check_buff(second_turn, played_card_second_turn)
                     else:
                         print("You have no cards in your deck")
-            #AI logic
+
+            # AI logic
             else:
-                pass
+
+                # MCTS LOGIC
+
+                ai_game_snapshot = GameStateExtractor.extract_game(game_state)
+
+                root_node = GwentNode(ai_game_snapshot)
+
+                mcts = MCTS()
+
+                best_node = mcts.search(root_node, 150)
+
+                move = mcts.get_move_from_node(best_node)
+
+                # now applying the move that the MCTS found depending on the search
+
+                if isinstance(move, str):
+
+                    if move == "USE_LEADER":
+                        game_state.use_leader_ability(second_turn)
+
+                    elif move == "PASS":
+                        second_turn.passing_turn()
+
+
+                elif isinstance(move, Card):
+
+                    if move.card_type == "unit":
+                        game_state.use_card_ability(second_turn, move)
+                        game_state.maintain_effect(second_turn, move)
+                    elif move.card_type == "weather":
+                        game_state.check_weather_effect(move.ability)
+                    elif move.card_type == "buff" and move.ability == "scorch":
+                        game_state.check_buff(first_turn, move)
+
+                elif isinstance(move, tuple) and isinstance(move[0], Card):
+
+                    horn_card = move[0]
+
+                    horn_row = move[1]
+
+                    game_state.check_buff(second_turn, horn_card, horn_row)
 
         print()
         game_state.display_board()
