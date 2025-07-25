@@ -1,4 +1,4 @@
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Tuple
 from src.ai.PlayerState import PlayerState
 from src.ai.GameState import GameState
 from src.cards.Card import Card
@@ -13,7 +13,7 @@ import math
 # we are inheriting from the abstract node class
 class GwentNode(Node):
 
-    def __init__(self, game_state: GameState, parent: Optional["GwentNode", None] = None):
+    def __init__(self, game_state: GameState, move: Optional[Union[str, Card, Tuple[Card, str]], None], parent: Optional["GwentNode", None] = None):
         self.game_state = game_state
         self.parent = parent
         #allowing duplicates in this scenario
@@ -22,6 +22,7 @@ class GwentNode(Node):
         self.total_reward = 0.0
         #checking here if it's node has been expanded
         self.is_expanded = False
+        self.move = move
 
     #so this is to find the next legal moves in the position
     #use the return of the list that the game state creates
@@ -48,7 +49,7 @@ class GwentNode(Node):
                 new_state = self.game_state.apply_move(play_move, play_row)
                 #now creating a child node
                 #where this node is now it's parent
-                child_node = GwentNode(new_state, parent = self)
+                child_node = GwentNode(new_state, move, parent = self)
                 #now appending the child node
                 self.children.append(child_node)
 
@@ -58,7 +59,7 @@ class GwentNode(Node):
                 new_state = self.game_state.apply_move(move)
                 # now creating a child node
                 # where this node is now it's parent
-                child_node = GwentNode(new_state, parent=self)
+                child_node = GwentNode(new_state, move, parent=self)
                 # now appending the child node
                 self.children.append(child_node)
 

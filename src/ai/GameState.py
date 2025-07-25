@@ -2,7 +2,7 @@ from operator import contains
 
 from src.ai.PlayerState import PlayerState
 from dataclasses import dataclass, field
-from typing import Set, List, Union, Optional
+from typing import Set, List, Union, Optional, Tuple
 
 from src.general_game_space.GameLogic import GameLogic
 from src.general_game_space.PlayerLogic import PlayerLogic
@@ -27,7 +27,7 @@ class GameState:
     #isn't filled with wrong moves
     #IMPLEMENTATION_NOTE: this method need to be pretty comprehensive and prevent any illegal moves
     #this will also filter out bad moves that serve no purpose
-    def get_legal_moves(self, player: PlayerState) -> List[Union[Card, str]]:
+    def get_legal_moves(self, player: PlayerState) -> List[Union[str, Card, Tuple[Card, str]]]:
 
         opponent = None
 
