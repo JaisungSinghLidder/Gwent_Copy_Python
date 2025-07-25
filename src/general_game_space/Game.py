@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from src.ai.GameState import GameState
 from src.general_game_space import Player
@@ -276,7 +276,7 @@ class Game:
                 card.current_strength += 1
 
     #TRANSFERRED
-    def check_buff(self, player: Player, og_card: Card) -> None:
+    def check_buff(self, player: Player, og_card: Card, row: Union[str, None] = None) -> None:
 
         opponent = None
 
@@ -374,31 +374,59 @@ class Game:
 
         elif og_card.ability.lower().strip() == "horn":
 
-            while True:
-                chosen_row = input("What row do you want to double?")
-                if chosen_row == "melee":
+            if not player.ai_player:
+                while True:
+                    chosen_row = input("What row do you want to double?")
+                    if chosen_row == "melee":
+
+                        for card in player.board["melee"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.melee_row_horn_effect = True
+
+                    elif chosen_row == "range":
+
+                        for card in player.board["range"]:
+                            card.current_strength = card.base_strength * 2
+
+                        player.range_row_horn_effect = True
+
+                    elif chosen_row == "siege":
+                        for card in player.board["siege"]:
+
+                            card.current_strength = card.base_strength * 2
+
+                        player.siege_row_horn_effect = True
+
+
+
+                    print("Please type in either melee, range, or siege please")
+
+            else:
+
+                if row is None:
+                    print("AN ERROR HAS OCCURRED")
+
+                if row == "melee":
 
                     for card in player.board["melee"]:
                         card.current_strength = card.base_strength * 2
 
                     player.melee_row_horn_effect = True
 
-                elif chosen_row == "range":
+                elif row == "range":
 
                     for card in player.board["range"]:
                         card.current_strength = card.base_strength * 2
 
                     player.range_row_horn_effect = True
 
-                elif chosen_row == "siege":
+                elif row == "siege":
                     for card in player.board["siege"]:
-
                         card.current_strength = card.base_strength * 2
 
                     player.siege_row_horn_effect = True
 
-
-                print("Please type in either melee, range, or siege please")
 
 
     #DON'T COPIED
