@@ -1,7 +1,8 @@
-from Card_Space.Deck import Deck
-from General_Game_Space.Player import Player
-from Card_Space.CardLoader import CardLoader
-from General_Game_Space.Game import Game
+from src.cards.Deck import Deck
+from src.general_game_space.Player import Player
+from src.cards.CardLoader import CardLoader
+from src.general_game_space.Game import Game
+
 
 #this main function will run the game and it's loop
 def main():

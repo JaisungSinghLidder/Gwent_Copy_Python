@@ -21,7 +21,15 @@ class MCTS:
     #searches through to find the best possible for the tree
     #the main driver function where it will contain every other functions
     def search(self, root: GwentNode, num_simulations: int) -> GwentNode:
-        current = self
+        for _ in range(num_simulations):
+            node = self.select(root)
+            if not node.is_fully_expanded():
+                node = self.expand(node)
+            reward = self.rollout(node)
+            self.backpropagate(node, reward)
+
+        best_child = max(root.children, key=lambda c: c.visits)
+        return best_child
 
 
     #we are going to navigate the tree using the UCT formula to find a promising node to expand
@@ -139,7 +147,7 @@ class MCTS:
         flip = 1
         while current is not None:
             current.visits += 1
-            current.total_value += flip * reward
+            current.total_reward += flip * reward
             flip *= -1
             current = current.parent
 
