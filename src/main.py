@@ -5,6 +5,7 @@ from src.general_game_space.Game import Game
 from src.general_game_space.GameStateExtractor import GameStateExtractor
 from src.ai.GwentNode import GwentNode
 from src.ai.MCTS import MCTS
+from src.cards.Card import Card
 
 
 #this main function will run the game and it's loop
@@ -193,15 +194,26 @@ def main():
                             first_turn.passing_turn()
 
 
-                    if played_card_first_turn.card_type == "unit":
-                        game_state.use_card_ability(first_turn, move)
-                        game_state.maintain_effect(first_turn, move)
-                    elif played_card_first_turn.card_type == "weather":
-                        game_state.check_weather_effect(move.ability)
-                    elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "scorch":
-                        game_state.check_buff(first_turn, move)
-                    elif played_card_first_turn.card_type == "buff" and played_card_first_turn.ability == "horn":
-                        game_state.check_buff(first_turn, move[0], move[1])
+                    elif isinstance(move, Card):
+
+                        if move.card_type == "unit":
+                            game_state.use_card_ability(first_turn, move)
+                            game_state.maintain_effect(first_turn, move)
+                        elif move.card_type == "weather":
+                            game_state.check_weather_effect(move.ability)
+                        elif move.card_type == "buff" and move.ability == "scorch":
+                            game_state.check_buff(first_turn, move)
+
+                    elif isinstance(move, tuple) and isinstance(move[0], Card):
+
+                        horn_card = move[0]
+
+                        horn_row = move[1]
+
+                        game_state.check_buff(first_turn, horn_card, horn_row)
+
+
+
 
 
 
