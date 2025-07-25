@@ -13,7 +13,7 @@ import math
 # we are inheriting from the abstract node class
 class GwentNode(Node):
 
-    def __init__(self, game_state: GameState, move: Optional[Union[str, Card, Tuple[Card, str]], None], parent: Optional["GwentNode", None] = None):
+    def __init__(self, game_state: GameState, move: Optional[Union[str, Card, Tuple[Card, str]], None] = None, parent: Optional["GwentNode", None] = None):
         self.game_state = game_state
         self.parent = parent
         #allowing duplicates in this scenario

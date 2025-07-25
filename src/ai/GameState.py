@@ -181,9 +181,9 @@ class GameState:
             #need to play leader
             elif move == "USE_LEADER":
                 if player == self.ai_player_state:
-                    new_state.ai_player_state.passed = True
+                    GameLogic.use_leader_ability_logic(self, self.ai_player_state)
                 else:
-                    new_state.opponent_state.passed = True
+                    GameLogic.use_leader_ability_logic(self,self.opponent_state)
 
         if isinstance(move, Card):
             #need to use the player logic
