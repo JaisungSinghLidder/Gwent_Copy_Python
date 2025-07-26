@@ -1,5 +1,5 @@
 from src.ai.PlayerState import PlayerState
-from src.general_game_space import Game, Player
+from src.general_game_space import Player
 from src.cards.Card import Card
 from typing import Union, Optional
 from random import random
@@ -13,7 +13,9 @@ class GameLogic:
 
     #ai needs to be able to determine the round winner
     @staticmethod
-    def determine_round_winner(game_or_gamestate: Union[Game, "GameState"]) -> str:
+    def determine_round_winner(game_or_gamestate: Union["Game", "GameState"]) -> str:
+
+        from src.general_game_space.Game import Game
 
         def determining_winner_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
             if player_one.sum > player_two.sum:
@@ -42,7 +44,9 @@ class GameLogic:
     #ai should be able to understand how the ai is able to use a card ability
 
     @staticmethod
-    def use_card_ability(game_or_game_state: Union[Game, "GameState"], player: Union[Player,  PlayerState], og_card) -> None:
+    def use_card_ability(game_or_game_state: Union["Game", "GameState"], player: Union[Player,  PlayerState], og_card) -> None:
+
+        from src.general_game_space.Game import Game
 
         #use the player ability input:
         def use_card_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> None:
@@ -137,7 +141,8 @@ class GameLogic:
 
     #ai should know how to end the game and how to check that case, also to use nilfgaardian case to it advantage
     @staticmethod
-    def end_game_checker(game_or_game_state: Union[Game, "GameState"]) -> str:
+    def end_game_checker(game_or_game_state: Union["Game", "GameState"]) -> str:
+        from src.general_game_space.Game import Game
 
         def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
 
@@ -188,8 +193,10 @@ class GameLogic:
     #ai needs to be able to use its' own leader ability
     @staticmethod
     def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
+        from src.general_game_space.Game import Game
 
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
+
 
             #Opponent = None
             opponent = None
@@ -293,7 +300,9 @@ class GameLogic:
     #need to change for AI version
     #need to change the player union
     @staticmethod
-    def check_buff_logic(game_or_game_state: Union[Game, "GameState"], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
+    def check_buff_logic(game_or_game_state: Union["Game", "GameState"], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
+        from src.general_game_space.Game import Game
+
         #use the leader ability logic player input
         def check_buff_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
@@ -450,7 +459,8 @@ class GameLogic:
 
     #the ai should know this as well
     @staticmethod
-    def faction_ability_logic(game_or_game_state: Union[Game, "GameState"], round_winner: str ) -> None:
+    def faction_ability_logic(game_or_game_state: Union["Game", "GameState"], round_winner: str ) -> None:
+        from src.general_game_space.Game import Game
 
         def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
