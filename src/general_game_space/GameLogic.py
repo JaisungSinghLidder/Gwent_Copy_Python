@@ -16,6 +16,7 @@ class GameLogic:
     def determine_round_winner(game_or_gamestate: Union["Game", "GameState"]) -> str:
 
         from src.general_game_space.Game import Game
+        from src.ai.GameState import GameState
 
         def determining_winner_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
             if player_one.sum > player_two.sum:
@@ -33,7 +34,7 @@ class GameLogic:
 
         if isinstance(game_or_gamestate, Game):
             determining_winner_player_input(game_or_gamestate.player_one, game_or_gamestate.player_two)
-        elif isinstance(game_or_gamestate, "GameState"):
+        elif isinstance(game_or_gamestate, GameState):
             determining_winner_player_input(game_or_gamestate.ai_player_state, game_or_gamestate.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
@@ -47,6 +48,7 @@ class GameLogic:
     def use_card_ability(game_or_game_state: Union["Game", "GameState"], player: Union[Player,  PlayerState], og_card) -> None:
 
         from src.general_game_space.Game import Game
+        from src.ai.GameState import GameState
 
         #use the player ability input:
         def use_card_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> None:
@@ -134,7 +136,7 @@ class GameLogic:
 
             if isinstance(game_or_game_state, Game):
                 use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, "GameState"):
+            elif isinstance(game_or_game_state, GameState):
                 use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
@@ -143,6 +145,7 @@ class GameLogic:
     @staticmethod
     def end_game_checker(game_or_game_state: Union["Game", "GameState"]) -> str:
         from src.general_game_space.Game import Game
+        from src.ai.GameState import GameState
 
         def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
 
@@ -171,7 +174,7 @@ class GameLogic:
         if isinstance(game_or_game_state, Game):
             end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
 
-        elif isinstance(game_or_game_state, "GameState"):
+        elif isinstance(game_or_game_state, GameState):
             end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
 
         else:
@@ -194,6 +197,7 @@ class GameLogic:
     @staticmethod
     def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
         from src.general_game_space.Game import Game
+        from src.ai.GameState import GameState
 
         def use_leader_ability_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> str:
 
@@ -291,7 +295,7 @@ class GameLogic:
 
         if isinstance(game_or_game_state, Game):
             use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-        elif isinstance(game_or_game_state, "GameState"):
+        elif isinstance(game_or_game_state, GameState):
             use_leader_ability_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
@@ -302,6 +306,7 @@ class GameLogic:
     @staticmethod
     def check_buff_logic(game_or_game_state: Union["Game", "GameState"], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
         from src.general_game_space.Game import Game
+        from src.ai.GameState import GameState
 
         #use the leader ability logic player input
         def check_buff_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
@@ -451,7 +456,7 @@ class GameLogic:
 
             if isinstance(game_or_game_state, Game):
                 check_buff_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, "GameState"):
+            elif isinstance(game_or_game_state, GameState):
                 check_buff_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
@@ -461,6 +466,7 @@ class GameLogic:
     @staticmethod
     def faction_ability_logic(game_or_game_state: Union["Game", "GameState"], round_winner: str ) -> None:
         from src.general_game_space.Game import Game
+        from src.ai.GameState import GameState
 
         def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
@@ -527,7 +533,7 @@ class GameLogic:
 
         if isinstance(game_or_game_state, Game):
             faction_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-        elif isinstance(game_or_game_state, "GameState"):
+        elif isinstance(game_or_game_state, GameState):
             faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
