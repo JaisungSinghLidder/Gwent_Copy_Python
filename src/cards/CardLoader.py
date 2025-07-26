@@ -41,7 +41,7 @@ class CardLoader:
         faction = faction.lower().strip()
 
         c.execute("""
-            SELECT card_name, faction, row, base_strength, current_strength, card_type, ability
+            SELECT card_name, faction, row, base_strength, current_strength, card_type, ability, is_affected_by_weather, is_affected_by_horn
             FROM cards
             WHERE LOWER(faction) = ? OR LOWER(faction) = 'neutral'
         """, (faction,))
@@ -55,13 +55,15 @@ class CardLoader:
         selected_rows = random.sample(rows, deck_size)
 
         cards = [Card(
-            card_name = row[0],
-            faction = row[1],
-            row = row[2],
-            base_strength = row[3],
-            current_strength = row[4],
-            card_type = row[5],
-            ability = row[6]
+            card_name=row[0],
+            faction=row[1],
+            row=row[2],
+            base_strength=row[3],
+            current_strength=row[4],
+            card_type=row[5],
+            ability=row[6],
+            is_affected_by_weather=bool(row[7]),
+            is_affected_by_horn=bool(row[8])
         ) for row in selected_rows]
 
         return cards

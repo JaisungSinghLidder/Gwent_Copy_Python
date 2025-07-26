@@ -1,17 +1,15 @@
 import sqlite3
 import json
 
-#using this file to get previous json file into the database
-
-#just connecting to the previous database
+# Connect to the existing database
 conn = sqlite3.connect('cards.db')
 c = conn.cursor()
 
-#loading cards from JSON file
-with open (r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\cards.json", 'r') as file:
+# Load cards from JSON file
+with open(r"C:\Users\jaisu\PycharmProjects\GwentClone\Card_Space\cards.json", 'r') as file:
     cards = json.load(file)
 
-# Inserting each card into the database
+# Insert each card into the database
 for card in cards:
     c.execute("""
         INSERT INTO cards (
@@ -21,8 +19,10 @@ for card in cards:
             base_strength,
             current_strength,
             card_type,
-            ability
-        ) VALUES (?,?,?,?,?,?,?)
+            ability,
+            is_affected_by_weather,
+            is_affected_by_horn
+        ) VALUES (?,?,?,?,?,?,?,?,?)
     """, (
         card['card_name'],
         card['faction'],
@@ -30,10 +30,11 @@ for card in cards:
         card['base_strength'],
         card['current_strength'],
         card['card_type'],
-        card['ability']
+        card['ability'],
+        False,  # Default value for is_affected_by_weather
+        False   # Default value for is_affected_by_horn
     ))
 
-#now closing it
-
+# Commit and close
 conn.commit()
 conn.close()

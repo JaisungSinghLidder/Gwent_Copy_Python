@@ -18,7 +18,7 @@ def main():
     chosen_row_first_turn = None
     chosen_row_second_turn = None
     #intializing the decks for the player
-    #their faction is already intialized when the deck is created
+    #their faction is already initialized when the deck is created
     player_one_deck = Deck("northern realms")
     player_one_deck.load_card_from_db(r"C:\Users\jaisu\PycharmProjects\GwentClone\DB\cards.db")
     player_two_deck = Deck("nilfgaardian")

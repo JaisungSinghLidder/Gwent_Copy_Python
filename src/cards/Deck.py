@@ -1,6 +1,6 @@
 from typing import List
 
-from Card import Card
+from src.cards.Card import Card
 import json
 import random
 
