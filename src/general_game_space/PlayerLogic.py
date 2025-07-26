@@ -1,4 +1,4 @@
-from src.general_game_space import Game, Player
+from src.general_game_space import Player
 from src.ai.PlayerState import PlayerState
 from src.cards.Card import Card
 from typing import Union, Optional
