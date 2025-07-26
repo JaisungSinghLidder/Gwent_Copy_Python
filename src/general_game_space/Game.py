@@ -48,7 +48,7 @@ class Game:
     def determine_turn_order(self)-> None:
 
         p1_scoia = self.player_one.faction.lower().strip() == "scoia'tael"
-        p2_scoia = self.player_two.factoin.lower().strip() == "scoia'tael"
+        p2_scoia = self.player_two.faction.lower().strip() == "scoia'tael"
 
 
         def coin_flip():
