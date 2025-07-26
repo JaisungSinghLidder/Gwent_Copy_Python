@@ -31,7 +31,7 @@ class GwentNode(Node):
 
 
         #getting a list of all the legal moves that can happen within the game
-        legal_moves = self.game_state.get_legal_moves()
+        legal_moves = self.game_state.get_legal_moves(self.game_state.ai_player_state)
 
         #going through and picking up a move in legal moves
         for move in legal_moves:
