@@ -46,7 +46,7 @@ class GwentNode(Node):
                 play_row = move[1]
 
                 #creating a new state
-                new_state = self.game_state.apply_move(play_move, play_row)
+                new_state = self.game_state.apply_move(play_move, play_row, self.game_state.ai_player_state)
                 #now creating a child node
                 #where this node is now it's parent
                 child_node = GwentNode(new_state, move, parent = self)
@@ -56,7 +56,7 @@ class GwentNode(Node):
             #regular case
             else:
 
-                new_state = self.game_state.apply_move(move)
+                new_state = self.game_state.apply_move(move, None, self.game_state.ai_player_state)
                 # now creating a child node
                 # where this node is now it's parent
                 child_node = GwentNode(new_state, move, parent=self)
