@@ -1,4 +1,4 @@
-from src.general_game_space.Player import Player
+
 from src.ai.PlayerState import PlayerState
 from src.cards.Card import Card
 from typing import Union, Optional
@@ -8,8 +8,8 @@ from typing import Union, Optional
 class PlayerLogic:
 
     @staticmethod
-    def play_card(player_or_player_state: Union[Player, PlayerState], card_name: str) -> Card | None | str:
-
+    def play_card(player_or_player_state: Union["Player", PlayerState], card_name: str) -> Card | None | str:
+        from src.general_game_space.Player import Player
 
         #change logic to separate AI and human player code
 
@@ -58,9 +58,10 @@ class PlayerLogic:
             raise ValueError("Need to enter either a player or player state values")
 
     @staticmethod
-    def passing_turn(player_or_player_state: Union[Player, PlayerState], passChoice: Optional[str]) -> None:
+    def passing_turn(player_or_player_state: Union["Player", PlayerState], passChoice: Optional[str]) -> None:
+        from src.general_game_space.Player import Player
 
-        if isinstance(player_or_player_state,  Player):
+        if isinstance(player_or_player_state, Player):
 
             while True:
                 choice = input("Do you want to pass this round: yes or no?").lower()
