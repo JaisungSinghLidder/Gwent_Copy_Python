@@ -1,4 +1,3 @@
-from src.ai.GameState import GameState
 from src.ai.PlayerState import PlayerState
 from src.general_game_space import Game, Player
 from src.cards.Card import Card
@@ -14,7 +13,7 @@ class GameLogic:
 
     #ai needs to be able to determine the round winner
     @staticmethod
-    def determine_round_winner(game_or_gamestate: Union[Game, GameState]) -> str:
+    def determine_round_winner(game_or_gamestate: Union[Game, "GameState"]) -> str:
 
         def determining_winner_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
             if player_one.sum > player_two.sum:
@@ -32,7 +31,7 @@ class GameLogic:
 
         if isinstance(game_or_gamestate, Game):
             determining_winner_player_input(game_or_gamestate.player_one, game_or_gamestate.player_two)
-        elif isinstance(game_or_gamestate, GameState):
+        elif isinstance(game_or_gamestate, "GameState"):
             determining_winner_player_input(game_or_gamestate.ai_player_state, game_or_gamestate.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
@@ -43,7 +42,7 @@ class GameLogic:
     #ai should be able to understand how the ai is able to use a card ability
 
     @staticmethod
-    def use_card_ability(game_or_game_state: Union[Game, GameState], player: Union[Player,  PlayerState], og_card) -> None:
+    def use_card_ability(game_or_game_state: Union[Game, "GameState"], player: Union[Player,  PlayerState], og_card) -> None:
 
         #use the player ability input:
         def use_card_ability_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> None:
@@ -131,14 +130,14 @@ class GameLogic:
 
             if isinstance(game_or_game_state, Game):
                 use_card_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, GameState):
+            elif isinstance(game_or_game_state, "GameState"):
                 use_card_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
 
     #ai should know how to end the game and how to check that case, also to use nilfgaardian case to it advantage
     @staticmethod
-    def end_game_checker(game_or_game_state: Union[Game, GameState]) -> str:
+    def end_game_checker(game_or_game_state: Union[Game, "GameState"]) -> str:
 
         def end_game_checker_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player,PlayerState]) -> str:
 
@@ -167,7 +166,7 @@ class GameLogic:
         if isinstance(game_or_game_state, Game):
             end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
 
-        elif isinstance(game_or_game_state, GameState):
+        elif isinstance(game_or_game_state, "GameState"):
             end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
 
         else:
@@ -285,7 +284,7 @@ class GameLogic:
 
         if isinstance(game_or_game_state, Game):
             use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-        elif isinstance(game_or_game_state, GameState):
+        elif isinstance(game_or_game_state, "GameState"):
             use_leader_ability_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
@@ -294,7 +293,7 @@ class GameLogic:
     #need to change for AI version
     #need to change the player union
     @staticmethod
-    def check_buff_logic(game_or_game_state: Union[Game, GameState], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
+    def check_buff_logic(game_or_game_state: Union[Game, "GameState"], player: Union[Player, PlayerState], og_card: Card, selected_row: Optional[str] = None) -> None:
         #use the leader ability logic player input
         def check_buff_logic_player_input(player_one: Union[Player, PlayerState], player_two: Union[Player, PlayerState]) -> None:
 
@@ -443,7 +442,7 @@ class GameLogic:
 
             if isinstance(game_or_game_state, Game):
                 check_buff_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-            elif isinstance(game_or_game_state, GameState):
+            elif isinstance(game_or_game_state, "GameState"):
                 check_buff_logic_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
             else:
                 raise ValueError("Must input either a Game or GameState class")
@@ -451,7 +450,7 @@ class GameLogic:
 
     #the ai should know this as well
     @staticmethod
-    def faction_ability_logic(game_or_game_state: Union[Game, GameState], round_winner: str ) -> None:
+    def faction_ability_logic(game_or_game_state: Union[Game, "GameState"], round_winner: str ) -> None:
 
         def monster_keep_card(player, board) -> None:
             valid_rows = [row for row in board if board[row]]
@@ -518,7 +517,7 @@ class GameLogic:
 
         if isinstance(game_or_game_state, Game):
             faction_ability_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
-        elif isinstance(game_or_game_state, GameState):
+        elif isinstance(game_or_game_state, "GameState"):
             faction_ability_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
@@ -527,7 +526,7 @@ class GameLogic:
     #coverting this into a lite method for the ai, just to handle the
 
     @staticmethod
-    def check_weather_effect_MCTS(game_state : GameState, weather_effect: str) -> str:
+    def check_weather_effect_MCTS(game_state : "GameState", weather_effect: str) -> str:
 
         if weather_effect in game_state.active_weather_effect:
             return "already happened"
