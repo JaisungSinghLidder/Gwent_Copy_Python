@@ -120,7 +120,7 @@ def main():
             if not first_turn.passed:
 
                 #human logic
-                if not first_turn.ai:
+                if not first_turn.ai_player:
 
                     #we are now going to reset the card choice here to be careful
                     first_turn_card_choice = None
@@ -241,7 +241,7 @@ def main():
         if not second_turn.passed:
 
             #human logic
-            if not second_turn.ai:
+            if not second_turn.ai_player:
                 second_turn_card_choice = None
 
                 game_state.display_player_hand(second_turn)
