@@ -2,7 +2,7 @@ from src.ai.PlayerState import PlayerState
 from src.general_game_space import Player
 from src.cards.Card import Card
 from typing import Union, Optional
-from random import random
+import random
 
 
 #creating this class so that we can have pure functions here that don't rely on printing information so that both the AI class and this regular game class can use it
