@@ -133,7 +133,8 @@ def main():
                         first_turn.passed = True
                         print("You have no cards, automatically passing your turn")
                     else:
-                        first_turn.passing_turn()
+                        pass_choice = input("Do you want to pass your turn")
+                        first_turn.passing_turn(pass_choice)
 
 
                     #now checking whether a user wants to use their leader
@@ -250,7 +251,8 @@ def main():
                     second_turn.passed = True
                     print("You have no cards, automatically passing your turn")
                 else:
-                    second_turn.passing_turn()
+                    pass_choice = input("Do you want to pass your turn")
+                    first_turn.passing_turn(pass_choice)
 
 
                 if not second_turn.passed:

@@ -77,9 +77,9 @@ class Player:
                 print(f"{card.card_name} | {card.strength} | {card.ability}")
 
     #maybe
-    def passing_turn(self) -> None:
+    def passing_turn(self, passChoice: str) -> None:
 
-        PlayerLogic.passing_turn(self)
+        PlayerLogic.passing_turn(self, passChoice)
 
 
     #no need
