@@ -220,7 +220,7 @@ class GameLogic:
                 if player.leader_card.leader_ability.lower().strip() == "clear" and player.leader_card.faction.lower().strip() == "northern realms":
 
                     #setting the active weather effects
-                    if game_or_game_state.active_weather_effects:
+                    if game_or_game_state.active_weather_effect:
                         game_or_game_state.active_weather_effect.clear()
                         # doing it twice so we don't clear it twice
                         for row in ["melee", "range", "siege"]:
@@ -252,7 +252,7 @@ class GameLogic:
                     else:
                         cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
                         for card in cards_to_show:
-                            player.opponent_hand(card)
+                            player.opponent_hand.append(card)
 
                     player.leader_used = True
 
