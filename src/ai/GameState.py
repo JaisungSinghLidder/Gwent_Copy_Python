@@ -549,6 +549,9 @@ class GameState:
 
                 reward += 0.2 * cardCounter
 
+
+        return reward 
+
     #creating a hash function
     def __hash__(self):
         return hash((
