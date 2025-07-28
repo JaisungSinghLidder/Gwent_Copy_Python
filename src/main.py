@@ -154,6 +154,10 @@ def main():
                             #now we are going to play card
                             played_card_first_turn = first_turn.play_card(first_turn_card_choice)
 
+                            if played_card_first_turn is None:
+                                print("Invalid card selection. Please try again.")
+                                continue
+
                             #deciding which effect to use
                             if played_card_first_turn.card_type == "unit":
                                 game_state.use_card_ability(first_turn,played_card_first_turn)
