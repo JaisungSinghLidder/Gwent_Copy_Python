@@ -48,7 +48,7 @@ class Player:
     #need to port this over player logic
     def play_card(self, card_name: str) -> Card | None:
 
-        PlayerLogic.play_card(self, card_name)
+        return PlayerLogic.play_card(self, card_name)
 
     #no need
     def lose_life(self) -> None:
