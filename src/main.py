@@ -149,14 +149,34 @@ def main():
 
                         #going to ask the user to play their card
                         if len(first_turn.hand) != 0:
+                            print("\nYour current hand:")
+                            for idx, card in enumerate(first_turn.hand, 1):
+                                print(
+                                    f"{idx}. {card.card_name} - Type: {card.card_type}, Row: {card.row}, Ability: {card.ability}")
+
                             first_turn_card_choice = input("\n Please pick a card in your hand to play")
 
                             #now we are going to play card
                             played_card_first_turn = first_turn.play_card(first_turn_card_choice)
 
+                            #debugging part
+
+                            print("CARD TYPE OF THE PLAYED CARD")
+                            print(played_card_first_turn.card_type)
+                            print("CARD NAME OF THE PLAYED CARD")
+                            print(played_card_first_turn.card_name)
+
+                            if first_turn.hand is None:
+                                print("ERROR, PLAYER's HAND IS EMPTY")
+
                             if played_card_first_turn is None:
-                                print("Invalid card selection. Please try again.")
+                                print("ERROR: No card returned — possibly empty hand.")
+                                continue  # Skip the rest and let the player try again
+
+                            elif played_card_first_turn == "invalid":
+                                print("ERROR: Invalid card name — try again.")
                                 continue
+
 
                             #deciding which effect to use
                             if played_card_first_turn.card_type == "unit":
@@ -183,7 +203,7 @@ def main():
 
                     mcts = MCTS()
 
-                    best_node = mcts.search(root_node, 150)
+                    best_node = mcts.search(root_node, 10)
 
                     move = mcts.get_move_from_node(best_node)
 
@@ -270,6 +290,12 @@ def main():
 
                     # going to ask the user to play their card
                     if len(second_turn.hand) != 0:
+
+                        print("\nYour current hand:")
+                        for idx, card in enumerate(second_turn.hand, 1):
+                            print(
+                                f"{idx}. {card.card_name} - Type: {card.card_type}, Row: {card.row}, Ability: {card.ability}")
+
                         second_turn_card_choice = input("\n Please pick a card in your hand to play")
 
                         # now we are going to play card
@@ -300,7 +326,7 @@ def main():
 
                 mcts = MCTS()
 
-                best_node = mcts.search(root_node, 150)
+                best_node = mcts.search(root_node, 10)
 
                 move = mcts.get_move_from_node(best_node)
 
