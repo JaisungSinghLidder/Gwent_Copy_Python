@@ -80,10 +80,13 @@ class MCTS:
 
 
     #the rollout is going to be a simulation of a game state and will give us a reward based on that random game state
-    #might be bad implementation, current rollout is O(n^3), which is terrible
-
+    #maybe add an implementation here to cut it off after a certain number of childern
     def rollout(self, node: GwentNode) -> float:
 
+
+        #just setting a max rollout depth to prevent it from loading tool ong
+
+        MAX_ROLLOUT_DEPTH = 5
 
         sim_state = node.game_state.clone()
 
@@ -96,7 +99,11 @@ class MCTS:
 
         other_player = sim_state.opponent_state
 
-        while not sim_state.is_terminal():
+
+        depth = 0
+
+        while not sim_state.is_terminal() and depth < MAX_ROLLOUT_DEPTH:
+            depth += 1
 
             if not current_player.passed:
 
