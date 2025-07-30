@@ -166,7 +166,6 @@ class GameState:
 
 
     #clone method because deepcopy is too small
-    @staticmethod
     def clone(self):
         return GameState(
 
@@ -183,7 +182,7 @@ class GameState:
     #might need to change this to be more flexible
     def apply_move(self, move: Union[Card, str], row: Optional[str], player: PlayerState) -> "GameState":
 
-        new_state = deepcopy(self)
+        new_state = self.clone()
 
         if isinstance(move, str):
             if move == "PASS":
