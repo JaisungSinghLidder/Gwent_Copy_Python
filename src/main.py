@@ -145,6 +145,7 @@ def main():
 
                         if leader_choice.lower().strip() == "yes":
                             game_state.use_leader_ability(first_turn)
+                            continue
 
 
                         #going to ask the user to play their card
@@ -203,7 +204,7 @@ def main():
 
                     mcts = MCTS()
 
-                    best_node = mcts.search(root_node, 10)
+                    best_node = mcts.search(root_node, 1)
 
                     move = mcts.get_move_from_node(best_node)
 
@@ -287,6 +288,7 @@ def main():
 
                     if leader_choice.lower().strip() == "yes":
                         game_state.use_leader_ability(second_turn)
+                        continue
 
                     # going to ask the user to play their card
                     if len(second_turn.hand) != 0:
@@ -326,7 +328,7 @@ def main():
 
                 mcts = MCTS()
 
-                best_node = mcts.search(root_node, 10)
+                best_node = mcts.search(root_node, 1)
 
                 move = mcts.get_move_from_node(best_node)
 
