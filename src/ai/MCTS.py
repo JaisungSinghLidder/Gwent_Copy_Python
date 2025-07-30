@@ -85,7 +85,7 @@ class MCTS:
     def rollout(self, node: GwentNode) -> float:
 
 
-        sim_state = deepcopy(node.game_state)
+        sim_state = node.game_state.clone()
 
         state_reward = 0
 
