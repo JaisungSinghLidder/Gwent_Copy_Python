@@ -32,8 +32,11 @@ class GameState:
         opponent = None
 
         if player == self.ai_player_state:
+
             opponent = self.opponent_state
+
         else:
+
             opponent = self.ai_player_state
 
         legal_moves = []
@@ -162,6 +165,18 @@ class GameState:
         return legal_moves
 
 
+    #clone method because deepcopy is too small
+    @staticmethod
+    def clone(self):
+        return GameState(
+
+            ai_player_state=self.ai_player_state.clone(),
+            opponent_state=self.opponent_state.clone(),
+            round_counter=self.round_counter,
+            active_weather_effect= set(self.active_weather_effect)
+
+        )
+
     #lots of integration with the apply moves
     #so this will take only one legal move so that it can build the tree piece by piece through it children
 
@@ -181,9 +196,9 @@ class GameState:
             #need to play leader
             elif move == "USE_LEADER":
                 if player == self.ai_player_state:
-                    GameLogic.use_leader_ability_logic(self, self.ai_player_state)
+                    GameLogic.use_leader_ability_logic(new_state, self.ai_player_state)
                 else:
-                    GameLogic.use_leader_ability_logic(self,self.opponent_state)
+                    GameLogic.use_leader_ability_logic(new_state,self.opponent_state)
 
         if isinstance(move, Card):
             #need to use the player logic
@@ -550,7 +565,7 @@ class GameState:
                 reward += 0.2 * cardCounter
 
 
-        return reward 
+        return reward
 
     #creating a hash function
     def __hash__(self):
