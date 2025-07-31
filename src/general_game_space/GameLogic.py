@@ -172,10 +172,10 @@ class GameLogic:
                 return "player one wins"
 
         if isinstance(game_or_game_state, Game):
-            end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
+            return end_game_checker_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
 
         elif isinstance(game_or_game_state, GameState):
-            end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
+            return end_game_checker_player_input(game_or_game_state.ai_player_state, game_or_game_state.opponent_state)
 
         else:
             raise ValueError("Must input either a Game or GameState class")
