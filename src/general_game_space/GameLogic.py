@@ -253,7 +253,7 @@ class GameLogic:
                     else:
                         cards_to_show = random.sample(opponent.hand, min(3, len(opponent.hand)))
                         for card in cards_to_show:
-                            player.opponent_hand.append(card)
+                            opponent.opponent_hand.append(card)
 
                     player.leader_used = True
 
