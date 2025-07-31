@@ -33,9 +33,9 @@ class GameLogic:
 
 
         if isinstance(game_or_gamestate, Game):
-            determining_winner_player_input(game_or_gamestate.player_one, game_or_gamestate.player_two)
+            return determining_winner_player_input(game_or_gamestate.player_one, game_or_gamestate.player_two)
         elif isinstance(game_or_gamestate, GameState):
-            determining_winner_player_input(game_or_gamestate.ai_player_state, game_or_gamestate.opponent_state)
+            return determining_winner_player_input(game_or_gamestate.ai_player_state, game_or_gamestate.opponent_state)
         else:
             raise ValueError("Must input either a Game or GameState class")
 
@@ -194,6 +194,7 @@ class GameLogic:
         player.sum = total
 
     #ai needs to be able to use its' own leader ability
+
     @staticmethod
     def use_leader_ability_logic(game_or_game_state, player: Union[Player, PlayerState] ) -> None:
         from src.general_game_space.Game import Game
@@ -292,6 +293,8 @@ class GameLogic:
                     random.shuffle(player.deck)
 
                     player.leader_used = True
+
+            return "player has used their leader ability"
 
         if isinstance(game_or_game_state, Game):
             use_leader_ability_logic_player_input(game_or_game_state.player_one, game_or_game_state.player_two)
