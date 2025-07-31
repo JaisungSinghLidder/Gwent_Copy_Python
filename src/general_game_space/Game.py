@@ -99,7 +99,7 @@ class Game:
     #DID TRANSFER :
     def faction_ability(self, round_winner: str) -> None:
 
-        GameLogic.faction_ability_logic(self, round_winner)
+        return GameLogic.faction_ability_logic(self, round_winner)
 
 
 
@@ -463,7 +463,7 @@ class Game:
 
     #TRANSFERRED
     def use_leader_ability(self, player: Player) -> None:
-        GameLogic.use_leader_ability_logic(self, player)
+        return GameLogic.use_leader_ability_logic(self, player)
 
 
     #DON'T COPY: FOR THE GAME TO FIX  THE ROUND AFTER EVERYTHING IS COMPLETED
