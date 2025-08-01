@@ -204,7 +204,7 @@ def main():
 
                     mcts = MCTS()
 
-                    best_node = mcts.search(root_node, 1)
+                    best_node = mcts.search(root_node, 50)
 
                     move = mcts.get_move_from_node(best_node)
 
@@ -221,6 +221,8 @@ def main():
 
 
                     elif isinstance(move, Card):
+
+                        print(f"AI plays card: {move.card_name}")
 
                         if move.card_type == "unit":
                             game_state.use_card_ability(first_turn, move)
@@ -258,122 +260,128 @@ def main():
 
 
 
-        print(f"{second_turn.player_name}'s turn is now")
+            print(f"{second_turn.player_name}'s turn is now")
 
-        print()
-        game_state.display_board()
-        print()
+            print()
+            game_state.display_board()
+            print()
 
-        if not second_turn.passed:
+            if not second_turn.passed:
 
-            #human logic
-            if not second_turn.ai_player:
-                second_turn_card_choice = None
+                #human logic
+                if not second_turn.ai_player:
+                    second_turn_card_choice = None
 
-                game_state.display_player_hand(second_turn)
+                    game_state.display_player_hand(second_turn)
 
-                if second_turn.hand == 0:
-                    second_turn.passed = True
-                    print("You have no cards, automatically passing your turn")
-                else:
-                    pass_choice = input("Do you want to pass your turn")
-                    first_turn.passing_turn(pass_choice)
-
-
-                if not second_turn.passed:
-                    # now checking whether a user wants to use their leader
-                    # this is happening in the game class because this ability affects the whole board
-
-                    leader_choice = input("Do you want to use your leader card?")
-
-                    if leader_choice.lower().strip() == "yes":
-                        game_state.use_leader_ability(second_turn)
-                        continue
-
-                    # going to ask the user to play their card
-                    if len(second_turn.hand) != 0:
-
-                        print("\nYour current hand:")
-                        for idx, card in enumerate(second_turn.hand, 1):
-                            print(
-                                f"{idx}. {card.card_name} - Type: {card.card_type}, Row: {card.row}, Ability: {card.ability}")
-
-                        second_turn_card_choice = input("\n Please pick a card in your hand to play")
-
-                        # now we are going to play card
-                        played_card_second_turn = second_turn.play_card(second_turn_card_choice)
-
-                        # deciding which effect to use
-                        if played_card_second_turn.card_type == "unit":
-                            game_state.use_card_ability(second_turn, played_card_second_turn)
-                            # the effects should only have to be maintained by unit cards
-                            game_state.maintain_effect(second_turn, played_card_second_turn)
-                        elif played_card_second_turn.card_type == "weather":
-                            game_state.check_weather_effect(played_card_second_turn.ability)
-                        elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
-                            game_state.check_buff(second_turn, played_card_second_turn)
-                        elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
-                            chosen_row = game_state.check_buff(second_turn, played_card_second_turn)
+                    if second_turn.hand == 0:
+                        second_turn.passed = True
+                        print("You have no cards, automatically passing your turn")
                     else:
-                        print("You have no cards in your deck")
-
-            # AI logic
-            else:
-
-                # MCTS LOGIC
-
-                ai_game_snapshot = GameStateExtractor.extract_game(game_state)
-
-                root_node = GwentNode(ai_game_snapshot)
-
-                mcts = MCTS()
-
-                best_node = mcts.search(root_node, 1)
-
-                move = mcts.get_move_from_node(best_node)
-
-                # now applying the move that the MCTS found depending on the search
-
-                if isinstance(move, str):
-
-                    if move == "USE_LEADER":
-                        game_state.use_leader_ability(second_turn)
-
-                    elif move == "PASS":
-                        second_turn.passing_turn()
+                        pass_choice = input("Do you want to pass your turn")
+                        first_turn.passing_turn(pass_choice)
 
 
-                elif isinstance(move, Card):
+                    if not second_turn.passed:
+                        # now checking whether a user wants to use their leader
+                        # this is happening in the game class because this ability affects the whole board
 
-                    if move.card_type == "unit":
-                        game_state.use_card_ability(second_turn, move)
-                        game_state.maintain_effect(second_turn, move)
-                    elif move.card_type == "weather":
-                        game_state.check_weather_effect(move.ability)
-                    elif move.card_type == "buff" and move.ability == "scorch":
-                        game_state.check_buff(first_turn, move)
+                        leader_choice = input("Do you want to use your leader card?")
 
-                elif isinstance(move, tuple) and isinstance(move[0], Card):
+                        if leader_choice.lower().strip() == "yes":
+                            game_state.use_leader_ability(second_turn)
+                            continue
 
-                    horn_card = move[0]
+                        # going to ask the user to play their card
+                        if len(second_turn.hand) != 0:
 
-                    horn_row = move[1]
+                            print("\nYour current hand:")
+                            for idx, card in enumerate(second_turn.hand, 1):
+                                print(
+                                    f"{idx}. {card.card_name} - Type: {card.card_type}, Row: {card.row}, Ability: {card.ability}")
 
-                    game_state.check_buff(second_turn, horn_card, horn_row)
+                            second_turn_card_choice = input("\n Please pick a card in your hand to play")
 
-        print()
-        game_state.display_board()
-        print()
+                            # now we are going to play card
+                            played_card_second_turn = second_turn.play_card(second_turn_card_choice)
 
-        #this block should probably be changed
-        #something are wrong with these functions
+                            # deciding which effect to use
+                            if played_card_second_turn.card_type == "unit":
+                                game_state.use_card_ability(second_turn, played_card_second_turn)
+                                # the effects should only have to be maintained by unit cards
+                                game_state.maintain_effect(second_turn, played_card_second_turn)
+                            elif played_card_second_turn.card_type == "weather":
+                                game_state.check_weather_effect(played_card_second_turn.ability)
+                            elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "scorch":
+                                game_state.check_buff(second_turn, played_card_second_turn)
+                            elif played_card_second_turn.card_type == "buff" and played_card_second_turn.ability == "horn":
+                                chosen_row = game_state.check_buff(second_turn, played_card_second_turn)
+                        else:
+                            print("You have no cards in your deck")
 
-        #should calculate strength first for both players
-        game_state.calculate_strength(first_turn)
+                # AI logic
+                else:
 
-        game_state.calculate_strength(second_turn)
+                    # MCTS LOGIC
 
-        print()
+                    ai_game_snapshot = GameStateExtractor.extract_game(game_state)
+
+                    root_node = GwentNode(ai_game_snapshot)
+
+                    mcts = MCTS()
+
+                    best_node = mcts.search(root_node, 50)
+
+                    move = mcts.get_move_from_node(best_node)
+
+                    # now applying the move that the MCTS found depending on the search
+
+                    if isinstance(move, str):
+
+                        if move == "USE_LEADER":
+                            game_state.use_leader_ability(second_turn)
+
+                        elif move == "PASS":
+                            second_turn.passing_turn("Yes")
+
+
+                    elif isinstance(move, Card):
+
+                        print(f"AI plays card: {move.card_name}")
+
+                        second_turn.play_card(move.card_name)
+
+                        if move.card_type == "unit":
+                            game_state.use_card_ability(second_turn, move)
+                            game_state.maintain_effect(second_turn, move)
+                        elif move.card_type == "weather":
+                            game_state.check_weather_effect(move.ability)
+                        elif move.card_type == "buff" and move.ability == "scorch":
+                            game_state.check_buff(first_turn, move)
+
+                    elif isinstance(move, tuple) and isinstance(move[0], Card):
+
+                        second_turn.play_card(move[0].card_name)
+
+                        horn_card = move[0]
+
+                        horn_row = move[1]
+
+                        game_state.check_buff(second_turn, horn_card, horn_row)
+
+            print()
+            game_state.display_board()
+            print()
+
+            #this block should probably be changed
+            #something are wrong with these functions
+
+            #should calculate strength first for both players
+            game_state.calculate_strength(first_turn)
+
+            game_state.calculate_strength(second_turn)
+
+            print()
 
         #now determine the winner
         round_winner = game_state.determine_winner()
